@@ -1,7 +1,8 @@
 -- =====================================================================
 -- IFQ582 Assignment 2  |  "League of Legends" group (Group 1D)
 -- Indigenous Cultural Collection database
-
+-- Build script for MySQL Workbench (MySQL 8.x)
+--- =====================================================================
 
 DROP DATABASE IF EXISTS ifq582_a2;
 CREATE DATABASE ifq582_a2
@@ -219,9 +220,8 @@ INSERT INTO CulturalMetadata (metadataID, itemID, communityGroup, language, loca
 (18, 18, 'Multiple coastal communities', 'English', 'Far North Queensland coast', 'Land and sea management', 'None', 'Acknowledge ranger program and community partners', 'Open access'),
 (19, 19, 'Mixed community', 'English', 'Regional Queensland', 'Land management', 'Family names mentioned; consent to be confirmed', 'Hold pending family consent for named individuals', 'Approved request only, family consent pending');
 
--- AccessRequest 6 was added so every outcome has two examples. It is a
--- Rejected request with no ReviewDecision or CommunityComment behind it
--- (see the note at the top of this file).
+-- AccessRequest 6 was added so every outcome has two examples. Its
+-- rejection is recorded in ReviewDecision 4 (see the note at the top).
 INSERT INTO AccessRequest (requestID, userID, itemID, requestReason, supportingDocuments, requestDate, requestStatus) VALUES
 (1, 5, 2, 'PhD research on Meriam Mir language revival', 'ethics_approval_EC2026.pdf', '2026-05-20', 'Approved'),
 (2, 6, 10, 'Family history research into community ceremonies', NULL, '2026-05-22', 'Pending'),
@@ -233,7 +233,8 @@ INSERT INTO AccessRequest (requestID, userID, itemID, requestReason, supportingD
 INSERT INTO ReviewDecision (decisionID, requestID, reviewerID, decisionType, decisionNotes, accessConditions, decisionDate) VALUES
 (1, 1, 3, 'Approve', 'Ethics approval sighted; legitimate research use. Speakers'' families acknowledged.', 'Research use only, no reproduction without further permission', '2026-05-21'),
 (2, 3, 4, 'Reject', 'Request does not meet the cultural protocol for these photographs. No specific need shown.', NULL, '2026-05-26'),
-(3, 5, 3, 'Approve', 'Community consent letter provided; appropriate heritage research purpose.', 'View in reading room only; site coordinates redacted', '2026-06-02');
+(3, 5, 3, 'Approve', 'Community consent letter provided; appropriate heritage research purpose.', 'View in reading room only; site coordinates redacted', '2026-06-02'),
+(4, 6, 3, 'Reject', 'No specific need or community connection shown; personal interest does not meet the cultural protocol for this restricted songline.', NULL, '2026-03-02');
 
 INSERT INTO CommunityComment (commentID, requestID, reviewerID, commentText, createdDate) VALUES
 (1, 1, 3, 'Spoke with Meriam Mir community contacts about this use, they are comfortable with it provided families are acknowledged in any publication.', '2026-05-20'),
@@ -247,7 +248,7 @@ INSERT INTO CommunityComment (commentID, requestID, reviewerID, commentText, cre
 
 -- ---------------------------------------------------------------------
 -- Count check (Stage 0 pre-flight). Run this after the build.
--- Expected one row: 4, 5, 4, 8, 21, 19, 6, 3, 8
+-- Expected one row: 4, 5, 4, 8, 21, 19, 6, 4, 8
 -- ---------------------------------------------------------------------
 SELECT
   (SELECT COUNT(*) FROM Role)             AS roles,
