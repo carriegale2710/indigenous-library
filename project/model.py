@@ -205,9 +205,16 @@ class User:
         never store a plain password. Remember mysql.connection.commit().
         Returns the new userID (cur.lastrowid).
         """
-        # TODO: INSERT INTO `User` (roleID, fullName, username, email,
-        #       passwordHash, accountStatus, createdDate) VALUES (%s, ...)
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute("INSERT INTO `User` "
+        "(roleID, fullName, username, email, passwordHash, accountStatus, createdDate) "
+        "VALUES (%s, %s, %s, %s, %s, %s, %s)",
+        (roleID, fullName, username, email, passwordHash, accountStatus, date.today()))
+        from project import mysql
+        mysql.connection.commit()
+        new_id = cur.lastrowid
+        cur.close()
+        return new_id
 
     @staticmethod
     def verify_password(stored_hash, candidate_password):
@@ -216,14 +223,14 @@ class User:
         Use the checker that matches your hashing function
         (e.g. werkzeug check_password_hash). No SQL here.
         """
-        # TODO: return check_password_hash(stored_hash, candidate_password)
-        raise NotImplementedError
+        return check_password_hash(stored_hash, candidate_password)
+      
 
     @staticmethod
     def list_all():
         """SELECT all users (Admin user-management screen). Returns a list."""
         cur = _get_cursor()
-        cur.execute("SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM `User")
+        cur.execute("SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM `User`")
         rows = cur.fetchall()
         cur.close()
         return rows
@@ -253,12 +260,7 @@ class CollectionItem:
     @staticmethod
     def get_all(search=None, collection_id=None, status_id=None):
         """
-        Home page query. SELECT items, JOINed to Collection and AccessStatus so
-        the page can show collection name and status name without extra calls.
-
-        The brief bans hardcoded data, so the home page must read from here.
-
-        Build the WHERE clause from whichever filters are provided:
+         Build the WHERE clause from whichever filters are provided:
           * search       LIKE on title (and maybe summary)
           * collection_id exact match on collectionID
           * status_id     exact match on statusID
@@ -268,12 +270,40 @@ class CollectionItem:
         then join the conditions with " AND ". Always use %s placeholders, never
         string formatting, so you are safe from SQL injection.
         """
-        # TODO: SELECT i.*, c.collectionName, s.statusName
-        #       FROM CollectionItem i
-        #       JOIN Collection c   ON i.collectionID = c.collectionID
-        #       JOIN AccessStatus s ON i.statusID = s.statusID
-        #       [WHERE ...]
-        raise NotImplementedError
+        sql = """
+            SELECT CollectionItem.itemID, CollectionItem.title, CollectionItem.authorCreator,
+                   CollectionItem.`year`, CollectionItem.itemType, CollectionItem.summary,
+                   CollectionItem.thumbnailPath, CollectionItem.statusID, CollectionItem.collectionID,
+                   Collection.collectionName, AccessStatus.statusName
+            FROM CollectionItem
+            JOIN Collection   ON CollectionItem.collectionID = Collection.collectionID
+            JOIN AccessStatus ON CollectionItem.statusID = AccessStatus.statusID
+            """
+
+        # Collect a condition + value for each filter that was actually passed
+        conditions = []
+        params = []
+
+        if search:
+            conditions.append("CollectionItem.title LIKE %s")
+            params.append("%" + search + "%")
+        if collection_id:
+            conditions.append("CollectionItem.collectionID = %s")
+            params.append(collection_id)
+        if status_id:
+            conditions.append("CollectionItem.statusID = %s")
+            params.append(status_id)
+
+        if conditions:
+            sql += " WHERE " + " AND ".join(conditions)
+
+        cur = _get_cursor()
+        cur.execute(sql, params)
+        rows = cur.fetchall()
+        cur.close()
+        return rows 
+    
+        
 
     @staticmethod
     def get_by_id(item_id):
