@@ -312,12 +312,30 @@ class CollectionItem:
         and (LEFT JOIN) CulturalMetadata, since Pending items have no metadata
         row yet. Returns a single row or None (None drives the 404 / empty state).
         """
-        # TODO: SELECT ... FROM CollectionItem i
-        #       JOIN Collection c        ON ...
-        #       JOIN AccessStatus s      ON ...
-        #       LEFT JOIN CulturalMetadata m ON i.itemID = m.itemID
-        #       WHERE i.itemID = %s
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            """
+            SELECT CollectionItem.itemID, CollectionItem.title, CollectionItem.authorCreator,
+                   CollectionItem.`year`, CollectionItem.itemType, CollectionItem.summary,
+                   CollectionItem.thumbnailPath, CollectionItem.statusID, CollectionItem.collectionID,
+                   CollectionItem.nextReviewDate,
+                   Collection.collectionName, AccessStatus.statusName,
+                   CulturalMetadata.communityGroup, CulturalMetadata.language,
+                   CulturalMetadata.location, CulturalMetadata.subjectArea,
+                   CulturalMetadata.culturalSensitivityNotes,
+                   CulturalMetadata.culturalProtocolNotes,
+                   CulturalMetadata.accessRecommendations
+            FROM CollectionItem
+            JOIN Collection   ON CollectionItem.collectionID = Collection.collectionID
+            JOIN AccessStatus ON CollectionItem.statusID = AccessStatus.statusID
+            LEFT JOIN CulturalMetadata ON CollectionItem.itemID = CulturalMetadata.itemID
+            WHERE CollectionItem.itemID = %s
+            """,
+            (item_id,)
+        )
+        row = cur.fetchone()
+        cur.close()
+        return row
 
     @staticmethod
     def create(collectionID, title, authorCreator=None, year=None, itemType=None,
@@ -338,6 +356,7 @@ class CollectionItem:
         """
         # TODO: UPDATE CollectionItem SET ... WHERE itemID = %s
         raise NotImplementedError
+        
 
     @staticmethod
     def update_status(item_id, new_status_id):
@@ -380,8 +399,11 @@ class CulturalMetadata:
     @staticmethod
     def get_by_item(item_id):
         """SELECT the metadata row for one item. Returns a row or None."""
-        # TODO: SELECT ... FROM CulturalMetadata WHERE itemID = %s
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute("SELECT metadataID, itemID, communityGroup, `language`, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations FROM CulturalMetadata WHERE itemID = %s", (item_id,))
+        row = cur.fetchone()
+        cur.close()
+        return row
 
     @staticmethod
     def create(itemID, communityGroup=None, language=None, location=None,
@@ -391,14 +413,31 @@ class CulturalMetadata:
         INSERT a metadata row. A Reviewer/Elder adds this when first reviewing a
         Pending item. itemID is UNIQUE, so one row per item. Commit.
         """
-        # TODO: INSERT INTO CulturalMetadata (...) VALUES (...)
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            "INSERT INTO CulturalMetadata " 
+            "(itemID, communityGroup, language, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", 
+            (itemID, communityGroup, language, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations)
+        )
+        from project import mysql
+        mysql.connection.commit()
+        new_id = cur.lastrowid
+        cur.close()
+        return new_id
 
     @staticmethod
-    def update(item_id, **fields):
+    def update(item_id, communityGroup=None, language=None, location=None, subjectArea=None, culturalSensitivityNotes=None, culturalProtocolNotes=None, accessRecommendations=None):
         """UPDATE the metadata for an item (Reviewer edits). Commit."""
-        # TODO: UPDATE CulturalMetadata SET ... WHERE itemID = %s
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            "UPDATE CulturalMetadata SET communityGroup = %s, language = %s, location = %s, subjectArea = %s, culturalSensitivityNotes = %s, culturalProtocolNotes= %s, accessRecommendations = %s "  
+            "WHERE itemID = %s", (communityGroup, language, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations, item_id))
+        from project import mysql
+        mysql.connection.commit()
+        count = cur.rowcount
+        cur.close()
+        return count
 
 
 # ============================================================================
@@ -425,9 +464,19 @@ class AccessRequest:
         INSERT a new access request (public user submits the form on the details
         page). Set requestDate to today. Commit, return the new requestID.
         """
-        # TODO: INSERT INTO AccessRequest (userID, itemID, requestReason,
-        #       supportingDocuments, requestDate, requestStatus) VALUES (...)
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            "INSERT INTO AccessRequest "
+            "(userID, itemID, requestReason, supportingDocuments, requestDate, requestStatus) "
+            "VALUES (%s, %s, %s, %s, %s, %s)",
+            (userID, itemID, requestReason, supportingDocuments, date.today(), requestStatus)
+        )
+        from project import mysql
+        mysql.connection.commit()
+        new_id = cur.lastrowid
+        cur.close()
+        return new_id
+
 
     @staticmethod
     def get_by_id(request_id):
