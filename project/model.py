@@ -344,8 +344,20 @@ class CollectionItem:
         INSERT a new item (Library Staff). New items default to statusID 4 = Pending.
         Commit, then return the new itemID.
         """
-        # TODO: INSERT INTO CollectionItem (...) VALUES (...)
-        raise NotImplementedError
+        if thumbnailPath is None:
+            thumbnailPath = "/img/items/IC_Logo.jpg"
+        cur = _get_cursor()
+        cur.execute(
+            "INSERT INTO CollectionItem "
+            "(collectionID, statusID, title, authorCreator, `year`, itemType, summary, thumbnailPath, nextReviewDate) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            (collectionID, statusID, title, authorCreator, year, itemType, summary, thumbnailPath, nextReviewDate)
+        )
+        from project import mysql
+        mysql.connection.commit()
+        new_id = cur.lastrowid
+        cur.close()
+        return new_id
 
     @staticmethod
     def update(item_id, **fields):
@@ -354,8 +366,29 @@ class CollectionItem:
         Decide which columns staff may edit, build a SET clause from the passed
         fields, commit. Returns nothing (or the affected row count).
         """
-        # TODO: UPDATE CollectionItem SET ... WHERE itemID = %s
-        raise NotImplementedError
+        editable = {"collectionID", "statusID", "title", "authorCreator",
+                    "year", "itemType", "summary", "thumbnailPath", "nextReviewDate"}
+
+        set_parts = []
+        params = []
+        for column, value in fields.items():
+            if column in editable:
+                set_parts.append("`" + column + "` = %s")
+                params.append(value)
+
+        if not set_parts:
+            return 0
+
+        params.append(item_id)
+        sql = "UPDATE CollectionItem SET " + ", ".join(set_parts) + " WHERE itemID = %s"
+
+        cur = _get_cursor()
+        cur.execute(sql, params)
+        from project import mysql
+        mysql.connection.commit()
+        count = cur.rowcount
+        cur.close()
+        return count
         
 
     @staticmethod
@@ -366,8 +399,16 @@ class CollectionItem:
         This is the write half of the review workflow, pair it with
         ReviewDecision.create.
         """
-        # TODO: UPDATE CollectionItem SET statusID = %s WHERE itemID = %s
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            "UPDATE CollectionItem SET statusID = %s WHERE itemID = %s",
+            (new_status_id, item_id)
+        )
+        from project import mysql
+        mysql.connection.commit()
+        count = cur.rowcount
+        cur.close()
+        return count
 
     @staticmethod
     def delete(item_id):
@@ -375,8 +416,16 @@ class CollectionItem:
         DELETE an item. CulturalMetadata cascades; AccessRequest does not, so
         decide how to handle items that already have requests. Commit.
         """
-        # TODO: DELETE FROM CollectionItem WHERE itemID = %s
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            "DELETE FROM CollectionItem WHERE itemID = %s",
+            (item_id,)
+        )
+        from project import mysql
+        mysql.connection.commit()
+        count = cur.rowcount
+        cur.close()
+        return count
 
 
 class CulturalMetadata:
@@ -484,14 +533,45 @@ class AccessRequest:
         SELECT one request, ideally JOINed to User and CollectionItem so the
         assessment page can show who asked and for which item. Row or None.
         """
-        # TODO: SELECT ... FROM AccessRequest WHERE requestID = %s
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            """
+            SELECT AccessRequest.requestID, AccessRequest.userID, AccessRequest.itemID,
+                   AccessRequest.requestReason, AccessRequest.supportingDocuments,
+                   AccessRequest.requestDate, AccessRequest.requestStatus,
+                   `User`.fullName, `User`.username,
+                   CollectionItem.title
+            FROM AccessRequest
+            JOIN `User`         ON AccessRequest.userID = `User`.userID
+            JOIN CollectionItem ON AccessRequest.itemID = CollectionItem.itemID
+            WHERE AccessRequest.requestID = %s
+            """,
+            (request_id,)
+        )
+        row = cur.fetchone()
+        cur.close()
+        return row
 
     @staticmethod
     def get_by_user(user_id):
         """SELECT all requests a user has made (their 'my requests' view)."""
-        # TODO: SELECT ... FROM AccessRequest WHERE userID = %s
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            """
+            SELECT AccessRequest.requestID, AccessRequest.userID, AccessRequest.itemID,
+                   AccessRequest.requestReason, AccessRequest.supportingDocuments,
+                   AccessRequest.requestDate, AccessRequest.requestStatus,
+                   CollectionItem.title
+            FROM AccessRequest
+            JOIN CollectionItem ON AccessRequest.itemID = CollectionItem.itemID
+            WHERE AccessRequest.userID = %s
+            ORDER BY AccessRequest.requestDate DESC
+            """,
+            (user_id,)
+        )
+        rows = cur.fetchall()
+        cur.close()
+        return rows
 
     @staticmethod
     def list_pending():
@@ -499,8 +579,15 @@ class AccessRequest:
         SELECT requests still awaiting a decision (requestStatus = 'Pending').
         This is the Reviewer's work queue. Returns a list.
         """
-        # TODO: SELECT ... FROM AccessRequest WHERE requestStatus = 'Pending'
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            "SELECT requestID, userID, itemID, requestReason, supportingDocuments, requestDate, requestStatus "
+            "FROM AccessRequest WHERE requestStatus = %s",
+            ("Pending",)
+        )
+        rows = cur.fetchall()
+        cur.close()
+        return rows
 
     @staticmethod
     def update_status(request_id, new_status):
@@ -508,8 +595,16 @@ class AccessRequest:
         UPDATE requestStatus to 'Approved' or 'Rejected' once a decision is
         recorded. Commit. Call this alongside ReviewDecision.create.
         """
-        # TODO: UPDATE AccessRequest SET requestStatus = %s WHERE requestID = %s
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            "UPDATE AccessRequest SET requestStatus = %s WHERE requestID = %s",
+            (new_status, request_id)
+        )
+        from project import mysql
+        mysql.connection.commit()
+        count = cur.rowcount
+        cur.close()
+        return count
 
 
 class ReviewDecision:
@@ -544,15 +639,40 @@ class ReviewDecision:
           3. CollectionItem.update_status(...)   set the item's access status
         Do all three so the data stays consistent.
         """
-        # TODO: INSERT INTO ReviewDecision (requestID, reviewerID, decisionType,
-        #       decisionNotes, accessConditions, decisionDate) VALUES (...)
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            "INSERT INTO ReviewDecision "
+            "(requestID, reviewerID, decisionType,decisionNotes, accessConditions, decisionDate) " 
+            "VALUES (%s, %s, %s, %s, %s, %s)",
+            (requestID, reviewerID, decisionType,decisionNotes, accessConditions, date.today())
+        )
+        from project import mysql
+        mysql.connection.commit()
+        new_decision = cur.lastrowid
+        cur.close()
+        return new_decision
+  
 
     @staticmethod
     def get_by_request(request_id):
         """SELECT the decision(s) for a request. Shown in the request history."""
-        # TODO: SELECT ... FROM ReviewDecision WHERE requestID = %s
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            """
+            SELECT ReviewDecision.decisionID, ReviewDecision.requestID, ReviewDecision.reviewerID,
+                   ReviewDecision.decisionType, ReviewDecision.decisionNotes,
+                   ReviewDecision.accessConditions, ReviewDecision.decisionDate,
+                   `User`.fullName
+            FROM ReviewDecision
+            JOIN `User` ON ReviewDecision.reviewerID = `User`.userID
+            WHERE ReviewDecision.requestID = %s
+            ORDER BY ReviewDecision.decisionDate
+            """,
+            (request_id,)
+        )
+        rows = cur.fetchall()
+        cur.close()
+        return rows
 
 
 class CommunityComment:
@@ -572,9 +692,18 @@ class CommunityComment:
         INSERT a comment against a request. Stamp createdDate (today). Commit,
         return the new commentID.
         """
-        # TODO: INSERT INTO CommunityComment (requestID, reviewerID,
-        #       commentText, createdDate) VALUES (...)
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            "INSERT INTO CommunityComment "
+            "(requestID, reviewerID, commentText, createdDate) " 
+            "VALUES (%s, %s, %s, %s)",
+            (requestID, reviewerID, commentText, date.today())
+        )
+        from project import mysql
+        mysql.connection.commit()
+        new_comment = cur.lastrowid
+        cur.close()
+        return new_comment
 
     @staticmethod
     def get_by_request(request_id):
@@ -582,6 +711,18 @@ class CommunityComment:
         SELECT all comments for a request, oldest first, ideally JOINed to User
         so the page can show each reviewer's name. Returns a list.
         """
-        # TODO: SELECT ... FROM CommunityComment WHERE requestID = %s
-        #       ORDER BY createdDate
-        raise NotImplementedError
+        cur = _get_cursor()
+        cur.execute(
+            """
+            SELECT CommunityComment.commentID, CommunityComment.requestID, CommunityComment.reviewerID, CommunityComment.commentText, CommunityComment.createdDate, `User`.fullName
+            FROM CommunityComment
+            JOIN `User` ON CommunityComment.reviewerID = `User`.userID
+            WHERE CommunityComment.requestID = %s
+            ORDER BY CommunityComment.createdDate
+            """,
+            (request_id,)
+        )
+        rows = cur.fetchall()
+        cur.close()
+        return rows
+      
