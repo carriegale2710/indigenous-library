@@ -1,0 +1,567 @@
+<!-- Submitted by LU - Catalogue Listing Page -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Catalogue | Indigenous Academic Library</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.lineicons.com/5.1/line/lineicons.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-sm py-3 shadow">
+        <div class="container px-4">
+
+            <a class="navbar-brand" href="index.html">
+                <img src="assets/logo.svg" alt="Library logo" class="navbar-logo">
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="lni lni-layout-9"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
+
+                    <!-- Home Dropdown -->
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle nav-button" href="index.html" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Home
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="index.html">Landing Page</a></li>
+                            <li><a class="dropdown-item" href="index.html#acknowledgement">Acknowledgement of
+                                    Country</a></li>
+                            <li><a class="dropdown-item" href="index.html#web-app-intro">Access Service Introduction</a>
+                            </li>
+                            <li><a class="dropdown-item" href="index.html#featured-items">Featured Items</a></li>
+                            <li><a class="dropdown-item" href="index.html#catalogue-search">Search Catalogue</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Catalogue Dropdown -->
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle nav-button" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Catalogue
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="catalogue.html">Browse Catalogue</a></li>
+                            <li><a class="dropdown-item" href="item-details.html">Item Details</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Cultural Access Dropdown -->
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle nav-button" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Cultural Access
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="item-details.html#request-form">Request to View Item</a>
+                            </li>
+                            <li><a class="dropdown-item" href="my-access-requests.html">My Access Requests</a></li>
+                            <li><a class="dropdown-item" href="item-assessment.html">Assessment Panel</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Login Button -->
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link nav-button login-btn" href="login.html">Login</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="catalogue-page-header py-5">
+        <div class="container px-4">
+            <p class="section-label text-warning mb-2">Collection Catalogue</p>
+            <h1 class="fw-bold mb-2">Browse Catalogue</h1>
+            <p class="mb-0 page-subtitle">
+                Browse collection records, review access status, and request approval to view restricted materials at
+                the library.
+            </p>
+        </div>
+    </header>
+
+    <!-- Catalogue Area -->
+    <main class="catalogue-area py-5">
+        <div class="container px-4">
+
+            <!-- Search / Filter Panel -->
+            <div class="catalogue-filter-panel mb-5">
+                <h2 class="h4 fw-bold">Search and Filter Collection Records</h2>
+                <p class="text-muted">
+                    Search collection records by title, collection area, language, item type or access status.
+                </p>
+
+                <form class="row g-3">
+                    <div class="col-lg-5">
+                        <label for="catalogueSearch" class="form-label">Search catalogue</label>
+                        <input type="text" class="form-control" id="catalogueSearch"
+                            placeholder="Search by title, collection, language or keyword">
+                    </div>
+
+                    <div class="col-md-4 col-lg-3">
+                        <label for="itemType" class="form-label">Item type</label>
+                        <select class="form-select" id="itemType">
+                            <option selected>All item types</option>
+                            <option>Book</option>
+                            <option>Recording</option>
+                            <option>Image</option>
+                            <option>Manuscript</option>
+                            <option>Resource</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 col-lg-2">
+                        <label for="accessStatus" class="form-label">Access status</label>
+                        <select class="form-select" id="accessStatus">
+                            <option selected>All statuses</option>
+                            <option>Open</option>
+                            <option>Restricted</option>
+                            <option>Culturally Sensitive</option>
+                            <option>Pending</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 col-lg-2 d-flex align-items-end">
+                        <button type="button" class="btn btn-primary w-100">Apply Filters</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Catalogue Cards -->
+            <div class="row g-4">
+
+                <!-- Item 1 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/kalaw-lagaw-ya-dictionary.svg" class="card-img-top catalogue-image"
+                            alt="Kalaw Lagaw Ya Dictionary">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Kalaw Lagaw Ya Dictionary</h3>
+                            <p class="text-muted small mb-2">Torres Strait Language Collection | Book | 2018</p>
+                            <p>
+                                A community dictionary of the Kalaw Lagaw Ya language.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/recordings-of-meriam-mir-speakers.svg" class="card-img-top catalogue-image"
+                            alt="Recordings of Meriam Mir Speakers">
+                        <div class="card-body">
+                            <span class="badge status-restricted mb-2">Restricted</span>
+                            <h3 class="h5 fw-bold">Recordings of Meriam Mir Speakers</h3>
+                            <p class="text-muted small mb-2">Torres Strait Language Collection | Recording | 2005</p>
+                            <p>
+                                Audio recordings of fluent Meriam Mir speakers.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/creation-songline-of-the-seven-sisters.svg"
+                            class="card-img-top catalogue-image" alt="Creation Songline of the Seven Sisters">
+                        <div class="card-body">
+                            <span class="badge status-restricted mb-2">Restricted</span>
+                            <h3 class="h5 fw-bold">Creation Songline of the Seven Sisters</h3>
+                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 1998</p>
+                            <p>
+                                A recorded songline shared under cultural protocol.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/oral-history-mission-days.svg" class="card-img-top catalogue-image"
+                            alt="Oral History: Mission Days">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Oral History: Mission Days</h3>
+                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 2010</p>
+                            <p>
+                                Interviews recalling life on the missions.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/weaving-patterns-of-the-yolngu.svg" class="card-img-top catalogue-image"
+                            alt="Weaving Patterns of the Yolngu">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Weaving Patterns of the Yolngu</h3>
+                            <p class="text-muted small mb-2">Visual Culture Collection | Image | 2015</p>
+                            <p>
+                                Photographs documenting traditional weaving patterns.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/ceremony-photographs-collection.svg" class="card-img-top catalogue-image"
+                            alt="Ceremony Photographs Collection">
+                        <div class="card-body">
+                            <span class="badge status-restricted mb-2">Restricted</span>
+                            <h3 class="h5 fw-bold">Ceremony Photographs Collection</h3>
+                            <p class="text-muted small mb-2">Visual Culture Collection | Image | 1972</p>
+                            <p>
+                                A restricted set of ceremony photographs.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/childrens-picture-book-in-yumplatok.svg" class="card-img-top catalogue-image"
+                            alt="Children's Picture Book in Yumplatok">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Children's Picture Book in Yumplatok</h3>
+                            <p class="text-muted small mb-2">Torres Strait Language Collection | Book | 2020</p>
+                            <p>
+                                An illustrated children's book in Yumplatok, also known as Torres Strait Creole.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 8 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/mens-business-recordings.svg" class="card-img-top catalogue-image"
+                            alt="Men's Business Recordings">
+                        <div class="card-body">
+                            <span class="badge status-restricted mb-2">Restricted</span>
+                            <h3 class="h5 fw-bold">Men's Business Recordings</h3>
+                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 1985</p>
+                            <p>
+                                Restricted recordings held under cultural protocol.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 9 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/bark-painting-records.svg" class="card-img-top catalogue-image"
+                            alt="Bark Painting Records">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Bark Painting Records</h3>
+                            <p class="text-muted small mb-2">Visual Culture Collection | Image | 2012</p>
+                            <p>
+                                Catalogue of bark paintings with artist notes.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 10 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/restricted-ceremony-audio.svg" class="card-img-top catalogue-image"
+                            alt="Restricted Ceremony Audio">
+                        <div class="card-body">
+                            <span class="badge status-sensitive mb-2">Culturally Sensitive</span>
+                            <h3 class="h5 fw-bold">Restricted Ceremony Audio</h3>
+                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 1990</p>
+                            <p>
+                                Ceremony audio with an access request under assessment.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 11 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/yolngu-matha-language-primer.svg" class="card-img-top catalogue-image"
+                            alt="Yolngu Matha Language Primer">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Yolngu Matha Language Primer</h3>
+                            <p class="text-muted small mb-2">Torres Strait Language Collection | Book | 2017</p>
+                            <p>
+                                An introductory primer for Yolngu Matha.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 12 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/sacred-site-survey-notes.svg" class="card-img-top catalogue-image"
+                            alt="Sacred Site Survey Notes">
+                        <div class="card-body">
+                            <span class="badge status-restricted mb-2">Restricted</span>
+                            <h3 class="h5 fw-bold">Sacred Site Survey Notes</h3>
+                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Manuscript | 2003</p>
+                            <p>
+                                Field notes referencing restricted sacred sites.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 13 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/community-festival-photographs.svg" class="card-img-top catalogue-image"
+                            alt="Community Festival Photographs">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Community Festival Photographs</h3>
+                            <p class="text-muted small mb-2">Visual Culture Collection | Image | 2019</p>
+                            <p>
+                                Photographs from annual community festivals.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 14 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/initiation-recordings.svg" class="card-img-top catalogue-image"
+                            alt="Initiation Recordings">
+                        <div class="card-body">
+                            <span class="badge status-sensitive mb-2">Culturally Sensitive</span>
+                            <h3 class="h5 fw-bold">Initiation Recordings</h3>
+                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 1988</p>
+                            <p>
+                                Initiation recordings with an access request under assessment.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 15 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/dreaming-stories-anthology.svg" class="card-img-top catalogue-image"
+                            alt="Dreaming Stories Anthology">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Dreaming Stories Anthology</h3>
+                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Book | 2014</p>
+                            <p>
+                                A published anthology of Dreaming stories cleared for public access.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 16 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/seasonal-plant-knowledge-cards.svg" class="card-img-top catalogue-image"
+                            alt="Seasonal Plant Knowledge Cards">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Seasonal Plant Knowledge Cards</h3>
+                            <p class="text-muted small mb-2">Land and Sea Country Collection | Resource | 2021</p>
+                            <p>
+                                Illustrated cards describing traditional plant uses and seasonal gathering calendars.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 17 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/healing-practices-recordings.svg" class="card-img-top catalogue-image"
+                            alt="Healing Practices Recordings">
+                        <div class="card-body">
+                            <span class="badge status-sensitive mb-2">Culturally Sensitive</span>
+                            <h3 class="h5 fw-bold">Healing Practices Recordings</h3>
+                            <p class="text-muted small mb-2">Land and Sea Country Collection | Recording | 1996</p>
+                            <p>
+                                Recordings of healing practices and plant preparation methods shared under cultural
+                                conditions.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 18 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/caring-for-sea-country-photo-series.svg" class="card-img-top catalogue-image"
+                            alt="Caring for Sea Country Photo Series">
+                        <div class="card-body">
+                            <span class="badge status-open mb-2">Open</span>
+                            <h3 class="h5 fw-bold">Caring for Sea Country Photo Series</h3>
+                            <p class="text-muted small mb-2">Land and Sea Country Collection | Image | 2022</p>
+                            <p>
+                                Photographs documenting sea country management and community-led conservation work.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 19 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/land-management-oral-histories.svg" class="card-img-top catalogue-image"
+                            alt="Land Management Oral Histories">
+                        <div class="card-body">
+                            <span class="badge status-restricted mb-2">Restricted</span>
+                            <h3 class="h5 fw-bold">Land Management Oral Histories</h3>
+                            <p class="text-muted small mb-2">Land and Sea Country Collection | Recording | 2009</p>
+                            <p>
+                                Interviews with Elders describing traditional land management and fire practices.
+                            </p>
+                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 20 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/recently-donated-community-recordings.svg" class="card-img-top catalogue-image"
+                            alt="Recently Donated Community Recordings">
+                        <div class="card-body">
+                            <span class="badge status-pending mb-2">Pending</span>
+                            <h3 class="h5 fw-bold">Recently Donated Community Recordings</h3>
+                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 2023</p>
+                            <p>
+                                Newly catalogued recordings awaiting cultural review before an access status is set.
+                            </p>
+                            <button type="button" class="btn btn-secondary" disabled>Not Available for Request</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 21 -->
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 catalogue-card">
+                        <img src="assets/uncatalogued-item.svg" class="card-img-top catalogue-image"
+                            alt="Uncatalogued Photograph Series">
+                        <div class="card-body">
+                            <span class="badge status-pending mb-2">Pending</span>
+                            <h3 class="h5 fw-bold">Uncatalogued Photograph Series</h3>
+                            <p class="text-muted small mb-2">Visual Culture Collection | Image | Year unknown</p>
+                            <p>
+                                A set of photographs recently added to the catalogue and awaiting Elder review.
+                            </p>
+                            <button type="button" class="btn btn-secondary" disabled>Not Available for Request</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Expanded Footer -->
+    <footer class="site-footer py-5">
+        <div class="container px-4">
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+                    <h3 class="h5 fw-bold">Indigenous Academic Library</h3>
+                    <p>
+                        Supporting respectful discovery, cultural access requests, cultural review,
+                        and responsible use of Indigenous collection materials.
+                    </p>
+                </div>
+
+                <div class="col-md-4 col-lg-2">
+                    <h4 class="h6 fw-bold">Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="catalogue.html">Browse Catalogue</a></li>
+                        <li><a href="item-details.html">Item Details</a></li>
+                        <li><a href="my-access-requests.html">My Requests</a></li>
+                        <li><a href="item-assessment.html">Assessment Panel</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 col-lg-3">
+                    <h4 class="h6 fw-bold">Access and Privacy</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="access-privacy.html#cultural-access-protocols">Cultural Access Protocols</a></li>
+                        <li><a href="access-privacy.html#privacy-notice">Privacy Notice</a></li>
+                        <li><a href="access-privacy.html#responsible-data-use">Responsible Data Use</a></li>
+                        <li><a href="access-privacy.html#contact-library-staff">Contact Library Staff</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 col-lg-3">
+                    <h4 class="h6 fw-bold">Contact</h4>
+                    <p class="mb-1">Indigenous Academic Library</p>
+                    <p class="mb-1">R Block, Kelvin Grove campus</p>
+                    <p class="mb-1">Victoria Park Road, Kelvin Grove QLD</p>
+                    <p class="mb-0">library@iac.edu.au</p>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom mt-4 pt-3 text-center">
+                <p class="mb-0">
+                    Indigenous Academic Library | Collections Access Service &copy; 2026. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

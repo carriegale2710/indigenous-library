@@ -1,0 +1,345 @@
+<!-- Submitted by LU - Error Page -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ error_code | default('Error') }} | Indigenous Academic Library</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.lineicons.com/5.1/line/lineicons.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-sm py-3 shadow">
+        <div class="container px-4">
+
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <img src="{{ url_for('static', filename='assets/logo.svg') }}" alt="Indigenous Academic Library logo"
+                    class="navbar-logo">
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="lni lni-layout-9"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
+
+                    <!-- Home Dropdown -->
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle nav-button" href="{{ url_for('index') }}" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Home
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('index') }}">Landing Page</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('index') }}#acknowledgement">Acknowledgement
+                                    of Country</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('index') }}#web-app-intro">Access Service
+                                    Introduction</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('index') }}#featured-items">Featured Items</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('index') }}#catalogue-search">Search
+                                    Catalogue</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Catalogue Dropdown -->
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle nav-button" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Catalogue
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('catalogue') }}">Browse Catalogue</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('item_details', item_id=2) }}">Item
+                                    Details</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Cultural Access Dropdown -->
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle nav-button" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Cultural Access
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item"
+                                    href="{{ url_for('item_details', item_id=2) }}#request-form">Request to View
+                                    Item</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('my_access_requests') }}">My Access
+                                    Requests</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('item_assessment') }}">Assessment Panel</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Access and Privacy -->
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link nav-button" href="{{ url_for('access_privacy') }}">Access & Privacy</a>
+                    </li>
+
+                    <!-- Login Button -->
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link nav-button login-btn" href="{{ url_for('login') }}">Login</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Error Header -->
+    <header class="item-page-header py-5">
+        <div class="container px-4">
+            <p class="section-label text-warning mb-2">Collections Access Service</p>
+
+            {% if error_code == 404 %}
+            <h1 class="fw-bold mb-2">Page Not Found</h1>
+            <p class="mb-0 page-subtitle">
+                The page you requested could not be found. The link may be incorrect, the page may have moved,
+                or the item may no longer be available through this address.
+            </p>
+
+            {% elif error_code == 403 %}
+            <h1 class="fw-bold mb-2">Access Restricted</h1>
+            <p class="mb-0 page-subtitle">
+                This area is only available to authorised users. Some collection records, access requests and assessment
+                tools require a permitted account role.
+            </p>
+
+            {% elif error_code == 500 %}
+            <h1 class="fw-bold mb-2">Service Error</h1>
+            <p class="mb-0 page-subtitle">
+                The service could not complete the request. Please return to the catalogue or try again later.
+            </p>
+
+            {% else %}
+            <h1 class="fw-bold mb-2">{{ error_title | default('Something Went Wrong') }}</h1>
+            <p class="mb-0 page-subtitle">
+                {{ error_message | default('The request could not be completed. Please use the links below to
+                continue.') }}
+            </p>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Error Main Content -->
+    <main class="item-details-area py-5">
+        <div class="container px-4">
+
+            <div class="row g-4 align-items-stretch">
+
+                <!-- Error Message Card -->
+                <div class="col-lg-7">
+                    <div class="content-card h-100">
+                        <p class="section-label">Error {{ error_code | default('') }}</p>
+
+                        {% if error_code == 404 %}
+                        <h2 class="h3 fw-bold mb-3">We could not find that page</h2>
+                        <p>
+                            The requested page may not exist, or the address may have been typed incorrectly.
+                            Use the catalogue to continue browsing collection records.
+                        </p>
+
+                        {% elif error_code == 403 %}
+                        <h2 class="h3 fw-bold mb-3">You do not have permission to view this area</h2>
+                        <p>
+                            Some sections of the Collections Access Service are restricted to approved library staff,
+                            administrators, or community reviewers. Login with an authorised account or return to the
+                            catalogue.
+                        </p>
+
+                        {% elif error_code == 500 %}
+                        <h2 class="h3 fw-bold mb-3">The request could not be completed</h2>
+                        <p>
+                            A service error occurred while processing the request. This may relate to a temporary
+                            database, routing, or server issue.
+                        </p>
+
+                        {% else %}
+                        <h2 class="h3 fw-bold mb-3">{{ error_title | default('Request Not Completed') }}</h2>
+                        <p>
+                            {{ error_message | default('The request could not be completed. Please use the available
+                            navigation links to continue.') }}
+                        </p>
+                        {% endif %}
+
+                        <div class="status-panel mt-4">
+                            <strong>Recommended action:</strong>
+                            <p class="mb-0">
+                                Return to the catalogue, go back to the homepage, or sign in if the page requires
+                                an authorised account.
+                            </p>
+                        </div>
+
+                        <div class="mt-4">
+                            <a href="{{ url_for('index') }}" class="btn btn-primary me-md-2">Return Home</a>
+                            <a href="{{ url_for('catalogue') }}" class="btn btn-outline-dark me-md-2">Browse
+                                Catalogue</a>
+                            <a href="{{ url_for('login') }}" class="btn btn-outline-secondary">Login</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Help / Pathways Card -->
+                <div class="col-lg-5">
+                    <div class="card item-card h-100">
+                        <div class="card-body">
+                            <p class="section-label">Where to Go Next</p>
+                            <h2 class="h4 fw-bold">Continue Using the Library Service</h2>
+
+                            <div class="timeline mt-4">
+
+                                <div class="timeline-entry role-public">
+                                    <h3 class="h6 fw-bold mb-1">Browse Collection Records</h3>
+                                    <p class="mb-1">
+                                        Search collection records and review access status before submitting a request.
+                                    </p>
+                                    <p class="small text-muted mb-0">
+                                        Recommended for public users and researchers.
+                                    </p>
+                                </div>
+
+                                <div class="timeline-entry role-system">
+                                    <h3 class="h6 fw-bold mb-1">Login for Request History</h3>
+                                    <p class="mb-1">
+                                        Sign in to view submitted access requests, review outcomes and approved access
+                                        conditions.
+                                    </p>
+                                    <p class="small text-muted mb-0">
+                                        Required for user-specific request records.
+                                    </p>
+                                </div>
+
+                                <div class="timeline-entry role-ce-adm">
+                                    <h3 class="h6 fw-bold mb-1">Authorised Review Areas</h3>
+                                    <p class="mb-1">
+                                        Assessment tools are limited to authorised staff, administrators and community
+                                        reviewers.
+                                    </p>
+                                    <p class="small text-muted mb-0">
+                                        Access depends on account role.
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Error Type Guidance -->
+            <section class="mt-5">
+                <div class="card item-card">
+                    <div class="card-body">
+                        <p class="section-label">Error Guidance</p>
+                        <h2 class="h4 fw-bold">Why This Page Appears</h2>
+
+                        <div class="row g-4 mt-2">
+
+                            <div class="col-md-4">
+                                <div class="request-state-card h-100">
+                                    <h3 class="h5 fw-bold">404 Not Found</h3>
+                                    <p class="mb-0">
+                                        The page or item address does not exist. This can happen when a link is typed
+                                        incorrectly or an item route is unavailable.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="request-state-card h-100">
+                                    <h3 class="h5 fw-bold">403 Restricted</h3>
+                                    <p class="mb-0">
+                                        The page exists, but the signed-in user does not have the required account role
+                                        for that route.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="request-state-card h-100">
+                                    <h3 class="h5 fw-bold">500 Service Error</h3>
+                                    <p class="mb-0">
+                                        The service encountered an unexpected issue while processing the request.
+                                        This page prevents default server error details from being shown.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Expanded Footer -->
+    <footer class="site-footer py-5">
+        <div class="container px-4">
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+                    <h3 class="h5 fw-bold">Indigenous Academic Library</h3>
+                    <p>
+                        Supporting respectful discovery, cultural access requests, cultural review,
+                        and responsible use of Indigenous collection materials.
+                    </p>
+                </div>
+
+                <div class="col-md-4 col-lg-2">
+                    <h4 class="h6 fw-bold">Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('index') }}">Home</a></li>
+                        <li><a href="{{ url_for('catalogue') }}">Browse Catalogue</a></li>
+                        <li><a href="{{ url_for('item_details', item_id=2) }}">Item Details</a></li>
+                        <li><a href="{{ url_for('my_access_requests') }}">My Requests</a></li>
+                        <li><a href="{{ url_for('item_assessment') }}">Assessment Panel</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 col-lg-3">
+                    <h4 class="h6 fw-bold">Access and Privacy</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('access_privacy') }}#cultural-access-protocols">Cultural Access
+                                Protocols</a></li>
+                        <li><a href="{{ url_for('access_privacy') }}#privacy-notice">Privacy Notice</a></li>
+                        <li><a href="{{ url_for('access_privacy') }}#responsible-data-use">Responsible Data Use</a></li>
+                        <li><a href="{{ url_for('access_privacy') }}#contact-library-staff">Contact Library Staff</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 col-lg-3">
+                    <h4 class="h6 fw-bold">Contact</h4>
+                    <p class="mb-1">Indigenous Academic Library</p>
+                    <p class="mb-1">R Block, Kelvin Grove campus</p>
+                    <p class="mb-1">Victoria Park Road, Kelvin Grove QLD</p>
+                    <p class="mb-0">library@iac.edu.au</p>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom mt-4 pt-3 text-center">
+                <p class="mb-0">
+                    Indigenous Academic Library | Collections Access Service &copy; 2026. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

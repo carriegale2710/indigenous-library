@@ -1,0 +1,900 @@
+/* =========================================================
+   Global Styles
+   Academic Library Indigenous Collections Portal
+   ========================================================= */
+
+:root {
+    --deep-red: #8b2f23;
+    --dark-red: #5d1f1f;
+    --gold: #d6a21e;
+    --charcoal: #161616;
+    --cream: #f8f4ec;
+    --soft-grey: #eae9e9;
+    --white: #ffffff;
+    --text-dark: #2a2a2a;
+    --muted-brown: #6f4e37;
+    --danger-red: #b83227;
+}
+
+body {
+    background-color: var(--soft-grey);
+    color: var(--text-dark);
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+.portal-heading {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.portal-heading {
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    color: var(--dark-red);
+    letter-spacing: 0.5px;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    max-width: 760px;
+}
+
+.section-intro {
+    max-width: 780px;
+    margin: 0 auto 2rem auto;
+    text-align: center;
+}
+
+.section-label {
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--deep-red);
+}
+
+/* =========================================================
+   Navigation
+   ========================================================= */
+
+.navbar {
+    background-color: var(--white);
+}
+
+.navbar-logo {
+    width: 100px;
+    height: auto;
+    display: block;
+}
+
+.nav-link {
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.nav-button {
+    background-color: var(--deep-red);
+    color: var(--white) !important;
+    border-radius: 25px;
+    padding: 10px 20px !important;
+    margin: 0 6px;
+    transition: all 0.25s ease;
+}
+
+.nav-button:hover {
+    background-color: var(--gold);
+    color: var(--charcoal) !important;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.login-btn {
+    background-color: var(--charcoal);
+    color: var(--white) !important;
+}
+
+.login-btn:hover {
+    background-color: var(--gold);
+    color: var(--charcoal) !important;
+}
+
+/* Dropdown opens on hover on desktop */
+@media (min-width: 576px) {
+    .navbar .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+    }
+}
+
+.dropdown-menu {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+}
+
+.dropdown-item {
+    font-size: 17px;
+    padding: 10px 18px;
+}
+
+.dropdown-item:hover {
+    background-color: var(--cream);
+    color: var(--deep-red);
+}
+
+/* Subtle abstract background.
+   Avoiding reproduction of specific Indigenous artwork, symbols or sacred designs. */
+.cultural-pattern-bg {
+    background:
+        radial-gradient(circle at 15% 20%, rgba(214, 162, 30, 0.22) 0 9%, transparent 10%),
+        radial-gradient(circle at 85% 25%, rgba(139, 47, 35, 0.18) 0 8%, transparent 9%),
+        radial-gradient(circle at 30% 85%, rgba(22, 22, 22, 0.12) 0 7%, transparent 8%),
+        linear-gradient(135deg, #d6a21e 0%, #8b2f23 55%, #161616 100%);
+}
+
+/* =========================================================
+   Buttons, Badges and Forms
+   ========================================================= */
+
+.btn-primary {
+    background-color: var(--deep-red);
+    border-color: var(--deep-red);
+    color: var(--white);
+    font-weight: 600;
+    border-radius: 25px;
+    padding: 10px 22px;
+    transition: all 0.25s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--gold);
+    border-color: var(--gold);
+    color: var(--charcoal);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.btn-outline-dark,
+.btn-outline-secondary {
+    border-radius: 25px;
+    font-weight: 600;
+    padding: 10px 22px;
+}
+
+.btn-secondary {
+    border-radius: 25px;
+    font-weight: 600;
+    padding: 10px 22px;
+}
+
+.btn-secondary:disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+}
+
+.badge {
+    font-size: 0.85rem;
+    padding: 0.55em 0.8em;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    border: 1px solid #d5cec2;
+    padding: 10px 14px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 0.2rem rgba(214, 162, 30, 0.22);
+}
+
+/* =========================================================
+   Shared Cards and Panels
+   ========================================================= */
+
+.content-card {
+    background-color: var(--white);
+    border-radius: 14px;
+    border-top: 5px solid var(--deep-red);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+}
+
+.status-panel {
+    background-color: var(--cream);
+    border-left: 6px solid var(--deep-red);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+}
+
+.metadata-label {
+    font-weight: 700;
+    color: var(--dark-red);
+}
+
+.cultural-alert {
+    background-color: #fff3cd;
+    border-left: 6px solid var(--gold);
+    color: #3a2a00;
+    border-radius: 12px;
+}
+
+/* =========================================================
+   Homepage Styles
+   ========================================================= */
+
+#acknowledgement {
+    min-height: 72vh;
+    display: flex;
+    align-items: center;
+}
+
+#acknowledgement.cultural-pattern-bg {
+    background:
+        radial-gradient(circle at 15% 20%, rgba(214, 162, 30, 0.22) 0 9%, transparent 10%),
+        radial-gradient(circle at 85% 25%, rgba(139, 47, 35, 0.18) 0 8%, transparent 9%),
+        radial-gradient(circle at 30% 85%, rgba(22, 22, 22, 0.12) 0 7%, transparent 8%),
+        linear-gradient(135deg, #d6a21e 0%, #8b2f23 55%, #161616 100%);
+}
+
+.acknowledgement-box {
+    max-width: 900px;
+    background-color: var(--white);
+    padding: 42px;
+    border-left: 8px solid #d6491e;
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+
+#acknowledgement h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+}
+
+#acknowledgement p {
+    font-size: 1.15rem;
+}
+
+#web-app-intro {
+    background-color: var(--white);
+}
+
+.intro-stat {
+    background-color: var(--cream);
+    border-radius: 14px;
+    padding: 1.25rem;
+    border-left: 5px solid var(--gold);
+    height: 100%;
+}
+
+#featured-items {
+    background-color: var(--cream);
+}
+
+.featured-item-card {
+    background-color: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    border-left: 6px solid var(--gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    height: 100%;
+}
+
+.featured-item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.featured-item-card img {
+    width: 100%;
+    height: 190px;
+    object-fit: cover;
+    background-color: var(--cream);
+}
+
+#access-process {
+    background-color: var(--white);
+}
+
+.process-step {
+    background-color: var(--cream);
+    border-radius: 14px;
+    padding: 1.5rem;
+    height: 100%;
+    border-top: 5px solid var(--deep-red);
+}
+
+.process-number {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--deep-red);
+    color: var(--white);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+#catalogue-search,
+#portal-options {
+    background-color: var(--cream);
+}
+
+.search-box {
+    max-width: 900px;
+    background-color: var(--white);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.search-input {
+    border-radius: 25px;
+    padding: 12px 18px;
+}
+
+.search-btn {
+    white-space: nowrap;
+}
+
+.portal-card {
+    background-color: var(--white);
+    border: none;
+    border-top: 5px solid var(--deep-red);
+    border-radius: 14px;
+    transition: all 0.25s ease;
+}
+
+.portal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+}
+
+.library-image-card {
+    background-color: var(--white);
+    border-radius: 14px;
+    overflow: hidden;
+    border-top: 5px solid var(--deep-red);
+}
+
+.library-image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* =========================================================
+   Catalogue Listing Page
+   ========================================================= */
+
+.catalogue-page-header {
+    background: linear-gradient(135deg,
+            var(--gold) 0%,
+            var(--deep-red) 55%,
+            var(--charcoal) 100%);
+    color: var(--white);
+}
+
+.catalogue-area {
+    background-color: var(--cream);
+}
+
+.catalogue-filter-panel {
+    background-color: var(--white);
+    border-radius: 14px;
+    border-left: 6px solid var(--gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+}
+
+.catalogue-card {
+    background-color: var(--white);
+    border: none;
+    border-top: 5px solid var(--deep-red);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.catalogue-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+}
+
+.catalogue-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    background-color: var(--cream);
+}
+
+.status-open {
+    background-color: #198754;
+    color: var(--white);
+}
+
+.status-restricted {
+    background-color: var(--danger-red);
+    color: var(--white);
+}
+
+.status-sensitive {
+    background-color: var(--gold);
+    color: var(--charcoal);
+}
+
+.status-pending {
+    background-color: #6c757d;
+    color: var(--white);
+}
+
+/* =========================================================
+   Item Details Page
+   ========================================================= */
+
+.item-page-header {
+    background: linear-gradient(135deg,
+            var(--gold) 0%,
+            var(--deep-red) 55%,
+            var(--charcoal) 100%);
+    color: var(--white);
+}
+
+.item-details-area {
+    background-color: var(--cream);
+}
+
+.item-card {
+    background-color: var(--white);
+    border: none;
+    border-top: 5px solid var(--deep-red);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+.item-thumbnail {
+    width: 100%;
+    height: auto;
+    display: block;
+    background-color: var(--cream);
+}
+
+.item-cultural-alert {
+    background-color: #fff3cd;
+    border-left: 6px solid var(--gold);
+    color: #3a2a00;
+    border-radius: 12px;
+}
+
+.metadata-table th {
+    width: 35%;
+    color: var(--dark-red);
+    background-color: #faf7f0;
+}
+
+.metadata-table td {
+    background-color: var(--white);
+}
+
+.related-item {
+    background-color: var(--cream);
+    border-radius: 12px;
+    padding: 1rem;
+    height: 100%;
+}
+
+/* Request Access display states */
+.request-state-card {
+    background-color: var(--white);
+    border-radius: 14px;
+    padding: 1rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    height: 100%;
+}
+
+.permission-note {
+    background-color: #fffaf0;
+    border-left: 6px solid #ff9d3d;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+/* =========================================================
+   Assessment Page
+   ========================================================= */
+
+.assessment-page-header {
+    background: linear-gradient(135deg,
+            var(--charcoal) 0%,
+            var(--deep-red) 65%,
+            var(--gold) 100%);
+    color: var(--white);
+}
+
+.assessment-area {
+    background-color: #f3efe7;
+}
+
+.assessment-alert {
+    background-color: #fff3cd;
+    border-left: 6px solid var(--gold);
+    color: #3a2a00;
+    border-radius: 12px;
+}
+
+.assessment-card {
+    background-color: var(--white);
+    border: none;
+    border-top: 5px solid var(--deep-red);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+.assessment-dashboard-card {
+    background-color: var(--charcoal);
+    color: var(--white);
+    border-radius: 14px;
+    padding: 1.25rem;
+    height: 100%;
+}
+
+.assessment-dashboard-card .badge {
+    background-color: var(--gold);
+    color: var(--charcoal);
+}
+
+.timeline {
+    border-left: 4px solid var(--deep-red);
+    padding-left: 1.5rem;
+}
+
+.timeline-entry {
+    background-color: var(--white);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    position: relative;
+}
+
+.timeline-entry::before {
+    content: "";
+    width: 14px;
+    height: 14px;
+    background-color: var(--gold);
+    border-radius: 50%;
+    position: absolute;
+    left: -2.05rem;
+    top: 1.2rem;
+}
+
+.comment-card {
+    border-left: 5px solid var(--gold);
+    background-color: #fffaf0;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+/* =========================================================
+   My Access Requests Page
+   ========================================================= */
+
+.request-summary-card {
+    background-color: var(--white);
+    border-radius: 14px;
+    border-top: 5px solid var(--deep-red);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    height: 100%;
+}
+
+.request-summary-card .display-6 {
+    color: var(--deep-red);
+}
+
+.request-history-table th {
+    color: var(--dark-red);
+    background-color: #faf7f0;
+}
+
+.request-history-table td {
+    vertical-align: middle;
+}
+
+.request-status-approved {
+    background-color: #198754;
+    color: var(--white);
+}
+
+.request-status-pending {
+    background-color: var(--gold);
+    color: var(--charcoal);
+}
+
+.request-status-rejected {
+    background-color: var(--danger-red);
+    color: var(--white);
+}
+
+/* =========================================================
+   Role and Workflow Accents
+   ========================================================= */
+
+.role-public {
+    border-left: 6px solid #a9a9a9;
+}
+
+.role-adm {
+    border-left: 6px solid #4aa3ff;
+}
+
+.role-lib-adm {
+    border-left: 6px solid #62d27b;
+}
+
+.role-ce-adm {
+    border-left: 6px solid #8f61ff;
+}
+
+.role-system {
+    border-left: 6px solid #ff9d3d;
+}
+
+/* =========================================================
+   Footer
+   ========================================================= */
+
+.site-footer {
+    background-color: var(--charcoal);
+    color: var(--white);
+}
+
+.site-footer h3,
+.site-footer h4 {
+    color: var(--gold);
+}
+
+.site-footer a {
+    color: var(--white);
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    color: var(--gold);
+    text-decoration: underline;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* =========================================================
+   Responsive Adjustments
+   ========================================================= */
+
+@media (max-width: 992px) {
+    .catalogue-image {
+        height: 200px;
+    }
+
+    .featured-item-card img {
+        height: 180px;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 17px;
+    }
+
+    .acknowledgement-box {
+        padding: 28px;
+    }
+
+    .nav-button {
+        margin: 6px 0;
+    }
+
+    .metadata-table th {
+        width: 45%;
+    }
+
+    .request-history-table {
+        font-size: 0.95rem;
+    }
+
+    .catalogue-filter-panel {
+        padding: 1.25rem;
+    }
+
+    .catalogue-image {
+        height: 190px;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-subtitle {
+        font-size: 1rem;
+    }
+
+    .search-box {
+        padding: 1.5rem;
+    }
+
+    .catalogue-image {
+        height: 175px;
+    }
+
+    .btn-primary,
+    .btn-outline-dark,
+    .btn-outline-secondary,
+    .btn-secondary {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+}
+
+/* =========================================================
+   Access and Privacy Page
+   ========================================================= */
+
+.access-page-header {
+    background: linear-gradient(135deg,
+            var(--charcoal) 0%,
+            var(--deep-red) 58%,
+            var(--gold) 100%);
+    color: var(--white);
+}
+
+.access-privacy-area {
+    background-color: var(--cream);
+}
+
+.access-card {
+    background-color: var(--white);
+    border: none;
+    border-top: 5px solid var(--deep-red);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+.care-principle-card {
+    background-color: var(--white);
+    border-left: 6px solid var(--gold);
+    border-radius: 14px;
+    padding: 1.4rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+.care-principle-card h3 {
+    color: var(--dark-red);
+}
+
+.access-list {
+    padding-left: 1.2rem;
+}
+
+.access-list li {
+    margin-bottom: 0.55rem;
+}
+
+.access-policy-table th {
+    color: var(--dark-red);
+    background-color: #faf7f0;
+}
+
+.access-policy-table td {
+    background-color: var(--white);
+}
+
+.contact-detail-box {
+    background-color: var(--cream);
+    border-left: 6px solid var(--gold);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.map-container {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 4px solid var(--cream);
+}
+
+/* =========================================================
+   Login Page
+   ========================================================= */
+
+.login-page-header {
+    background: linear-gradient(135deg,
+            var(--charcoal) 0%,
+            var(--deep-red) 60%,
+            var(--gold) 100%);
+    color: var(--white);
+}
+
+.login-area {
+    background-color: var(--cream);
+}
+
+.login-card,
+.login-info-card {
+    background-color: var(--white);
+    border: none;
+    border-top: 5px solid var(--deep-red);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+}
+
+.login-info-card {
+    border-top-color: var(--gold);
+}
+
+.role-info-box {
+    background-color: var(--cream);
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.login-card .form-label {
+    color: var(--dark-red);
+}
+
+.login-card .form-text {
+    color: #6c757d;
+}
+
+/* =========================================================
+   Ensuring Consistent Styling
+   ========================================================= */
+
+.featured-item-card img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Ensure spacing inside cards stays consistent */
+.featured-item-card .card-body {
+    padding: 1.25rem;
+}
+
+/* Improve hierarchy without changing layout */
+.featured-item-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.featured-item-card p {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    margin-bottom: 0.75rem;
+}
+
+/* Button consistency inside featured cards */
+.featured-item-card .btn {
+    border-radius: 999px;
+    width: 100%;
+}
+
+/* Hover ONLY (no layout changes) */
+.featured-item-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featured-item-card:hover {
+    transform: translateY(-3px);
+}
