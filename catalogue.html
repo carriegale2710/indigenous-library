@@ -106,10 +106,14 @@
                     Search collection records by title, collection area, language, item type or access status.
                 </p>
 
-                <form class="row g-3">
+                <form method="GET" action="{{ url_for('catalogue') }}" class="row g-3">
                     <div class="col-lg-5">
                         <label for="catalogueSearch" class="form-label">Search catalogue</label>
-                        <input type="text" class="form-control" id="catalogueSearch"
+                        <input 
+                            type="text" 
+                            class="form-control" 
+                            id="catalogueSearch"
+                            name="search"
                             placeholder="Search by title, collection, language or keyword">
                     </div>
 
@@ -132,7 +136,6 @@
                             <option>Open</option>
                             <option>Restricted</option>
                             <option>Culturally Sensitive</option>
-                            <option>Pending</option>
                         </select>
                     </div>
 
@@ -145,363 +148,40 @@
             <!-- Catalogue Cards -->
             <div class="row g-4">
 
-                <!-- Item 1 -->
+                <!-- Items: Jinja Loop that loops through all items in the db.sql and returns an item card for each item -->
+                {% for item in items %}
                 <div class="col-md-6 col-lg-4">
                     <div class="card h-100 catalogue-card">
-                        <img src="assets/kalaw-lagaw-ya-dictionary.svg" class="card-img-top catalogue-image"
-                            alt="Kalaw Lagaw Ya Dictionary">
+                        
+                        <img src="{{ url_for('static', filename=item.thumbnailPath) }}" 
+                            class="card-img-top catalogue-image"
+                            alt="{{ item.title }}">
+                        
                         <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Kalaw Lagaw Ya Dictionary</h3>
-                            <p class="text-muted small mb-2">Torres Strait Language Collection | Book | 2018</p>
-                            <p>
-                                A community dictionary of the Kalaw Lagaw Ya language.
+                            <span class="badge 
+                                {% if item.statusName == 'Open' %}status-open
+                                {% elif item.statusName == 'Restricted' %}status-restricted
+                                {% else %}status-sensitive
+                                {% endif %}
+                                mb-2">{{ item.statusName }}</span>
+                            
+                            <h3 class="h5 fw-bold">{{ item.title }}</h3>
+                            
+                            <p class="text-muted small mb-2">
+                                {{ item.collectionName }} |
+                                {{ item.itemType }} |
+                                {{ item.year if item.year else "Year unknown" }}
                             </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
+                            
+                            <p>
+                                {{ item.summary }}
+                            </p>
 
-                <!-- Item 2 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/recordings-of-meriam-mir-speakers.svg" class="card-img-top catalogue-image"
-                            alt="Recordings of Meriam Mir Speakers">
-                        <div class="card-body">
-                            <span class="badge status-restricted mb-2">Restricted</span>
-                            <h3 class="h5 fw-bold">Recordings of Meriam Mir Speakers</h3>
-                            <p class="text-muted small mb-2">Torres Strait Language Collection | Recording | 2005</p>
-                            <p>
-                                Audio recordings of fluent Meriam Mir speakers.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                            <a href="{{ url_for('item_details', item_id=item.itemID) }}" class="btn btn-primary">View Item</a>
                         </div>
                     </div>
                 </div>
-
-                <!-- Item 3 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/creation-songline-of-the-seven-sisters.svg"
-                            class="card-img-top catalogue-image" alt="Creation Songline of the Seven Sisters">
-                        <div class="card-body">
-                            <span class="badge status-restricted mb-2">Restricted</span>
-                            <h3 class="h5 fw-bold">Creation Songline of the Seven Sisters</h3>
-                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 1998</p>
-                            <p>
-                                A recorded songline shared under cultural protocol.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 4 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/oral-history-mission-days.svg" class="card-img-top catalogue-image"
-                            alt="Oral History: Mission Days">
-                        <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Oral History: Mission Days</h3>
-                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 2010</p>
-                            <p>
-                                Interviews recalling life on the missions.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 5 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/weaving-patterns-of-the-yolngu.svg" class="card-img-top catalogue-image"
-                            alt="Weaving Patterns of the Yolngu">
-                        <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Weaving Patterns of the Yolngu</h3>
-                            <p class="text-muted small mb-2">Visual Culture Collection | Image | 2015</p>
-                            <p>
-                                Photographs documenting traditional weaving patterns.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 6 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/ceremony-photographs-collection.svg" class="card-img-top catalogue-image"
-                            alt="Ceremony Photographs Collection">
-                        <div class="card-body">
-                            <span class="badge status-restricted mb-2">Restricted</span>
-                            <h3 class="h5 fw-bold">Ceremony Photographs Collection</h3>
-                            <p class="text-muted small mb-2">Visual Culture Collection | Image | 1972</p>
-                            <p>
-                                A restricted set of ceremony photographs.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 7 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/childrens-picture-book-in-yumplatok.svg" class="card-img-top catalogue-image"
-                            alt="Children's Picture Book in Yumplatok">
-                        <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Children's Picture Book in Yumplatok</h3>
-                            <p class="text-muted small mb-2">Torres Strait Language Collection | Book | 2020</p>
-                            <p>
-                                An illustrated children's book in Yumplatok, also known as Torres Strait Creole.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 8 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/mens-business-recordings.svg" class="card-img-top catalogue-image"
-                            alt="Men's Business Recordings">
-                        <div class="card-body">
-                            <span class="badge status-restricted mb-2">Restricted</span>
-                            <h3 class="h5 fw-bold">Men's Business Recordings</h3>
-                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 1985</p>
-                            <p>
-                                Restricted recordings held under cultural protocol.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 9 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/bark-painting-records.svg" class="card-img-top catalogue-image"
-                            alt="Bark Painting Records">
-                        <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Bark Painting Records</h3>
-                            <p class="text-muted small mb-2">Visual Culture Collection | Image | 2012</p>
-                            <p>
-                                Catalogue of bark paintings with artist notes.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 10 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/restricted-ceremony-audio.svg" class="card-img-top catalogue-image"
-                            alt="Restricted Ceremony Audio">
-                        <div class="card-body">
-                            <span class="badge status-sensitive mb-2">Culturally Sensitive</span>
-                            <h3 class="h5 fw-bold">Restricted Ceremony Audio</h3>
-                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 1990</p>
-                            <p>
-                                Ceremony audio with an access request under assessment.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 11 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/yolngu-matha-language-primer.svg" class="card-img-top catalogue-image"
-                            alt="Yolngu Matha Language Primer">
-                        <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Yolngu Matha Language Primer</h3>
-                            <p class="text-muted small mb-2">Torres Strait Language Collection | Book | 2017</p>
-                            <p>
-                                An introductory primer for Yolngu Matha.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 12 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/sacred-site-survey-notes.svg" class="card-img-top catalogue-image"
-                            alt="Sacred Site Survey Notes">
-                        <div class="card-body">
-                            <span class="badge status-restricted mb-2">Restricted</span>
-                            <h3 class="h5 fw-bold">Sacred Site Survey Notes</h3>
-                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Manuscript | 2003</p>
-                            <p>
-                                Field notes referencing restricted sacred sites.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 13 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/community-festival-photographs.svg" class="card-img-top catalogue-image"
-                            alt="Community Festival Photographs">
-                        <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Community Festival Photographs</h3>
-                            <p class="text-muted small mb-2">Visual Culture Collection | Image | 2019</p>
-                            <p>
-                                Photographs from annual community festivals.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 14 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/initiation-recordings.svg" class="card-img-top catalogue-image"
-                            alt="Initiation Recordings">
-                        <div class="card-body">
-                            <span class="badge status-sensitive mb-2">Culturally Sensitive</span>
-                            <h3 class="h5 fw-bold">Initiation Recordings</h3>
-                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 1988</p>
-                            <p>
-                                Initiation recordings with an access request under assessment.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 15 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/dreaming-stories-anthology.svg" class="card-img-top catalogue-image"
-                            alt="Dreaming Stories Anthology">
-                        <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Dreaming Stories Anthology</h3>
-                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Book | 2014</p>
-                            <p>
-                                A published anthology of Dreaming stories cleared for public access.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 16 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/seasonal-plant-knowledge-cards.svg" class="card-img-top catalogue-image"
-                            alt="Seasonal Plant Knowledge Cards">
-                        <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Seasonal Plant Knowledge Cards</h3>
-                            <p class="text-muted small mb-2">Land and Sea Country Collection | Resource | 2021</p>
-                            <p>
-                                Illustrated cards describing traditional plant uses and seasonal gathering calendars.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 17 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/healing-practices-recordings.svg" class="card-img-top catalogue-image"
-                            alt="Healing Practices Recordings">
-                        <div class="card-body">
-                            <span class="badge status-sensitive mb-2">Culturally Sensitive</span>
-                            <h3 class="h5 fw-bold">Healing Practices Recordings</h3>
-                            <p class="text-muted small mb-2">Land and Sea Country Collection | Recording | 1996</p>
-                            <p>
-                                Recordings of healing practices and plant preparation methods shared under cultural
-                                conditions.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 18 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/caring-for-sea-country-photo-series.svg" class="card-img-top catalogue-image"
-                            alt="Caring for Sea Country Photo Series">
-                        <div class="card-body">
-                            <span class="badge status-open mb-2">Open</span>
-                            <h3 class="h5 fw-bold">Caring for Sea Country Photo Series</h3>
-                            <p class="text-muted small mb-2">Land and Sea Country Collection | Image | 2022</p>
-                            <p>
-                                Photographs documenting sea country management and community-led conservation work.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 19 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/land-management-oral-histories.svg" class="card-img-top catalogue-image"
-                            alt="Land Management Oral Histories">
-                        <div class="card-body">
-                            <span class="badge status-restricted mb-2">Restricted</span>
-                            <h3 class="h5 fw-bold">Land Management Oral Histories</h3>
-                            <p class="text-muted small mb-2">Land and Sea Country Collection | Recording | 2009</p>
-                            <p>
-                                Interviews with Elders describing traditional land management and fire practices.
-                            </p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 20 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/recently-donated-community-recordings.svg" class="card-img-top catalogue-image"
-                            alt="Recently Donated Community Recordings">
-                        <div class="card-body">
-                            <span class="badge status-pending mb-2">Pending</span>
-                            <h3 class="h5 fw-bold">Recently Donated Community Recordings</h3>
-                            <p class="text-muted small mb-2">Cultural Knowledge Collection | Recording | 2023</p>
-                            <p>
-                                Newly catalogued recordings awaiting cultural review before an access status is set.
-                            </p>
-                            <button type="button" class="btn btn-secondary" disabled>Not Available for Request</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 21 -->
-                <div class="col-md-6 col-lg-4">
-                    <div class="card h-100 catalogue-card">
-                        <img src="assets/uncatalogued-item.svg" class="card-img-top catalogue-image"
-                            alt="Uncatalogued Photograph Series">
-                        <div class="card-body">
-                            <span class="badge status-pending mb-2">Pending</span>
-                            <h3 class="h5 fw-bold">Uncatalogued Photograph Series</h3>
-                            <p class="text-muted small mb-2">Visual Culture Collection | Image | Year unknown</p>
-                            <p>
-                                A set of photographs recently added to the catalogue and awaiting Elder review.
-                            </p>
-                            <button type="button" class="btn btn-secondary" disabled>Not Available for Request</button>
-                        </div>
-                    </div>
-                </div>
+                {% endfor %}
 
             </div>
 
