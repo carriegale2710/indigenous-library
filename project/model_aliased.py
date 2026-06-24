@@ -271,13 +271,23 @@ class CollectionItem:
         string formatting, so you are safe from SQL injection.
         """
         sql = """
-            SELECT CollectionItem.itemID, CollectionItem.title, CollectionItem.authorCreator,
-                   CollectionItem.`year`, CollectionItem.itemType, CollectionItem.summary,
-                   CollectionItem.thumbnailPath, CollectionItem.statusID, CollectionItem.collectionID,
-                   Collection.collectionName, AccessStatus.statusName
-            FROM CollectionItem
-            JOIN Collection   ON CollectionItem.collectionID = Collection.collectionID
-            JOIN AccessStatus ON CollectionItem.statusID = AccessStatus.statusID
+            SELECT 
+                ci.itemID,
+                ci.title,
+                ci.authorCreator,
+                ci.`year`,
+                ci.itemType,
+                ci.summary,
+                ci.thumbnailPath,
+                ci.statusID,
+                ci.collectionID,
+                c.collectionName,
+                ast.statusName
+            FROM CollectionItem ci
+                JOIN Collection c  
+                    ON ci.collectionID = c.collectionID
+                JOIN AccessStatus ast 
+                    ON ci.statusID = ast.statusID
             """
 
         # Collect a condition + value for each filter that was actually passed
@@ -285,17 +295,19 @@ class CollectionItem:
         params = []
 
         if search:
-            conditions.append("CollectionItem.title LIKE %s")
-            params.append("%" + search + "%")
+            conditions.append("ci.title LIKE %s OR ci.summary LIKE %s")
+            params.extend(f"%{search}%", f"%{search}%")
         if collection_id:
-            conditions.append("CollectionItem.collectionID = %s")
+            conditions.append("ci.collectionID = %s")
             params.append(collection_id)
         if status_id:
-            conditions.append("CollectionItem.statusID = %s")
+            conditions.append("ci.statusID = %s")
             params.append(status_id)
 
         if conditions:
             sql += " WHERE " + " AND ".join(conditions)
+
+        sql += " ORDER BY ci.title"     # ensures search returns consistent ordering for same search terms
 
         cur = _get_cursor()
         cur.execute(sql, params)
@@ -303,8 +315,31 @@ class CollectionItem:
         cur.close()
         return rows 
     
-        
-
+    @staticmethod
+    def get_featured_items():
+        """
+        Pages used:
+            - index.html
+        Purpose:
+            - populates the 'Featured Items' cards with a random set of 3 items
+        """
+        cur = _get_cursor()
+        cur.execute("""
+            SELECT
+                ci.itemID,
+                ci.title,
+                ci.summary,
+                ci.thumbnailPath,
+                ci.statusID,
+                ast.statusName
+            FROM CollectionItem ci
+            JOIN AccessStatus ast
+                ON ci.statusID = ast.statusID
+            ORDER BY RAND()
+            LIMIT 3
+        """)
+    
+    
     @staticmethod
     def get_by_id(item_id):
         """
@@ -315,21 +350,34 @@ class CollectionItem:
         cur = _get_cursor()
         cur.execute(
             """
-            SELECT CollectionItem.itemID, CollectionItem.title, CollectionItem.authorCreator,
-                   CollectionItem.`year`, CollectionItem.itemType, CollectionItem.summary,
-                   CollectionItem.thumbnailPath, CollectionItem.statusID, CollectionItem.collectionID,
-                   CollectionItem.nextReviewDate,
-                   Collection.collectionName, AccessStatus.statusName,
-                   CulturalMetadata.communityGroup, CulturalMetadata.language,
-                   CulturalMetadata.location, CulturalMetadata.subjectArea,
-                   CulturalMetadata.culturalSensitivityNotes,
-                   CulturalMetadata.culturalProtocolNotes,
-                   CulturalMetadata.accessRecommendations
-            FROM CollectionItem
-            JOIN Collection   ON CollectionItem.collectionID = Collection.collectionID
-            JOIN AccessStatus ON CollectionItem.statusID = AccessStatus.statusID
-            LEFT JOIN CulturalMetadata ON CollectionItem.itemID = CulturalMetadata.itemID
-            WHERE CollectionItem.itemID = %s
+            SELECT 
+                ci.itemID,
+                ci.title,
+                ci.authorCreator,
+                ci.`year`,
+                ci.itemType,
+                ci.summary,
+                ci.thumbnailPath,
+                ci.statusID,
+                ci.collectionID,
+                ci.nextReviewDate,
+                c.collectionName,
+                ast.statusName,
+                cm.communityGroup,
+                cm.language,
+                cm.location,
+                cm.subjectArea,
+                cm.culturalSensitivityNotes,
+                cm.culturalProtocolNotes,
+                cm.accessRecommendations
+            FROM CollectionItem ci
+                JOIN Collection c 
+                    ON ci.collectionID = c.collectionID
+                JOIN AccessStatus ast 
+                    ON ci.statusID = ast.statusID
+                LEFT JOIN CulturalMetadata cm 
+                    ON ci.itemID = cm.itemID
+            WHERE ci.itemID = %s
             """,
             (item_id,)
         )
@@ -536,15 +584,23 @@ class AccessRequest:
         cur = _get_cursor()
         cur.execute(
             """
-            SELECT AccessRequest.requestID, AccessRequest.userID, AccessRequest.itemID,
-                   AccessRequest.requestReason, AccessRequest.supportingDocuments,
-                   AccessRequest.requestDate, AccessRequest.requestStatus,
-                   `User`.fullName, `User`.username,
-                   CollectionItem.title
-            FROM AccessRequest
-            JOIN `User`         ON AccessRequest.userID = `User`.userID
-            JOIN CollectionItem ON AccessRequest.itemID = CollectionItem.itemID
-            WHERE AccessRequest.requestID = %s
+            SELECT 
+                ar.requestID,
+                ar.userID,
+                ar.itemID,
+                ar.requestReason,
+                ar.supportingDocuments,
+                ar.requestDate,
+                ar.requestStatus,
+                u.fullName,
+                u.username,
+                CollectionItem.title
+            FROM AccessRequest ar
+                JOIN `User` u
+                    ON ar.userID = u.userID
+                JOIN CollectionItem 
+                    ON ar.itemID = CollectionItem.itemID
+            WHERE ar.requestID = %s
             """,
             (request_id,)
         )
@@ -558,14 +614,20 @@ class AccessRequest:
         cur = _get_cursor()
         cur.execute(
             """
-            SELECT AccessRequest.requestID, AccessRequest.userID, AccessRequest.itemID,
-                   AccessRequest.requestReason, AccessRequest.supportingDocuments,
-                   AccessRequest.requestDate, AccessRequest.requestStatus,
-                   CollectionItem.title
-            FROM AccessRequest
-            JOIN CollectionItem ON AccessRequest.itemID = CollectionItem.itemID
-            WHERE AccessRequest.userID = %s
-            ORDER BY AccessRequest.requestDate DESC
+            SELECT
+                ar.requestID,
+                ar.userID,
+                ar.itemID,
+                ar.requestReason,
+                ar.supportingDocuments,
+                ar.requestDate,
+                ar.requestStatus,
+                ci.title
+            FROM AccessRequest ar
+                JOIN CollectionItem
+                    ON ar.itemID = ci.itemID
+            WHERE ar.userID = %s
+            ORDER BY ar.requestDate DESC
             """,
             (user_id,)
         )
@@ -659,14 +721,20 @@ class ReviewDecision:
         cur = _get_cursor()
         cur.execute(
             """
-            SELECT ReviewDecision.decisionID, ReviewDecision.requestID, ReviewDecision.reviewerID,
-                   ReviewDecision.decisionType, ReviewDecision.decisionNotes,
-                   ReviewDecision.accessConditions, ReviewDecision.decisionDate,
-                   `User`.fullName
-            FROM ReviewDecision
-            JOIN `User` ON ReviewDecision.reviewerID = `User`.userID
-            WHERE ReviewDecision.requestID = %s
-            ORDER BY ReviewDecision.decisionDate
+            SELECT
+                rd.decisionID,
+                rd.requestID,
+                rd.reviewerID,
+                rd.decisionType,
+                rd.decisionNotes,
+                rd.accessConditions,
+                rd.decisionDate,
+                u.fullName
+            FROM ReviewDecision rd
+                JOIN `User` u
+                    ON rd.reviewerID = u.userID
+            WHERE rd.requestID = %s
+            ORDER BY rd.decisionDate
             """,
             (request_id,)
         )
@@ -714,11 +782,18 @@ class CommunityComment:
         cur = _get_cursor()
         cur.execute(
             """
-            SELECT CommunityComment.commentID, CommunityComment.requestID, CommunityComment.reviewerID, CommunityComment.commentText, CommunityComment.createdDate, `User`.fullName
-            FROM CommunityComment
-            JOIN `User` ON CommunityComment.reviewerID = `User`.userID
-            WHERE CommunityComment.requestID = %s
-            ORDER BY CommunityComment.createdDate
+            SELECT
+                cc.commentID,
+                cc.requestID,
+                cc.reviewerID,
+                cc.commentText,
+                cc.createdDate,
+                u.fullName
+            FROM CommunityComment cc
+                JOIN `User` u
+                    ON CommunityComment.reviewerID = u.userID
+            WHERE cc.requestID = %s
+            ORDER BY cc.createdDate
             """,
             (request_id,)
         )
