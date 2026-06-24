@@ -38,7 +38,7 @@
                 </div>
 
                 <div class="mt-4">
-                    <a href="catalogue.html" class="btn btn-primary me-2">Browse Catalogue</a>
+                    <a href="{{ url_for('catalogue') }}" class="btn btn-primary me-2">Browse Catalogue</a>
                     <a href="#web-app-intro" class="btn btn-outline-dark">Learn About the Access Service</a>
                 </div>
             </div>
@@ -158,7 +158,7 @@
                         <div class="p-4">
                             <h3 class="h5 fw-bold">{{ item.title }}</h3>
                             
-                            <p>{{ item.description }}</p>
+                            <p>{{ item.summary }}</p>
 
                             <!-- 
                             Jinja
@@ -167,7 +167,7 @@
                             <p class="mb-2">
                                 {% if item.statusName == "Open" %}
                                     <span class="badge bg-success">{{ item.statusName }}</span>
-                                {% if item.statusName == "Restricted" %}
+                                {% elif item.statusName == "Restricted" %}
                                     <span class="badge bg-danger">{{ item.statusName }}</span>
                                 {% else %}
                                     <span class="badge bg-warning text-dark">{{ item.statusName }}</span>
