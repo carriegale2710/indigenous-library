@@ -74,7 +74,7 @@
                     <div class="intro-stat">
                         <h3 class="h5 fw-bold">Cultural Access Control</h3>
                         <p class="mb-0">
-                            Items may be public, restricted, culturally sensitive or pending review depending on
+                            Items may be public, restricted, or culturally sensitive depending on
                             cultural sensitivity, collection policy and responsible data use.
                         </p>
                     </div>
@@ -141,68 +141,49 @@
                     and cultural review requirements.
                 </p>
             </div>
-
+            
             <div class="row g-4">
 
+            <!-- 
+            Jinja2:
+                - for loop, same as the one used to populate the catalogue
+                - these are featured items, so controller needs to query DB for 3 random items
+                - each page refresh should populate new randomised set of featured items
+            -->
+                {% for item in featured_items %}
                 <div class="col-md-4">
                     <div class="featured-item-card">
-                        <img src="assets/recordings-of-meriam-mir-speakers.svg" alt="Recordings of Meriam Mir Speakers">
+                        <img src="{{ url_for('static', filename=item.thumbnailPath) }}" 
+                            alt="{{ item.title }}">
                         <div class="p-4">
-                            <h3 class="h5 fw-bold">Recordings of Meriam Mir Speakers</h3>
-                            <p>
-                                Audio recordings connected to Torres Strait Islander language knowledge, cultural memory
-                                and community language revival.
-                            </p>
+                            <h3 class="h5 fw-bold">{{ item.title }}</h3>
+                            
+                            <p>{{ item.description }}</p>
+
+                            <!-- 
+                            Jinja
+                                - if statement to seleect correct status badge depending on each random items statusName
+                            -->
                             <p class="mb-2">
-                                <span class="badge bg-danger">Restricted Access</span>
+                                {% if item.statusName == "Open" %}
+                                    <span class="badge bg-success">{{ item.statusName }}</span>
+                                {% if item.statusName == "Restricted" %}
+                                    <span class="badge bg-danger">{{ item.statusName }}</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">{{ item.statusName }}</span>
+                                {% endif %}
                             </p>
+                            
                             <p class="small text-muted">Review status: Community review required</p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
+                            <a href="{{ url_for('item_details', item_id=item.itemID) }}" class="btn btn-primary">View Item</a>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <div class="featured-item-card">
-                        <img src="assets/kalaw-lagaw-ya-dictionary.svg" alt="Kalaw Lagaw Ya Dictionary">
-                        <div class="p-4">
-                            <h3 class="h5 fw-bold">Kalaw Lagaw Ya Dictionary</h3>
-                            <p>
-                                Language resource from the Torres Strait collection that supports learning, research and
-                                cultural knowledge preservation.
-                            </p>
-                            <p class="mb-2">
-                                <span class="badge bg-success">Open Access</span>
-                            </p>
-                            <p class="small text-muted">Review status: Approved for catalogue access</p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="featured-item-card">
-                        <img src="assets/creation-songline-of-the-seven-sisters.svg"
-                            alt="Creation Songline of the Seven Sisters">
-                        <div class="p-4">
-                            <h3 class="h5 fw-bold">Creation Songline of the Seven Sisters</h3>
-                            <p>
-                                Culturally sensitive record requiring careful access review, cultural protocol notes and
-                                authorised consultation.
-                            </p>
-                            <p class="mb-2">
-                                <span class="badge bg-warning text-dark">Culturally Sensitive</span>
-                            </p>
-                            <p class="small text-muted">Review status: CE or Admin decision required</p>
-                            <a href="item-details.html" class="btn btn-primary">View Item</a>
-                        </div>
-                    </div>
-                </div>
-
+                {% endfor %}
             </div>
 
             <div class="text-center mt-4">
-                <a href="catalogue.html" class="btn btn-primary">View Full Catalogue</a>
+                <a href="{{ url_for('catalogue') }}" class="btn btn-primary">View Full Catalogue</a>
             </div>
         </div>
     </section>
@@ -303,7 +284,12 @@
                     <input type="text" class="form-control search-input"
                         placeholder="Search by title, item type, collection, community, format or keyword">
 
-                    <a href="catalogue.html" class="btn btn-primary search-btn">
+                    <!-- 
+                    CONSIDER:
+                        - adjusting design of this search section to either have no search field, just the button that links to catalogue search
+                        - alternatively, make the button submit search request to controller (similar to the search field on catalogue.html)
+                    --> 
+                    <a href="{{ url_for('catalogue') }}" class="btn btn-primary search-btn">
                         Search
                     </a>
                 </form>
@@ -339,11 +325,16 @@
                                 Explore available collection records and identify whether items are open, restricted,
                                 culturally sensitive or pending review.
                             </p>
-                            <a href="catalogue.html" class="btn btn-primary">Browse Catalogue</a>
+                            <a href="{{ url_for('catalogue') }}" class="btn btn-primary">Browse Catalogue</a>
                         </div>
                     </div>
                 </div>
 
+                <!-- 
+                CONSIDER: 
+                    - removing the below 'View Item Details' card from this section because it does not link to a specific itemID, so item-details.html cannot populate
+                    - alternative is controller pulls random item from DB, but what would the purpose of this function be?
+                -->
                 <div class="col-md-6 col-lg-3">
                     <div class="card h-100 shadow-sm portal-card">
                         <div class="card-body">
@@ -365,7 +356,7 @@
                                 Logged-in users can track submitted access requests, review progress, access conditions
                                 and final decisions.
                             </p>
-                            <a href="my-access-requests.html" class="btn btn-primary">View My Requests</a>
+                            <a href="{{ url_for('my_access_requests') }}" class="btn btn-primary">View My Requests</a>
                         </div>
                     </div>
                 </div>
@@ -378,7 +369,7 @@
                                 Authorised reviewers can assess requests, record consultation comments and update access
                                 decisions through the assessment panel.
                             </p>
-                            <a href="item-assessment.html" class="btn btn-primary">Open Review Page</a>
+                            <a href="{{ url_for('item_assessment') }}" class="btn btn-primary">Open Review Page</a>
                         </div>
                     </div>
                 </div>
