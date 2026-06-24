@@ -153,7 +153,7 @@
                 {% for item in featured_items %}
                 <div class="col-md-4">
                     <div class="featured-item-card">
-                        <img src="{{ url_for('static', filename=item.thumbnailPath) }}" 
+                        <img src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}" 
                             alt="{{ item.title }}">
                         <div class="p-4">
                             <h3 class="h5 fw-bold">{{ item.title }}</h3>
