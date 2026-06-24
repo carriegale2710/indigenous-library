@@ -143,7 +143,7 @@
                                 <p class="mb-0"><strong>Viewing Location:</strong> Special Collections Reading Room</p>
                             </div>
 
-                            <a href="#request-form" class="btn btn-primary">Request to View</a>
+                            <a href="#request-form" class="btn btn-primary">Request Access</a>
                         </div>
                     </div>
 
@@ -276,10 +276,7 @@
                                         <th scope="row">Last Reviewed</th>
                                         <td>18 May 2026</td>
                                     </tr>
-                                    <tr>
-                                        <th scope="row">Responsible Staff Member</th>
-                                        <td>Special Collections Access Officer</td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
@@ -311,12 +308,6 @@
                                         </p>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="permission-note mt-4">
-                                <strong>Login required:</strong>
-                                In the completed Flask system, users must be logged in to submit an access request.
-                                Unauthenticated users will be redirected to login before returning to this item.
                             </div>
 
                         </div>
@@ -363,12 +354,6 @@
                                 </div>
                             </div>
 
-                            <div class="permission-note mt-4">
-                                <strong>View layer note:</strong>
-                                In the Flask version, the controller passes the item status to the Jinja2 template.
-                                The template decides whether to show the request button, hide it, or show a disabled
-                                state.
-                            </div>
                         </div>
                     </div>
 
@@ -460,11 +445,6 @@
                                         Requests</a>
                                 </div>
                             </div>
-
-                            <p class="text-muted small mt-3 mb-0">
-                                Static prototype only. In the final Flask version, user ID will come from the session,
-                                item ID will come from the URL, and request date will be auto-recorded.
-                            </p>
 
                         </div>
                     </div>
