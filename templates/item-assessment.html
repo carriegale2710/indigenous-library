@@ -1,0 +1,362 @@
+<!-- Submitted by LU - Item Assessment Page -->
+{% extends "base_template.html" %}
+
+<!-- Adjust this to what the name of the page is, the other part of this in the base_template is ' | Indigenous Academic Library' -->
+{% block title %}Item Assessment{% endblock %}
+
+{% block content %}
+    <!-- Page Header -->
+    <header class="assessment-page-header py-5">
+        <div class="container px-4">
+            <p class="section-label text-warning mb-2">Authorised Review Area</p>
+            <h1 class="fw-bold mb-2">Item Assessment Panel</h1>
+            <p class="mb-0 page-subtitle">
+                Review collection metadata, consultation comments, cultural access conditions and access request
+                decisions for restricted collection items.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Assessment Area -->
+    <main class="assessment-area py-5">
+        <div class="container px-4">
+
+            <!-- Notice -->
+            <div class="alert assessment-alert mb-4" role="alert">
+                <strong>Authorised access only:</strong>
+                This area is available to approved library staff, administrators and community reviewers involved in
+                cultural access assessment.
+            </div>
+
+            <!-- Dashboard Summary -->
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="assessment-dashboard-card">
+                        <p class="mb-1">Current Status</p>
+                        <h2 class="h5 fw-bold">Review Required</h2>
+                        <span class="badge">Pending Decision</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="assessment-dashboard-card">
+                        <p class="mb-1">Access Level</p>
+                        <h2 class="h5 fw-bold">Restricted</h2>
+                        <span class="badge">High Sensitivity</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="assessment-dashboard-card">
+                        <p class="mb-1">Request Type</p>
+                        <h2 class="h5 fw-bold">Research Access</h2>
+                        <span class="badge">Submitted</span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="assessment-dashboard-card">
+                        <p class="mb-1">Next Step</p>
+                        <h2 class="h5 fw-bold">Community Review</h2>
+                        <span class="badge">Recommended</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+
+                <!-- Left Column -->
+                <div class="col-lg-4">
+
+                    <!-- Item Summary -->
+                    <div class="card assessment-card mb-4">
+                        <img src="assets/recordings-of-meriam-mir-speakers.svg" alt="Recordings of Meriam Mir Speakers"
+                            class="item-thumbnail">
+
+                        <div class="card-body">
+                            <h2 class="h4 fw-bold">Item Summary</h2>
+
+                            <p><strong>Item ID:</strong><br>CI-002</p>
+                            <p><strong>Item Title:</strong><br>Recordings of Meriam Mir Speakers</p>
+                            <p><strong>Item Type:</strong><br>Audio Recording</p>
+                            <p><strong>Collection:</strong><br>Languages of the Torres Strait</p>
+                            <p><strong>Community / Cultural Group:</strong><br>Torres Strait Islander community</p>
+                            <p><strong>Language:</strong><br>Meriam Mir</p>
+                            <p><strong>Location:</strong><br>Murray Island / Mer Island</p>
+
+                            <p><strong>Current Status:</strong><br>
+                                <span class="badge bg-warning text-dark">Review Required</span>
+                            </p>
+
+                            <p><strong>Access Level:</strong><br>
+                                <span class="badge bg-danger">Restricted Access</span>
+                            </p>
+
+                            <p><strong>Sensitivity Level:</strong><br>
+                                <span class="badge bg-danger">High</span>
+                            </p>
+
+                            <a href="item-details.html" class="btn btn-primary mt-2">Open Full Item Record</a>
+                        </div>
+                    </div>
+
+                    <!-- Access Request Summary -->
+                    <div class="card assessment-card mb-4">
+                        <div class="card-body">
+                            <h2 class="h4 fw-bold">Access Request Summary</h2>
+
+                            <p><strong>Requester:</strong><br>Dr Maya Wilson</p>
+                            <p><strong>Email:</strong><br>maya.wilson@example.edu.au</p>
+                            <p><strong>Purpose:</strong><br>PhD research on Meriam Mir language revival</p>
+                            <p><strong>Submitted:</strong><br>12 May 2026</p>
+                            <p><strong>Requested Viewing Date:</strong><br>24 May 2026</p>
+
+                            <div class="status-panel">
+                                <strong>Request reason:</strong>
+                                <p class="mb-0">
+                                    The requester is researching language preservation programs and has asked to view
+                                    the recordings in the Special Collections Reading Room for academic research only.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Details -->
+                    <div class="card assessment-card">
+                        <div class="card-body">
+                            <h2 class="h4 fw-bold">Reviewer Details</h2>
+
+                            <label for="reviewDate" class="form-label">Review Date</label>
+                            <input type="date" class="form-control mb-3" id="reviewDate">
+
+                            <label for="reviewerName" class="form-label">Reviewer Name</label>
+                            <input type="text" class="form-control mb-3" id="reviewerName"
+                                placeholder="Enter reviewer name">
+
+                            <label for="reviewerRole" class="form-label">Reviewer Role</label>
+                            <select class="form-select" id="reviewerRole">
+                                <option selected>Choose role...</option>
+                                <option>Admin</option>
+                                <option>Community Elder / Reviewer</option>
+                                <option>Cultural Advisor</option>
+                            </select>
+
+                            <p class="text-muted small mt-3 mb-0">
+                                Reviewer details identify the authorised person responsible for recording assessment
+                                notes, consultation comments or review decisions.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-lg-8">
+
+                    <!-- Metadata Review -->
+                    <div class="card assessment-card mb-4">
+                        <div class="card-body">
+                            <h2 class="h4 fw-bold">Cultural Metadata Review</h2>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="community" class="form-label">Community / Cultural Group</label>
+                                    <input type="text" class="form-control" id="community"
+                                        value="Torres Strait Islander community">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="language" class="form-label">Language</label>
+                                    <input type="text" class="form-control" id="language" value="Meriam Mir">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="location" class="form-label">Location / Country</label>
+                                    <input type="text" class="form-control" id="location"
+                                        value="Murray Island / Mer Island">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="subjectArea" class="form-label">Subject Area</label>
+                                    <select class="form-select" id="subjectArea">
+                                        <option selected>Language, oral history and cultural memory</option>
+                                        <option>Language</option>
+                                        <option>Oral history</option>
+                                        <option>Photograph collection</option>
+                                        <option>Ceremony</option>
+                                        <option>Environmental knowledge</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="accessCategory" class="form-label">Recommended Access Category</label>
+                                    <select class="form-select" id="accessCategory">
+                                        <option>Public access</option>
+                                        <option>Registered user access</option>
+                                        <option selected>Staff supervised access</option>
+                                        <option>Community approval required</option>
+                                        <option>No public access</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="protocolNotes" class="form-label">Cultural Sensitivity</label>
+                                    <textarea class="form-control" id="protocolNotes"
+                                        rows="3">Access should be limited to approved research use. No reproduction, publication or redistribution should occur without further community permission.</textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="metadataNotes" class="form-label">Metadata Notes</label>
+                                    <textarea class="form-control" id="metadataNotes" rows="3"
+                                        placeholder="Add notes about cultural context, access restrictions or item description.">Metadata review indicates that this item contains language content requiring careful access management and consultation before broader access is granted.</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conversation / History Timeline -->
+                    <div class="card assessment-card mb-4">
+                        <div class="card-body">
+                            <h2 class="h4 fw-bold">Assessment History and Conversation Log</h2>
+                            <p class="text-muted">
+                                This section records request history, status changes and consultation comments connected
+                                to the assessment workflow.
+                            </p>
+
+                            <div class="timeline mt-4">
+
+                                <div class="timeline-entry role-system">
+                                    <h3 class="h6 fw-bold mb-1">12 May 2026 — Access Request Submitted</h3>
+                                    <p class="mb-1">
+                                        A new access request was recorded for this item.
+                                    </p>
+                                    <p class="small text-muted mb-0">Recorded by: System</p>
+                                </div>
+
+                                <div class="timeline-entry role-lib-adm">
+                                    <h3 class="h6 fw-bold mb-1">14 May 2026 — Initial Staff Review</h3>
+                                    <p class="mb-1">
+                                        Library staff confirmed that the item contains Meriam Mir language recordings
+                                        and should not be automatically approved for public access.
+                                    </p>
+                                    <p class="small text-muted mb-0">Recorded by: Special Collections Access Officer</p>
+                                </div>
+
+                                <div class="timeline-entry role-adm">
+                                    <h3 class="h6 fw-bold mb-1">16 May 2026 — Metadata Flag Updated</h3>
+                                    <p class="mb-1">
+                                        Sensitivity level confirmed as “High” after reviewing the item description,
+                                        language content and cultural protocol notes.
+                                    </p>
+                                    <p class="small text-muted mb-0">Recorded by: Admin / Metadata Reviewer</p>
+                                </div>
+
+                                <div class="timeline-entry role-ce-adm">
+                                    <h3 class="h6 fw-bold mb-1">18 May 2026 — Community Review Recommended</h3>
+                                    <p class="mb-1">
+                                        Community review was recommended before access is approved. Research use may be
+                                        possible under restricted conditions.
+                                    </p>
+                                    <p class="small text-muted mb-0">Recorded by: Community Elder / Reviewer</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Consultation Comments -->
+                    <div class="card assessment-card mb-4">
+                        <div class="card-body">
+                            <h2 class="h4 fw-bold">Consultation Comments</h2>
+
+                            <div class="comment-card role-lib-adm">
+                                <p class="mb-1">
+                                    <strong>Special Collections Access Officer:</strong>
+                                </p>
+                                <p class="mb-0">
+                                    The request reason is clear, but access should remain restricted until consultation
+                                    comments have been considered.
+                                </p>
+                            </div>
+
+                            <div class="comment-card role-ce-adm">
+                                <p class="mb-1">
+                                    <strong>Community Elder / Reviewer:</strong>
+                                </p>
+                                <p class="mb-0">
+                                    Families and speakers connected to the recordings should be acknowledged in any
+                                    approved research output. No reproduction should be allowed without further
+                                    permission.
+                                </p>
+                            </div>
+
+                            <label for="consultationComment" class="form-label">Add New Consultation Comment</label>
+                            <textarea class="form-control" id="consultationComment" rows="5"
+                                placeholder="Record consultation notes from community representatives, cultural advisors or authorised reviewers."></textarea>
+
+                            <p class="text-muted small mt-3 mb-0">
+                                Consultation comments support transparent review and help document cultural advice,
+                                access concerns and recommended conditions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Final Decision -->
+                    <div class="card assessment-card">
+                        <div class="card-body">
+                            <h2 class="h4 fw-bold">Record Review Decision</h2>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="decision" class="form-label">Decision</label>
+                                    <select class="form-select" id="decision">
+                                        <option selected>Choose decision...</option>
+                                        <option>Approve</option>
+                                        <option>Reject</option>
+                                        <option>Further review required</option>
+                                        <option>Community approval required</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="decisionDate" class="form-label">Decision Date</label>
+                                    <input type="date" class="form-control" id="decisionDate">
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="accessConditions" class="form-label">Access Conditions</label>
+                                    <textarea class="form-control" id="accessConditions" rows="3"
+                                        placeholder="Required if access is approved. Example: research use only, supervised viewing, no reproduction."></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <label for="decisionReason" class="form-label">Decision Notes</label>
+                                    <textarea class="form-control" id="decisionReason" rows="3"
+                                        placeholder="Explain the reason for the access decision."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="permission-note mt-4">
+                                <strong>Decision responsibility:</strong>
+                                Final review decisions should only be recorded by authorised administrators or community
+                                reviewers. Approved access may include supervised viewing conditions at the library.
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="button" class="btn btn-primary">Save Review Decision</button>
+                                <button type="button" class="btn btn-outline-secondary ms-2">Save as Draft</button>
+                            </div>
+
+                            <p class="text-muted small mt-3 mb-0">
+                                Review decisions record the outcome, access conditions and next steps for the requester.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+{% endblock %}

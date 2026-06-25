@@ -1,0 +1,144 @@
+<!-- Submitted by LU - Catalogue Listing Page -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} | Indigenous Academic Library{% endblock %}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.lineicons.com/5.1/line/lineicons.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-sm py-3 shadow">
+        <div class="container px-4">
+
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='assets/logo.svg') }}" 
+                    alt="Library logo" 
+                    class="navbar-logo">
+            </a>
+
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+                aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="lni lni-layout-9"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-lg-auto p-4 p-lg-0">
+
+                    <!-- Home Dropdown -->
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle nav-button" href="{{ url_for('home') }}" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Home
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}">Landing Page</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#acknowledgement">Acknowledgement of
+                                    Country</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#web-app-intro">Access Service Introduction</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#featured-items">Featured Items</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('home') }}#catalogue-search">Search Catalogue</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Catalogue Dropdown -->
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle nav-button" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Catalogue
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('catalogue') }}">Browse All</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalogue', item_type='book') }}">Books</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalogue', item_type='recording') }}">Recordings</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalogue', item_type='image') }}">Images</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalogue', item_type='manuscript') }}">Manuscripts</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('catalogue', item_type='resource') }}">Resources</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Cultural Access Dropdown -->
+                    <li class="nav-item dropdown px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link dropdown-toggle nav-button" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Cultural Access
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('catalogue') }}">Request to View Item</a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('my_access_requests') }}">My Access Requests</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('item_assessment') }}">Assessment Panel</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Login Button -->
+                    <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                        <a class="nav-link nav-button login-btn" href="{{ url_for('login') }}">Login</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Jinja extension point for other templates -->
+    {% block content %}
+    {% endblock %}
+
+
+
+    <!-- Expanded Footer -->
+    <footer class="site-footer py-5">
+        <div class="container px-4">
+            <div class="row g-4">
+
+                <div class="col-lg-4">
+                    <h3 class="h5 fw-bold">Indigenous Academic Library</h3>
+                    <p>
+                        Supporting respectful discovery, cultural access requests, cultural review,
+                        and responsible use of Indigenous collection materials.
+                    </p>
+                </div>
+
+                <div class="col-md-4 col-lg-2">
+                    <h4 class="h6 fw-bold">Quick Links</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="{{ url_for('home') }}">Home</a></li>
+                        <li><a href="{{ url_for('catalogue') }}">Browse Catalogue</a></li>
+                        <li><a href="{{ url_for('my_access_requests') }}">My Requests</a></li>
+                        <li><a href="{{ url_for('item_assessment') }}">Assessment Panel</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-4 col-lg-3">
+                    <h4 class="h6 fw-bold">Contact</h4>
+                    <p class="mb-1">Indigenous Academic Library</p>
+                    <p class="mb-1">R Block, Kelvin Grove campus</p>
+                    <p class="mb-1">Victoria Park Road, Kelvin Grove QLD</p>
+                    <p class="mb-0">library@iac.edu.au</p>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom mt-4 pt-3 text-center">
+                <p class="mb-0">
+                    Indigenous Academic Library | Collections Access Service &copy; 2026. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
