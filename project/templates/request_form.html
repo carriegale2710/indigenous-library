@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Access | {{ item.title }}</title>
+</head>
+<body>
+    <h1>Request Access</h1>
+    <h2>{{ item.title }}</h2>
+    <p>Status: {{ item.statusName }}</p>
+
+    <form method="POST" action="{{ url_for('items_bp.request_access', item_id=item.itemID) }}">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.requestReason.label }}
+            {{ form.requestReason() }}
+        </div>
+        <div>
+            {{ form.supportingDocuments.label }}
+            {{ form.supportingDocuments() }}
+        </div>
+        {{ form.submit() }}
+    </form>
+</body>
+</html>

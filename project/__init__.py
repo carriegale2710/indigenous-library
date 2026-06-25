@@ -25,9 +25,16 @@ def create_app():
 
     mysql.init_app(app)
 
+    app.config["SECRET_KEY"] = "dev-secret-key"
+
     # Views get registered here later, e.g.:
     #   from project.views import main
     #   app.register_blueprint(main)
+
+    from project.routes import items_bp
+    app.register_blueprint(items_bp)
+
+
 
     return app
 
