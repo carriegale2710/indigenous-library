@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Request Access | {{ item.title }}</title>
-</head>
-<body>
+{% extends "base_template.html" %}
+
+{% block title %}Request Access | {{ item.title }}{% endblock %}
+
+{% block content %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <p class="{{ category }}">{{ message }}</p>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
     <h1>Request Access</h1>
     <h2>{{ item.title }}</h2>
     <p>Status: {{ item.statusName }}</p>
@@ -21,5 +28,4 @@
         </div>
         {{ form.submit() }}
     </form>
-</body>
-</html>
+{% endblock %}
