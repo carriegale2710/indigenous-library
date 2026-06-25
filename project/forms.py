@@ -3,8 +3,10 @@
 # ============================================================
 
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, StringField, SubmitField, PasswordField
+from wtforms import TextAreaField, StringField, SubmitField, PasswordField, FileField
+from wtforms.fields.choices import SelectField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length
+from flask_wtf.file import FileAllowed
 
 
 # ------------------------------------------------------------
@@ -29,13 +31,29 @@ class RegistrationForm(FlaskForm):
 # ------------------------------------------------------------
 # Collection Item Form — Rebecca
 # ------------------------------------------------------------
-# TODO
+class CollectionItemForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
+    authorCreator = StringField('Author or Creator', validators=[DataRequired()])
+    year = StringField('Year', validators=[Optional()])
+    summary = TextAreaField('Summary', validators=[Optional()])
+    collection = SelectField('Collection', choices=[], validators=[DataRequired()])
+    itemType = SelectField('Item Type', choices=[('book','Book'), ('recording','Recording'),('image','Image'),('manuscript','Manuscript'),('resource','Resource')], validators=[DataRequired()])
+    thumbnailPath = FileField('Image', validators=[Optional(), FileAllowed(['jpg', 'png', 'svg'])])
+    submit = SubmitField('Submit Item to Collection')
+
 
 # ------------------------------------------------------------
 # Cultural Metadata Form — Rebecca
 # ------------------------------------------------------------
-# TODO
-
+class CulturalMetadataForm(FlaskForm):
+    communityGroup = StringField('Community Group', validators=[Optional()])
+    language = StringField('Language', validators=[Optional()])
+    location = StringField('Location', validators=[Optional()])
+    subjectArea = SelectField('Subject Area', choices=[('bush_medicine', 'Bush Medicine'),('ceremony','Ceremony'), ('childrens_literature',"Children's Literature"), ('community_life', 'Community Life'), ('healing_practices', 'Healing Practices'), ('initiation','Initiation'), ('land_management', 'Land Management'), ('land_and_sea_management', 'Land and Sea Management'), ('language','Language'), ('oral_history', 'Oral History'), ('painting','Painting'), ('sacred_site', 'Sacred Site'), ('songline', 'Songline'), ('weaving','Weaving')], validators=[Optional()])
+    culturalSensitivityNotes = TextAreaField('Cultural Sensitivity Notes', validators=[Optional()])
+    culturalProtocolNotes = TextAreaField('Cultural Protocol Notes', validators=[Optional()])
+    accessRecommendations = TextAreaField('Access Recommendations', validators=[Optional()])
+    submit = SubmitField('Submit Cultural Metadata')
 # ------------------------------------------------------------
 # Community Comment Form — pending team confirmation (Rebecca?)
 # ------------------------------------------------------------
