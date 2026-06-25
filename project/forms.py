@@ -3,8 +3,9 @@
 # ============================================================
 
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, StringField, SubmitField
-from wtforms.validators import DataRequired, Optional
+from wtforms import TextAreaField, StringField, SubmitField, PasswordField
+from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length
+
 
 # ------------------------------------------------------------
 # Access Request Form — Rebecca
@@ -17,7 +18,13 @@ class AccessRequestForm(FlaskForm):
 # ------------------------------------------------------------
 # Registration Form — Rebecca
 # ------------------------------------------------------------
-# TODO
+class RegistrationForm(FlaskForm):
+    fullName = StringField('Enter your Full Name', validators=[DataRequired()])
+    username = StringField('Enter your username', validators=[DataRequired()])
+    email = StringField('Enter your email address', validators=[DataRequired(), Email()])
+    password = PasswordField('', validators=[DataRequired(), Length(min=8)])
+    confirmPassword = PasswordField('', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Submit Registration')
 
 # ------------------------------------------------------------
 # Collection Item Form — Rebecca
