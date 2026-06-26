@@ -4,22 +4,6 @@ Data model: classes + data-access methods for the Flask app.
 
 Source of truth for tables and columns: IFQ582_A2_database.sql  (database: ifq582_a2)
 
-================================================================================
-HOW TO USE THIS FILE
-================================================================================
-This is a DRAFT skeleton. Every data-access method is stubbed with:
-  * a docstring that states exactly which table, columns and WHERE clause it needs
-  * a "# TODO" line where YOU write the SQL
-  * raise NotImplementedError(...) so an unfinished method fails loudly
-
-Suggested build order (do not write all 30+ methods at once):
-  1. _get_cursor()                         connect first, prove it works
-  2. CollectionItem.get_all                home page reads from this
-  3. CollectionItem.get_by_id              item details page
-  4. User.get_by_username + verify_password + create   login and register
-  5. AccessRequest.create                  public submits a request
-  6. ReviewDecision.create + CollectionItem.update_status   the review workflow
-Then fill in the rest as the View team needs them.
 
 ================================================================================
 WIRING THE DATABASE (Flask-MySQLdb)
