@@ -5,7 +5,7 @@
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, StringField, SubmitField, PasswordField, FileField
 from wtforms.fields.choices import SelectField
-from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length
+from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length, ValidationError
 from flask_wtf.file import FileAllowed
 
 
@@ -64,10 +64,16 @@ class CommunityCommentForm(FlaskForm):
 # ------------------------------------------------------------
 # Review Decision Form — Carrie
 # ------------------------------------------------------------
+
+class RequiredIfDecision: # for accessConditions validation logic
+    def __call__(self, form, field):
+        if form.decisionType.data == "approve" and not field.data:
+            raise ValidationError("Access Conditions are required when approving.")
+
 class ReviewDecisionForm(FlaskForm):
-    decisionType = SelectField('Decision Type', choices=[('approve', 'Approve'), ('reject', 'Reject')] validators=[DataRequired()])
+    decisionType = SelectField('Decision Type', choices=[('approve', 'Approve'), ('reject', 'Reject')], validators=[DataRequired()])
     decisionNotes = TextAreaField('Decision Notes', validators=[Optional()])
-    accessConditions = TextAreaField('Access Conditions', validators=[DataRequired() if decisionType == 'approve' else Optional()]) 
+    accessConditions = TextAreaField('Access Conditions', validators=[RequiredIfDecision()]) # Note - TEST THIS
 
 # ------------------------------------------------------------
 # Login Form — Carrie
