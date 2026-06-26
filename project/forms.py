@@ -55,16 +55,25 @@ class CulturalMetadataForm(FlaskForm):
     accessRecommendations = TextAreaField('Access Recommendations', validators=[Optional()])
     submit = SubmitField('Submit Cultural Metadata')
 # ------------------------------------------------------------
-# Community Comment Form — pending team confirmation (Rebecca?)
+# Community Comment Form — pending team confirmation (Carrie)
 # ------------------------------------------------------------
-# TODO
+class CommunityCommentForm(FlaskForm):
+    commentText = TextAreaField('Community Comment', validators=[DataRequired()])
+    submit =  SubmitField('Submit Community Comment')
 
 # ------------------------------------------------------------
 # Review Decision Form — Carrie
 # ------------------------------------------------------------
-# TODO
+class ReviewDecisionForm(FlaskForm):
+    decisionType = SelectField('Decision Type', choices=[('approve', 'Approve'), ('reject', 'Reject')] validators=[DataRequired()])
+    decisionNotes = TextAreaField('Decision Notes', validators=[Optional()])
+    accessConditions = TextAreaField('Access Conditions', validators=[DataRequired() if decisionType == 'approve' else Optional()]) 
 
 # ------------------------------------------------------------
 # Login Form — Carrie
 # ------------------------------------------------------------
-# TODO
+class LoginForm(FlaskForm):
+    # username = StringField('Enter your username', validators=[DataRequired()]) # NOTE ask rebecca - login in with username as option?
+    email = StringField('Enter your email address', validators=[DataRequired(), Email()])  
+    password = PasswordField('Enter your password', validators=[DataRequired()])
+    submit = SubmitField('Log In')
