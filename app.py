@@ -1,17 +1,29 @@
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, flash, redirect, url_for, request, session
+from flask_wtf import FlaskForm
+from wtforms import TextAreaField, FileField, SubmitField
+from wtforms.validators import DataRequired
+
 
 app = Flask(__name__)
 app.secret_key = "temporary-dev-key"
 
 
-@app.route("/")
-def home():
-    return render_template("index.html")
+# ---------------------------------------------------------
+# Temporary WTForms class for request-form.html
+# Later, this can be moved into a separate forms.py file.
+# ---------------------------------------------------------
+class AccessRequestForm(FlaskForm):
+    requestReason = TextAreaField("Reason for Request", validators=[DataRequired()])
+    supportingDocuments = FileField("Supporting Documents")
+    submit = SubmitField("Submit Request")
 
 
-@app.route("/catalogue")
-def catalogue():
-    items = [
+# ---------------------------------------------------------
+# Temporary catalogue data
+# Later, this will be replaced with MySQL queries.
+# ---------------------------------------------------------
+def get_sample_items():
+    return [
         {
             "itemID": 1,
             "title": "Kalaw Lagaw Ya Dictionary",
@@ -287,26 +299,58 @@ def catalogue():
         }
     ]
 
-    return render_template("catalogue.html", items=items)
+
+def get_item_by_id(item_id):
+    for item in get_sample_items():
+        if item["itemID"] == item_id:
+            return item
+    return None
+
+
+# ---------------------------------------------------------
+# Routes
+# ---------------------------------------------------------
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+
+@app.route("/catalogue")
+def catalogue():
+    items = get_sample_items()
+
+    search = request.args.get("search", "").strip().lower()
+    item_type = request.args.get("item_type", "").strip().lower()
+    status = request.args.get("status", "").strip().lower()
+
+    if search:
+        items = [
+            item for item in items
+            if search in item["title"].lower()
+            or search in item["summary"].lower()
+            or search in item["collectionName"].lower()
+            or search in item["itemType"].lower()
+            or search in item["statusName"].lower()
+        ]
+
+    if item_type and item_type != "all item types":
+        items = [
+            item for item in items
+            if item["itemType"].lower() == item_type
+        ]
+
+    if status and status != "all statuses":
+        items = [
+            item for item in items
+            if item["statusName"].lower() == status
+        ]
 
     return render_template("catalogue.html", items=items)
 
 
 @app.route("/item-details/<int:item_id>", methods=["GET", "POST"])
 def item_details(item_id):
-    item = {
-        "itemID": item_id,
-        "title": "Recordings of Meriam Mir Speakers",
-        "summary": "This catalogue record represents a set of audio recordings connected to Meriam Mir language knowledge, Torres Strait Islander cultural memory and community language revival.",
-        "year": 2026,
-        "thumbnailPath": "recordings-of-meriam-mir-speakers.svg",
-        "itemType": "Recording",
-        "statusName": "Restricted",
-        "statusDescription": "Community review required",
-        "collectionName": "Languages of the Torres Strait",
-        "authorCreator": "Community speakers and library field researcher",
-        "nextReviewDate": "2026-05-18"
-    }
+    item = get_item_by_id(item_id)
 
     if item is None:
         abort(404)
@@ -321,7 +365,11 @@ def item_details(item_id):
         "accessRecommendations": "Research use only; no reproduction without further permission"
     }
 
-    related_items = []
+    related_items = [
+        related_item for related_item in get_sample_items()
+        if related_item["itemID"] != item_id and related_item["collectionName"] == item["collectionName"]
+    ][:3]
+
     existing_request = None
 
     return render_template(
@@ -332,19 +380,103 @@ def item_details(item_id):
         existing_request=existing_request
     )
 
+
+@app.route("/request-access/<int:item_id>", methods=["GET", "POST"])
+def request_access(item_id):
+    item = get_item_by_id(item_id)
+
+    if item is None:
+        abort(404)
+
+    form = AccessRequestForm()
+
+    if form.validate_on_submit():
+        flash("Your access request has been submitted for review.", "success")
+        return redirect(url_for("my_access_requests"))
+
+    return render_template("request-form.html", item=item, form=form)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if request.method == "POST":
+        email = request.form.get("email")
+
+        session["user_id"] = 1
+        session["full_name"] = "Test User"
+        session["email"] = email
+
+        flash("Temporary login successful.", "success")
+        return redirect(url_for("catalogue"))
+
     return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash("You have been logged out.", "success")
+    return redirect(url_for("login"))
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    if request.method == "POST":
+        flash("Temporary registration submitted successfully.", "success")
+        return redirect(url_for("login"))
+
     return render_template("register.html")
 
 
 @app.route("/my-access-requests")
 def my_access_requests():
-    return render_template("my-access-requests.html")
+    access_requests = [
+        {
+            "itemID": 2,
+            "title": "Recordings of Meriam Mir Speakers",
+            "itemType": "Restricted audio",
+            "requestDate": "12 May 2026",
+            "purpose": "PhD research on language revival",
+            "requestStatus": "Approved",
+            "decisionConditions": "Research use only. No reproduction without further permission. Approved viewing is arranged at the library."
+        },
+        {
+            "itemID": 3,
+            "title": "Creation Songline of the Seven Sisters",
+            "itemType": "Culturally sensitive",
+            "requestDate": "14 May 2026",
+            "purpose": "Teaching preparation",
+            "requestStatus": "Pending Review",
+            "decisionConditions": "Awaiting community consultation."
+        },
+        {
+            "itemID": 6,
+            "title": "Ceremony Photographs Collection",
+            "itemType": "Restricted image",
+            "requestDate": "18 May 2026",
+            "purpose": "Community access request",
+            "requestStatus": "Rejected",
+            "decisionConditions": "Not publicly accessible. Further community permission required."
+        }
+    ]
+
+    total_requests = len(access_requests)
+    pending_requests = sum(
+        1 for request_item in access_requests
+        if request_item["requestStatus"] == "Pending Review"
+    )
+    decided_requests = sum(
+        1 for request_item in access_requests
+        if request_item["requestStatus"] in ["Approved", "Rejected"]
+    )
+
+    return render_template(
+        "my-access-requests.html",
+        access_requests=access_requests,
+        total_requests=total_requests,
+        pending_requests=pending_requests,
+        decided_requests=decided_requests
+    )
 
 
 @app.route("/item-assessment")
@@ -355,6 +487,11 @@ def item_assessment():
 @app.route("/access-privacy")
 def access_privacy():
     return render_template("access-privacy.html")
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template("error.html"), 404
 
 
 if __name__ == "__main__":
