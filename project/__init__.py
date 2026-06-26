@@ -27,13 +27,16 @@ def create_app():
 
     app.config["SECRET_KEY"] = "dev-secret-key"
 
-    # Views get registered here later, e.g.:
-    #   from project.views import main
-    #   app.register_blueprint(main)
+    
 
+    from project.views import views_bp
+    app.register_blueprint(views_bp)
+   
     from project.routes import items_bp
     app.register_blueprint(items_bp)
 
+    from project.auth import auth_bp
+    app.register_blueprint(auth_bp)
 
 
     return app
