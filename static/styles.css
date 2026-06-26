@@ -898,3 +898,18 @@ h3,
 .featured-item-card:hover {
     transform: translateY(-3px);
 }
+/* =========================================================
+   Request Access Form Page
+   ========================================================= */
+
+.request-form-card .form-label {
+    color: var(--dark-red);
+}
+
+.request-form-card textarea {
+    min-height: 150px;
+}
+
+.request-form-actions {
+    gap: 0.75rem;
+}
