@@ -129,7 +129,7 @@
                             item's access status and cultural protocol requirements.
                         </p>
 
-                        <form method="POST" action="{{ url_for('items_bp.request_access', item_id=item.itemID) }}"
+                        <form method="POST" action="{{ url_for('request_access', item_id=item.itemID) }}"
                             enctype="multipart/form-data" novalidate>
                             {{ form.hidden_tag() }}
 
