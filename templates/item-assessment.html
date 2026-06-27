@@ -33,7 +33,7 @@
                 <div class="col-md-3">
                     <div class="assessment-dashboard-card">
                         <p class="mb-1">Current Status</p>
-                        <h2 class="h5 fw-bold">Review Required</h2>
+                        <h2 class="h5 fw-bold">{{ assessment.requestStatus }}</h2>
                         <span class="badge">Pending Decision</span>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="col-md-3">
                     <div class="assessment-dashboard-card">
                         <p class="mb-1">Access Level</p>
-                        <h2 class="h5 fw-bold">Restricted</h2>
+                        <h2 class="h5 fw-bold">{{ assessment.statusName }}</h2>
                         <span class="badge">High Sensitivity</span>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
                 <div class="col-md-3">
                     <div class="assessment-dashboard-card">
                         <p class="mb-1">Request Type</p>
-                        <h2 class="h5 fw-bold">Research Access</h2>
+                        <h2 class="h5 fw-bold">{{ assessment.requestReason }}</h2>
                         <span class="badge">Submitted</span>
                     </div>
                 </div>
@@ -70,33 +70,38 @@
 
                     <!-- Item Summary -->
                     <div class="card assessment-card mb-4">
-                        <img src="assets/recordings-of-meriam-mir-speakers.svg" alt="Recordings of Meriam Mir Speakers"
+                        <img src="{{ url_for('static', filename=assessment.thumbnailPath) }}" 
+                            alt="{{ assessment.title }}"
                             class="item-thumbnail">
 
                         <div class="card-body">
                             <h2 class="h4 fw-bold">Item Summary</h2>
 
-                            <p><strong>Item ID:</strong><br>CI-002</p>
-                            <p><strong>Item Title:</strong><br>Recordings of Meriam Mir Speakers</p>
-                            <p><strong>Item Type:</strong><br>Audio Recording</p>
-                            <p><strong>Collection:</strong><br>Languages of the Torres Strait</p>
-                            <p><strong>Community / Cultural Group:</strong><br>Torres Strait Islander community</p>
-                            <p><strong>Language:</strong><br>Meriam Mir</p>
-                            <p><strong>Location:</strong><br>Murray Island / Mer Island</p>
+                            <p><strong>Item ID:</strong><br>{{ assessment.itemID }}</p>
+                            <p><strong>Item Title:</strong><br>{{ assessment.title }}</p>
+                            <p><strong>Item Type:</strong><br>{{ assessment.itemType }}</p>
+                            <p><strong>Collection:</strong><br>{{ assessment.collectionName }}</p>
+                            <p><strong>Community / Cultural Group:</strong><br>{{ assessment.communityGroup or "Not recorded" }}</p>
+                            <p><strong>Language:</strong><br>{{ assessment.language or "Not recorded" }}</p>
+                            <p><strong>Location:</strong><br>{{ assessment.location or "Not recorded" }}</p>
 
                             <p><strong>Current Status:</strong><br>
                                 <span class="badge bg-warning text-dark">Review Required</span>
                             </p>
 
                             <p><strong>Access Level:</strong><br>
-                                <span class="badge bg-danger">Restricted Access</span>
+                                {% if assessment.statusName == "Open" %}
+                                    <span class="badge bg-success text-dark">{{ assessment.statusName }}</span>
+                                {% elif assessment.statusName == "Restricted" %}
+                                    <span class="badge bg-danger text-dark">{{ assessment.statusName }}</span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">{{ assessment.statusName }}</span>
+                                {% endif %}
                             </p>
 
-                            <p><strong>Sensitivity Level:</strong><br>
-                                <span class="badge bg-danger">High</span>
-                            </p>
-
-                            <a href="item-details.html" class="btn btn-primary mt-2">Open Full Item Record</a>
+                            <a href="{{ url_for('item_details', item_id=assessment.itemID) }}" class="btn btn-primary mt-2">
+                                Open Full Item Record
+                            </a>
                         </div>
                     </div>
 
@@ -105,46 +110,18 @@
                         <div class="card-body">
                             <h2 class="h4 fw-bold">Access Request Summary</h2>
 
-                            <p><strong>Requester:</strong><br>Dr Maya Wilson</p>
-                            <p><strong>Email:</strong><br>maya.wilson@example.edu.au</p>
-                            <p><strong>Purpose:</strong><br>PhD research on Meriam Mir language revival</p>
-                            <p><strong>Submitted:</strong><br>12 May 2026</p>
-                            <p><strong>Requested Viewing Date:</strong><br>24 May 2026</p>
+                            <p><strong>Requester:</strong><br>{{ assessment.fullName }}</p>
+                            <p><strong>Email:</strong><br>{{ assessment.email }}</p>
+                            <p><strong>Submitted:</strong><br>{{ assessment.requestDate }}</p>
+
+                            {% if assessment.supportingDocuments %}
+                                <p><strong>Supporting Documents:</strong><br>{{ assessment.supportingDocuments }}</p>
+                            {% endif %}
 
                             <div class="status-panel">
                                 <strong>Request reason:</strong>
-                                <p class="mb-0">
-                                    The requester is researching language preservation programs and has asked to view
-                                    the recordings in the Special Collections Reading Room for academic research only.
-                                </p>
+                                <p class="mb-0">{{ assessment.requestReason }}</p>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Review Details -->
-                    <div class="card assessment-card">
-                        <div class="card-body">
-                            <h2 class="h4 fw-bold">Reviewer Details</h2>
-
-                            <label for="reviewDate" class="form-label">Review Date</label>
-                            <input type="date" class="form-control mb-3" id="reviewDate">
-
-                            <label for="reviewerName" class="form-label">Reviewer Name</label>
-                            <input type="text" class="form-control mb-3" id="reviewerName"
-                                placeholder="Enter reviewer name">
-
-                            <label for="reviewerRole" class="form-label">Reviewer Role</label>
-                            <select class="form-select" id="reviewerRole">
-                                <option selected>Choose role...</option>
-                                <option>Admin</option>
-                                <option>Community Elder / Reviewer</option>
-                                <option>Cultural Advisor</option>
-                            </select>
-
-                            <p class="text-muted small mt-3 mb-0">
-                                Reviewer details identify the authorised person responsible for recording assessment
-                                notes, consultation comments or review decisions.
-                            </p>
                         </div>
                     </div>
 
@@ -153,71 +130,67 @@
                 <!-- Right Column -->
                 <div class="col-lg-8">
 
-                    <!-- Metadata Review -->
+                    <!-- Metadata Review:
+                        CONSIDER:
+                            - does this form belong on the access request review page?
+                            - maybe this belongs to item_details page, but only for admin/library staff for updating metadata
+                            - this would not require any changes to db / additional workflows, consider moving from this page
+                    -->
                     <div class="card assessment-card mb-4">
                         <div class="card-body">
                             <h2 class="h4 fw-bold">Cultural Metadata Review</h2>
 
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label for="community" class="form-label">Community / Cultural Group</label>
-                                    <input type="text" class="form-control" id="community"
-                                        value="Torres Strait Islander community">
+                            <form method="POST" action="{{ url_for('update_metadata', item_id=assessment.itemID) }}">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="communityGroup" class="form-label">Community / Cultural Group</label>
+                                        <input type="text" class="form-control" id="communityGroup" name="communityGroup"
+                                           value="{{ assessment.communityGroup or '' }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="language" class="form-label">Language</label>
+                                        <input type="text" class="form-control" id="language" name="language"
+                                                value="{{ assessment.language or '' }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="location" class="form-label">Location / Country</label>
+                                        <input type="text" class="form-control" id="location" name="location"
+                                               value="{{ assessment.location or '' }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="subjectArea" class="form-label">Subject Area</label>
+                                        <input type="text" class="form-control" id="subjectArea" name="subjectArea"
+                                               value="{{ assessment.subjectArea or '' }}">
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="culturalSensitivityNotes" class="form-label">Cultural Sensitivity Notes</label>
+                                        <textarea class="form-control" id="culturalSensitivityNotes" name="culturalSensitivityNotes" rows="3">{{ assessment.culturalSensitivityNotes or '' }}</textarea>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="culturalProtocolNotes" class="form-label">Cultural Protocol Notes</label>
+                                        <textarea class="form-control" id="culturalProtocolNotes" name="culturalProtocolNotes" rows="3">{{ assessment.culturalProtocolNotes or '' }}</textarea>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="accessRecommendations" class="form-label">Access Recommendations</label>
+                                        <textarea class="form-control" id="accessRecommendations" name="accessRecommendations" rows="3">{{ assessment.accessRecommendations or '' }}</textarea>
+                                    </div>
                                 </div>
 
-                                <div class="col-md-6">
-                                    <label for="language" class="form-label">Language</label>
-                                    <input type="text" class="form-control" id="language" value="Meriam Mir">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="location" class="form-label">Location / Country</label>
-                                    <input type="text" class="form-control" id="location"
-                                        value="Murray Island / Mer Island">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="subjectArea" class="form-label">Subject Area</label>
-                                    <select class="form-select" id="subjectArea">
-                                        <option selected>Language, oral history and cultural memory</option>
-                                        <option>Language</option>
-                                        <option>Oral history</option>
-                                        <option>Photograph collection</option>
-                                        <option>Ceremony</option>
-                                        <option>Environmental knowledge</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="accessCategory" class="form-label">Recommended Access Category</label>
-                                    <select class="form-select" id="accessCategory">
-                                        <option>Public access</option>
-                                        <option>Registered user access</option>
-                                        <option selected>Staff supervised access</option>
-                                        <option>Community approval required</option>
-                                        <option>No public access</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-12">
-                                    <label for="protocolNotes" class="form-label">Cultural Sensitivity</label>
-                                    <textarea class="form-control" id="protocolNotes"
-                                        rows="3">Access should be limited to approved research use. No reproduction, publication or redistribution should occur without further community permission.</textarea>
-                                </div>
-
-                                <div class="col-12">
-                                    <label for="metadataNotes" class="form-label">Metadata Notes</label>
-                                    <textarea class="form-control" id="metadataNotes" rows="3"
-                                        placeholder="Add notes about cultural context, access restrictions or item description.">Metadata review indicates that this item contains language content requiring careful access management and consultation before broader access is granted.</textarea>
-                                </div>
-                            </div>
+                                <button type="submit" class="btn btn-primary mt-4">Save Metadata Updates</button>
+                            </form>
                         </div>
                     </div>
 
                     <!-- Conversation / History Timeline -->
                     <div class="card assessment-card mb-4">
                         <div class="card-body">
-                            <h2 class="h4 fw-bold">Assessment History and Conversation Log</h2>
+                            <h2 class="h4 fw-bold">Assessment History</h2>
                             <p class="text-muted">
                                 This section records request history, status changes and consultation comments connected
                                 to the assessment workflow.
@@ -225,138 +198,114 @@
 
                             <div class="timeline mt-4">
 
-                                <div class="timeline-entry role-system">
-                                    <h3 class="h6 fw-bold mb-1">12 May 2026 — Access Request Submitted</h3>
-                                    <p class="mb-1">
-                                        A new access request was recorded for this item.
-                                    </p>
-                                    <p class="small text-muted mb-0">Recorded by: System</p>
-                                </div>
-
-                                <div class="timeline-entry role-lib-adm">
-                                    <h3 class="h6 fw-bold mb-1">14 May 2026 — Initial Staff Review</h3>
-                                    <p class="mb-1">
-                                        Library staff confirmed that the item contains Meriam Mir language recordings
-                                        and should not be automatically approved for public access.
-                                    </p>
-                                    <p class="small text-muted mb-0">Recorded by: Special Collections Access Officer</p>
-                                </div>
-
-                                <div class="timeline-entry role-adm">
-                                    <h3 class="h6 fw-bold mb-1">16 May 2026 — Metadata Flag Updated</h3>
-                                    <p class="mb-1">
-                                        Sensitivity level confirmed as “High” after reviewing the item description,
-                                        language content and cultural protocol notes.
-                                    </p>
-                                    <p class="small text-muted mb-0">Recorded by: Admin / Metadata Reviewer</p>
-                                </div>
-
-                                <div class="timeline-entry role-ce-adm">
-                                    <h3 class="h6 fw-bold mb-1">18 May 2026 — Community Review Recommended</h3>
-                                    <p class="mb-1">
-                                        Community review was recommended before access is approved. Research use may be
-                                        possible under restricted conditions.
-                                    </p>
-                                    <p class="small text-muted mb-0">Recorded by: Community Elder / Reviewer</p>
-                                </div>
-
+                            <div class="timeline-entry role-system">
+                                <h3 class="h6 fw-bold mb-1">
+                                    {{ assessment.requestDate }} — Access Request Submitted
+                                </h3>
+                                <p class="mb-1">
+                                    A new access request was submitted.
+                                </p>
+                                <p class="small text-muted mb-0">
+                                    Recorded by: {{ assessment.fullName }}
+                                </p>
                             </div>
+
+                            {% for comment in comments %}
+                            <div class="timeline-entry role-lib-adm">
+                                <h3 class="h6 fw-bold mb-1">
+                                    {{ comment.createdDate }} — Consultation Comment Added
+                                </h3>
+                                <p class="mb-1">{{ comment.commentText }}</p>
+                                <p class="small text-muted mb-0">
+                                    Recorded by: {{ comment.reviewerName }}
+                                </p>
+                            </div>
+                            {% endfor %}
+
+                            {% for decision in decisions %}
+                            <div class="timeline-entry role-adm">
+                                <h3 class="h6 fw-bold mb-1">
+                                    {{ decision.decisionDate }} — Review Decision Recorded
+                                </h3>
+                                <p class="mb-1">{{ decision.decisionNotes }}</p>
+                                <p class="small text-muted mb-0">
+                                    Recorded by: {{ decision.reviewerName }}
+                                </p>
+                            </div>
+                            {% endfor %}
+
                         </div>
                     </div>
 
                     <!-- Consultation Comments -->
                     <div class="card assessment-card mb-4">
-                        <div class="card-body">
-                            <h2 class="h4 fw-bold">Consultation Comments</h2>
+                    <div class="card-body">
+                        <h2 class="h4 fw-bold">Consultation Comments</h2>
 
-                            <div class="comment-card role-lib-adm">
-                                <p class="mb-1">
-                                    <strong>Special Collections Access Officer:</strong>
-                                </p>
-                                <p class="mb-0">
-                                    The request reason is clear, but access should remain restricted until consultation
-                                    comments have been considered.
-                                </p>
-                            </div>
-
+                        {% for comment in comments %}
                             <div class="comment-card role-ce-adm">
                                 <p class="mb-1">
-                                    <strong>Community Elder / Reviewer:</strong>
+                                    <strong>{{ comment.fullName }}:</strong>
                                 </p>
-                                <p class="mb-0">
-                                    Families and speakers connected to the recordings should be acknowledged in any
-                                    approved research output. No reproduction should be allowed without further
-                                    permission.
-                                </p>
+                                <p>{{ comment.commentText }}</p>
+                                <p class="small text-muted mb-0">Recorded: {{ comment.createdDate }}</p>
                             </div>
+                        {% else %}
+                            <p class="text-muted">No consultation comments have been recorded yet.</p>
+                        {% endfor %}
 
+                        <form method="POST" action="{{ url_for('add_comment', request_id=assessment.requestID) }}">
                             <label for="consultationComment" class="form-label">Add New Consultation Comment</label>
-                            <textarea class="form-control" id="consultationComment" rows="5"
-                                placeholder="Record consultation notes from community representatives, cultural advisors or authorised reviewers."></textarea>
+                            <textarea class="form-control" id="consultationComment" name="commentText" rows="5"
+                                      placeholder="Record consultation notes from authorised reviewers."></textarea>
 
-                            <p class="text-muted small mt-3 mb-0">
-                                Consultation comments support transparent review and help document cultural advice,
-                                access concerns and recommended conditions.
-                            </p>
-                        </div>
+                            <button type="submit" class="btn btn-primary mt-3">Save Comment</button>
+                        </form>
                     </div>
+                </div>
 
                     <!-- Final Decision -->
-                    <div class="card assessment-card">
-                        <div class="card-body">
-                            <h2 class="h4 fw-bold">Record Review Decision</h2>
+                <div class="card assessment-card">
+                    <div class="card-body">
+                        <h2 class="h4 fw-bold">Record Review Decision</h2>
 
+                        <form method="POST" action="{{ url_for('save_review_decision', request_id=assessment.requestID) }}">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label for="decision" class="form-label">Decision</label>
-                                    <select class="form-select" id="decision">
-                                        <option selected>Choose decision...</option>
-                                        <option>Approve</option>
-                                        <option>Reject</option>
-                                        <option>Further review required</option>
-                                        <option>Community approval required</option>
+                                    <label for="decisionType" class="form-label">Decision</label>
+                                    <select class="form-select" id="decisionType" name="decisionType" required>
+                                        <option value="">Choose decision...</option>
+                                        <option value="Approve">Approve</option>
+                                        <option value="Reject">Reject</option>
+                                        <option value="Further review required">Further review required</option>
+                                        <option value="Community approval required">Community approval required</option>
                                     </select>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="decisionDate" class="form-label">Decision Date</label>
-                                    <input type="date" class="form-control" id="decisionDate">
                                 </div>
 
                                 <div class="col-12">
                                     <label for="accessConditions" class="form-label">Access Conditions</label>
-                                    <textarea class="form-control" id="accessConditions" rows="3"
-                                        placeholder="Required if access is approved. Example: research use only, supervised viewing, no reproduction."></textarea>
+                                    <textarea class="form-control" id="accessConditions" name="accessConditions" rows="3"></textarea>
                                 </div>
 
                                 <div class="col-12">
-                                    <label for="decisionReason" class="form-label">Decision Notes</label>
-                                    <textarea class="form-control" id="decisionReason" rows="3"
-                                        placeholder="Explain the reason for the access decision."></textarea>
+                                    <label for="decisionNotes" class="form-label">Decision Notes</label>
+                                    <textarea class="form-control" id="decisionNotes" name="decisionNotes" rows="3" required></textarea>
                                 </div>
                             </div>
 
                             <div class="permission-note mt-4">
                                 <strong>Decision responsibility:</strong>
-                                Final review decisions should only be recorded by authorised administrators or community
-                                reviewers. Approved access may include supervised viewing conditions at the library.
+                                Final review decisions should only be recorded by authorised administrators or community reviewers.
                             </div>
 
-                            <div class="mt-4">
-                                <button type="button" class="btn btn-primary">Save Review Decision</button>
-                                <button type="button" class="btn btn-outline-secondary ms-2">Save as Draft</button>
-                            </div>
-
-                            <p class="text-muted small mt-3 mb-0">
-                                Review decisions record the outcome, access conditions and next steps for the requester.
-                            </p>
-                        </div>
+                            <button type="submit" class="btn btn-primary mt-4">Save Review Decision</button>
+                        </form>
                     </div>
-
                 </div>
 
             </div>
 
         </div>
-    </main>
+    </div>
+</main>
 {% endblock %}
