@@ -27,8 +27,6 @@ def create_app():
 
     app.config["SECRET_KEY"] = "dev-secret-key"
 
-    
-
     from project.views import views_bp
     app.register_blueprint(views_bp)
    
