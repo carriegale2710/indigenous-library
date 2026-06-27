@@ -489,9 +489,40 @@ def access_privacy():
     return render_template("access-privacy.html")
 
 
+# ---------------------------------------------------------
+# Error Handlers
+# ---------------------------------------------------------
+@app.errorhandler(403)
+def forbidden(error):
+    return render_template(
+        "error.html",
+        error_code=403,
+        error_title="Access Forbidden",
+        error_message="You do not have permission to access this page.",
+        error_description="This area may be restricted to authorised library staff, administrators, or community reviewers."
+    ), 403
+
+
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template("error.html"), 404
+    return render_template(
+        "error.html",
+        error_code=404,
+        error_title="Page Not Found",
+        error_message="The page you are looking for could not be found.",
+        error_description="The link may be incorrect, the page may have moved, or the item may no longer be available."
+    ), 404
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return render_template(
+        "error.html",
+        error_code=500,
+        error_title="Internal Server Error",
+        error_message="Something went wrong while processing your request.",
+        error_description="Please try again later or contact library staff if the problem continues."
+    ), 500
 
 
 if __name__ == "__main__":
