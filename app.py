@@ -524,6 +524,8 @@ def internal_server_error(error):
         error_description="Please try again later or contact library staff if the problem continues."
     ), 500
 
-
+# ------------------------------------------------------------
+# Need to change below debug to 'False' for final submission
+# ------------------------------------------------------------
 if __name__ == "__main__":
     app.run(debug=True)
