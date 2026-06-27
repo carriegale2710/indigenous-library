@@ -4,13 +4,14 @@ from wtforms import TextAreaField, FileField, SubmitField
 from wtforms.validators import DataRequired
 
 
+
 app = Flask(__name__)
 app.secret_key = "temporary-dev-key"
 
 
 # ---------------------------------------------------------
 # Temporary WTForms class for request-form.html
-# Later, this can be moved into a separate forms.py file.
+# Later, this can be moved into a separate forms.py file. # TODO - move to forms.py
 # ---------------------------------------------------------
 class AccessRequestForm(FlaskForm):
     requestReason = TextAreaField("Reason for Request", validators=[DataRequired()])
@@ -19,8 +20,8 @@ class AccessRequestForm(FlaskForm):
 
 
 # ---------------------------------------------------------
-# Temporary catalogue data
-# Later, this will be replaced with MySQL queries.
+# Temporary catalogue data 
+# Later, this will be replaced with MySQL queries. # TODO - remove hard coded values with mySQL
 # ---------------------------------------------------------
 def get_sample_items():
     return [
@@ -308,8 +309,10 @@ def get_item_by_id(item_id):
 
 
 # ---------------------------------------------------------
-# Routes
+# Routes # TODO - Convert all view routes here into blueprints, then move to views.py
 # ---------------------------------------------------------
+
+
 @app.route("/")
 def home():
     return render_template("index.html")

@@ -1,1 +1,381 @@
-{% extends 'base.html' %}
+<!-- Submitted by LU - Index -->
+{% extends "base_template.html" %}
+
+<!-- Adjust this to what the name of the page is, the other part of this in the base_template is ' | Indigenous Academic Library' -->
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- Acknowledgement of Country -->
+<section id="acknowledgement" class="py-5 text-center cultural-pattern-bg">
+    <div class="container px-5">
+        <div class="acknowledgement-box mx-auto">
+            <p class="section-label mb-2">Indigenous Academic Library Collections Access Service</p>
+            <h1 class="fw-bold mb-3">Acknowledgement of Country</h1>
+
+            <p class="lead">
+                We acknowledge the Traditional Custodians of the lands on which this academic library operates.
+                We pay respect to Elders past and present, and recognise the continuing connection of Aboriginal
+                and Torres Strait Islander peoples to Country, culture, knowledge and community.
+            </p>
+
+            <p>
+                The Indigenous Collections Portal provides access to selected library collection records,
+                including language resources, oral histories, images, manuscripts, and cultural knowledge
+                materials. Some items are open for general discovery, while others require review before
+                access can be approved.
+            </p>
+
+            <p>
+                Access conditions are guided by cultural protocols, privacy requirements, and responsible
+                data use principles. Requests for restricted or culturally sensitive items are reviewed by
+                authorised library staff and community reviewers.
+            </p>
+
+            <div class="mt-4">
+                <span class="badge rounded-pill bg-dark me-2">Cultural Metadata</span>
+                <span class="badge rounded-pill bg-warning text-dark me-2">Access Review</span>
+                <span class="badge rounded-pill bg-danger">Restricted Items</span>
+            </div>
+
+            <div class="mt-4">
+                <a href="{{ url_for('catalogue') }}" class="btn btn-primary me-2">Browse Catalogue</a>
+                <a href="#web-app-intro" class="btn btn-outline-dark">Learn About the Access Service</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Web App Introduction -->
+<section id="web-app-intro" class="py-5">
+    <div class="container px-4">
+
+        <div class="section-intro">
+            <p class="section-label">Collection Access Service Introduction</p>
+            <h2 class="fw-bold portal-heading">Respectful Access to Academic Library Collections</h2>
+            <p class="text-muted">
+                The Indigenous Academic Library provides a structured digital portal for discovering Indigenous
+                collection records, managing cultural access requests, and supporting responsible review of
+                restricted and culturally sensitive materials.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="intro-stat">
+                    <h3 class="h5 fw-bold">Catalogue Discovery</h3>
+                    <p class="mb-0">
+                        Users can browse and search collection records, view item metadata and identify access
+                        requirements before submitting a request.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="intro-stat">
+                    <h3 class="h5 fw-bold">Cultural Access Control</h3>
+                    <p class="mb-0">
+                        Items may be public, restricted, or culturally sensitive depending on
+                        cultural sensitivity, collection policy and responsible data use.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="intro-stat">
+                    <h3 class="h5 fw-bold">Assessment Workflow</h3>
+                    <p class="mb-0">
+                        Authorised staff and reviewers can assess requests, record consultation comments and update
+                        item access decisions.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- About the Library Section -->
+<section id="about-library" class="py-5">
+    <div class="container px-4">
+        <div class="row align-items-center g-4">
+
+            <div class="col-lg-6">
+                <div class="library-image-card shadow-sm">
+                    <img src="static/assets/library.svg" alt="Academic Library" class="img-fluid library-image">
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <p class="section-label">Collection Space</p>
+                <h2 class="fw-bold portal-heading">About the Library and Collection Space</h2>
+
+                <p>
+                    The academic library provides access to research materials, cultural records, gallery displays
+                    and special collections. Some items may require additional review before access is granted.
+                </p>
+
+                <p>
+                    The Indigenous Academic Library Collections Portal supports responsible access by combining
+                    catalogue information, cultural metadata, access conditions and review workflows in one web
+                    application.
+                </p>
+
+                <div class="status-panel mt-3">
+                    <strong>Service purpose:</strong> The Indigenous Academic Library provides access to collection
+                    records, request management, and cultural review processes for Indigenous collection materials.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Items Section -->
+<section id="featured-items" class="py-5">
+    <div class="container px-4">
+
+        <div class="section-intro">
+            <p class="section-label">Featured Collection Items</p>
+            <h2 class="fw-bold portal-heading">Explore Sample Indigenous Collection Records</h2>
+            <p class="text-muted">
+                Featured items demonstrate how catalogue records can display different item types, access statuses
+                and cultural review requirements.
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+            <!-- 
+            Jinja2:
+                - for loop, same as the one used to populate the catalogue
+                - these are featured items, so controller needs to query DB for 3 random items
+                - each page refresh should populate new randomised set of featured items
+            -->
+            {% for item in featured_items %}
+            <div class="col-md-4">
+                <div class="featured-item-card">
+                    <img src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}" alt="{{ item.title }}">
+                    <div class="p-4">
+                        <h3 class="h5 fw-bold">{{ item.title }}</h3>
+
+                        <p>{{ item.summary }}</p>
+
+                        <!-- 
+                            Jinja
+                                - if statement to select correct status badge depending on each random items statusName
+                            -->
+                        <span class="badge 
+                                {% if item.statusName == 'Open' %}status-open
+                                {% elif item.statusName == 'Restricted' %}status-restricted
+                                {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive
+                                {% elif item.statusName == 'Pending' %}status-pending
+                                {% else %}bg-secondary
+                                {% endif %}
+                                mb-2">
+                            {{ item.statusName }}
+                        </span>
+
+                        <p class="small text-muted">Review status: Community review required</p>
+                        <a href="{{ url_for('item_details', item_id=item.itemID) }}" class="btn btn-primary">View
+                            Item</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('catalogue') }}" class="btn btn-primary">View Full Catalogue</a>
+        </div>
+    </div>
+</section>
+
+<!-- Access Process Section -->
+<section id="access-process" class="py-5">
+    <div class="container px-4">
+
+        <div class="section-intro">
+            <p class="section-label">Access Workflow</p>
+            <h2 class="fw-bold portal-heading">How Cultural Access Requests Work</h2>
+            <p class="text-muted">
+                The portal is designed to help users understand whether an item can be viewed immediately or whether
+                a request must be reviewed by authorised staff and cultural advisors.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="process-step">
+                    <div class="process-number">1</div>
+                    <h3 class="h5 fw-bold">Search</h3>
+                    <p class="mb-0">Users search or browse catalogue records and review the access level.</p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="process-step">
+                    <div class="process-number">2</div>
+                    <h3 class="h5 fw-bold">Request</h3>
+                    <p class="mb-0">Logged-in users submit a reason for requesting access to a restricted item.</p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="process-step">
+                    <div class="process-number">3</div>
+                    <h3 class="h5 fw-bold">Review</h3>
+                    <p class="mb-0">Library staff and reviewers assess the item metadata and request context.</p>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="process-step">
+                    <div class="process-number">4</div>
+                    <h3 class="h5 fw-bold">Decision</h3>
+                    <p class="mb-0">The access status is updated and the decision is recorded in the system.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Gallery Events Section -->
+<section id="gallery-events" class="py-5">
+    <div class="container px-4">
+        <div class="row align-items-center g-4">
+
+            <div class="col-lg-6">
+                <p class="section-label">Events and Programs</p>
+                <h2 class="fw-bold portal-heading">Gallery Events and Collection Programs</h2>
+
+                <p>
+                    The library gallery hosts collection displays, learning sessions and events connected to
+                    academic research, cultural knowledge and special collection materials.
+                </p>
+
+                <p>
+                    Users may browse upcoming programs, register interest and learn about how selected collection
+                    items are interpreted and accessed within the library environment.
+                </p>
+
+                <a href="#" class="btn btn-primary">View Gallery Events</a>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="library-image-card shadow-sm">
+                    <img src="static/assets/gallery.svg" alt="Gallery event space" class="img-fluid library-image">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Search Catalogue Section -->
+<section id="catalogue-search" class="py-5">
+    <div class="container px-4">
+        <div class="search-box mx-auto text-center">
+            <p class="section-label">Catalogue Search</p>
+            <h2 class="fw-bold portal-heading">Search the Catalogue</h2>
+            <p class="text-muted">
+                Search for academic library items, collection records, cultural metadata or access information.
+            </p>
+
+            <form class="d-flex flex-column flex-md-row gap-3 justify-content-center mt-4">
+                <input type="text" class="form-control search-input"
+                    placeholder="Search by title, item type, collection, community, format or keyword">
+
+                <!-- 
+                    CONSIDER:
+                        - adjusting design of this search section to either have no search field, just the button that links to catalogue search
+                        - alternatively, make the button submit search request to controller (similar to the search field on catalogue.html)
+                    -->
+                <a href="{{ url_for('catalogue') }}" class="btn btn-primary search-btn">
+                    Search
+                </a>
+            </form>
+
+            <p class="small text-muted mt-3 mb-0">
+                Use the catalogue to search collection records by title, language, collection area, item type or
+                access status.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Portal Options Cards -->
+<section id="portal-options" class="py-5">
+    <div class="container px-4">
+
+        <div class="section-intro">
+            <p class="section-label">Access Service Navigation</p>
+            <h2 class="fw-bold portal-heading">Explore the Library Access Service</h2>
+            <p class="text-muted">
+                Use the access service to discover collection records, view item information, submit access
+                requests, track request progress and support culturally responsible review workflows.
+            </p>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm portal-card">
+                    <div class="card-body">
+                        <h3 class="h5 fw-bold">Browse Catalogue</h3>
+                        <p>
+                            Explore available collection records and identify whether items are open, restricted,
+                            culturally sensitive or pending review.
+                        </p>
+                        <a href="{{ url_for('catalogue') }}" class="btn btn-primary">Browse Catalogue</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 
+                CONSIDER: 
+                    - removing the below 'View Item Details' card from this section because it does not link to a specific itemID, so item-details.html cannot populate
+                    - alternative is controller pulls random item from DB, but what would the purpose of this function be?
+                -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm portal-card">
+                    <div class="card-body">
+                        <h3 class="h5 fw-bold">View Item Details</h3>
+                        <p>
+                            Open a detailed catalogue record with item metadata, access conditions, cultural notes
+                            and request options.
+                        </p>
+                        <a href="item-details.html" class="btn btn-primary">View Sample Item</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm portal-card">
+                    <div class="card-body">
+                        <h3 class="h5 fw-bold">My Access Requests</h3>
+                        <p>
+                            Logged-in users can track submitted access requests, review progress, access conditions
+                            and final decisions.
+                        </p>
+                        <a href="{{ url_for('my_access_requests') }}" class="btn btn-primary">View My Requests</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 shadow-sm portal-card">
+                    <div class="card-body">
+                        <h3 class="h5 fw-bold">Cultural Access Review</h3>
+                        <p>
+                            Authorised reviewers can assess requests, record consultation comments and update access
+                            decisions through the assessment panel.
+                        </p>
+                        <a href="{{ url_for('item_assessment') }}" class="btn btn-primary">Open Review Page</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
