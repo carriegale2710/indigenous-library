@@ -20,10 +20,10 @@ def request_access(item_id):
     form = AccessRequestForm()
 
     if form.validate_on_submit():
-        user_id = session['user_id']
+        userID = session['userID']
         requestReason = form.requestReason.data
         supportingDocuments = form.supportingDocuments.data
-        AccessRequest.create(user_id, item_id, requestReason, supportingDocuments)
+        AccessRequest.create(userID, item_id, requestReason, supportingDocuments)
         flash('Your access request has been submitted', 'success')
         return redirect(url_for('items_bp.request_access', item_id=item_id))
 

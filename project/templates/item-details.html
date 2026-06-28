@@ -333,7 +333,7 @@
                 }}.
               </p>
             </div>
-            {% elif session.get('user_id') %}
+            {% elif session.get('userID') %}
             <div class="request-state-card role-ce-adm">
               <h3 class="h6 fw-bold">Restricted Item</h3>
               <p class="small">
@@ -395,7 +395,7 @@
         {% endif %}
 
         <!-- Request Form -->
-        {% if item.statusName != 'Open' and session.get('user_id') and not
+        {% if item.statusName != 'Open' and session.get('userID') and not
         existing_request %}
         <div class="card item-card" id="request-form">
           <div class="card-body">

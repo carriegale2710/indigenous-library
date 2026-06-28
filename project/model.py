@@ -201,10 +201,10 @@ class User:
 
 
     @staticmethod
-    def get_by_id(user_id):
+    def get_by_id(userID):
         """SELECT one User by userID. Flask-Login's user loader uses this."""
         cur = _get_cursor()
-        cur.execute("SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM `User` WHERE userID = %s", (user_id,))
+        cur.execute("SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM `User` WHERE userID = %s", (userID,))
         rows = cur.fetchone()
         cur.close()
         return rows
@@ -622,7 +622,7 @@ class AccessRequest:
         return row
 
     @staticmethod
-    def get_by_user(user_id):
+    def get_by_user(userID):
         """SELECT all requests a user has made (their 'my requests' view)."""
         cur = _get_cursor()
         cur.execute(
@@ -642,7 +642,7 @@ class AccessRequest:
             WHERE ar.userID = %s
             ORDER BY ar.requestDate DESC
             """,
-            (user_id,)
+            (userID,)
         )
         rows = cur.fetchall()
         cur.close()

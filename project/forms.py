@@ -6,6 +6,7 @@ from wtforms import TextAreaField, StringField, SubmitField, PasswordField, File
 from wtforms.fields.choices import SelectField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length, ValidationError
 from flask_wtf.file import FileAllowed
+from project.model import User
 
 # TODO -  add error messages to all forms below
 
@@ -25,11 +26,20 @@ class RegistrationForm(FlaskForm):
     fullName = StringField('Full Name', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email address', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8, message='Password must be at least 8 characters.')])
     confirmPassword = PasswordField('Confirm Password',validators=[DataRequired(), EqualTo('password', message='Passwords must match.')])
-    agreeTerms = BooleanField('I agree to terms and conditions', validators=[DataRequired(message='You must agree to terms and conditions.')])
+    agreeTerms = BooleanField('I agree to follow the access conditions, privacy expectations and responsible use requirements of the Indigenous Academic Library.', validators=[DataRequired(message='You must check this box.')])
     submit = SubmitField('Create Account')
 
+    # Handle mySQLdb Integrity errors from duplicate entries
+    def validate_username(self, field):
+        if User.get_by_username(field.data.strip()):
+            raise ValidationError("That username is already taken.")
+
+    def validate_email(self, field):
+        if User.get_by_email(field.data.strip().lower()):
+            raise ValidationError("That email is already registered.")
+        
 # ------------------------------------------------------------
 # Collection Item Form — Rebecca
 # ------------------------------------------------------------

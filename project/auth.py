@@ -5,6 +5,7 @@ from flask import  Blueprint, g, session, redirect, render_template, url_for,fla
 from werkzeug.security import  generate_password_hash
 from project.model import User
 from project.forms import RegistrationForm, LoginForm
+from sqlalchemy.exc import IntegrityError
 
 # The authentication blueprint will have views to register new users and to log in and log out.
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -24,6 +25,7 @@ def register():
     
     form = RegistrationForm()
 
+
     if form.validate_on_submit():
         roleID = 4 # 'public user' role by default if role delegation can only be given by admin user
         fullName = form.fullName.data
@@ -31,18 +33,26 @@ def register():
         email = form.email.data
         password = form.password.data
         passwordHash = generate_password_hash(password) # NOTE : For security, never store raw password! Always hash!
-        error = None
+
 
         # Save to mySQL database
-        user = User.create(roleID,fullName,username, email, passwordHash)
-        if user is None:
-            flash(error, "danger")
-            return render_template("error.html", error_code = 500)
-        
-        flash(f"Registration successful for {user}.", "success")
-        return redirect(url_for("auth.login"))
+        # TODO - Add error handling for MySQLdb.IntegrityError for duplicate usernames/emails
+
+        try:
+            user = User.create(roleID,fullName,username, email, passwordHash)   
+
+            if user is None:
+                flash("Registration failed. Please try again.", "danger")
+                return render_template("error.html", error_code = 500)
             
-           
+            flash(f"Registration for email {email} successful. UserID = {user}", "success")
+            return redirect(url_for("auth.login"))
+        
+        except IntegrityError:
+            # Required after failed insert/commit when using ORM/session patterns
+            session.rollback()
+            form.email.errors.append("Registration failed due to a duplicate value.")
+            
     return render_template('auth/register.html', form=form) 
 
 @auth_bp.route('/login', methods=('GET','POST'))
@@ -52,7 +62,7 @@ def login():
 
     User is Shown login form -> types in email and password -> submits form
         1. If Invalid input: show error message -> redirect to login page
-        2. If Valid input: -> create new session with user_id saved as cookie (to stay logged in)
+        2. If Valid input: -> create new session with userID saved as cookie (to stay logged in)
 
     """
 
@@ -77,11 +87,12 @@ def login():
         # Store user details in new logged in session
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            session['userID'] = user['userID']
             session['fullName'] = user['fullName']
+            session['username'] = user['username']
             session["email"] = user['email']
 
-            flash(f"Login for {session['fullName']} successful.", "success")
+            flash(f"Login for username '{session['username']}' with email '{session["email"]}' successful.", "success")
             return redirect(url_for('views.catalogue'))
         
         flash(error, "danger")
@@ -97,12 +108,12 @@ def load_logged_in_user():
         1. If a user is logged: User info is loaded in session and made available to other views for length or request.
         2. If user not logged in: g.user will be None, no data stored in current session.
     """
-    user_id = session.get('user_id')
+    userID = session.get('userID')
 
-    if user_id is None:
+    if userID is None:
         g.user = None
     else:
-        g.user = User.get_by_id(user_id)
+        g.user = User.get_by_id(userID)
 
 
 @auth_bp.route('/logout')
@@ -110,7 +121,7 @@ def logout():
     """
     Logs out the user. 
     
-    This will clear all data from current session, including user_id. Redirects to index page.
+    This will clear all data from current session, including userID. Redirects to index page.
     """
     session.clear()
     flash("You have been logged out.", "success")

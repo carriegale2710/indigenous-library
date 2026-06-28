@@ -21,21 +21,6 @@
   </head>
 
   <body>
-    <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %}
-    <div class="mb-4">
-      {% for category, message in messages %}
-      <div
-        class="alert alert-{{'danger' if category == 'error' else category }} mb-2"
-        role="alert"
-      >
-        {{ message }}
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %} {% endwith %}
-
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-sm py-3 shadow">
       <div class="container px-4">
@@ -217,8 +202,29 @@
       </div>
     </nav>
 
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="mb-4">
+      {% for category, message in messages %}
+      <div
+        class="alert alert-{{'danger' if category == 'error' else category }} alert-dismissible fade show mb-2"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
     <!-- Jinja extension point for other templates -->
-    {% block content %} {% endblock %}
+    <main>{% block content %} {% endblock %}</main>
 
     <!-- Expanded Footer -->
     <footer class="site-footer py-5">
