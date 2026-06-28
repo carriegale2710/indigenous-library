@@ -180,10 +180,7 @@
 
             <p>{{ item.summary }}</p>
 
-            <!-- 
-                            Jinja
-                                - if statement to select correct status badge depending on each random items statusName
-                            -->
+            <!-- Jinja- if statement to select correct status badge depending on each random items statusName-->
             <span
               class="badge {% if item.statusName == 'Open' %}status-open {% elif item.statusName == 'Restricted' %}status-restricted {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive {% elif item.statusName == 'Pending' %}status-pending {% else %}bg-secondary {% endif %} mb-2"
             >
@@ -331,11 +328,9 @@
           placeholder="Search by title, item type, collection, community, format or keyword"
         />
 
-        <!-- 
-                    CONSIDER:
-                        - adjusting design of this search section to either have no search field, just the button that links to catalogue search
-                        - alternatively, make the button submit search request to controller (similar to the search field on catalogue.html)
-                    -->
+        <!-- CONSIDER:
+          - adjusting design of this search section to either have no search field, just the button that links to catalogue search
+          - alternatively, make the button submit search request to controller (similar to the search field on catalogue.html)-->
         <a
           href="{{ url_for('views.catalogue') }}"
           class="btn btn-primary search-btn"
@@ -381,12 +376,11 @@
         </div>
       </div>
 
-      <!-- 
-                CONSIDER: 
-                    - removing the below 'View Item Details' card from this section because it does not link to a specific itemID, so item-details.html cannot populate
-                    - alternative is controller pulls random item from DB, but what would the purpose of this function be?
-                -->
-      <div class="col-md-6 col-lg-3">
+      <!-- CONSIDER: 
+        - removing the below 'View Item Details' card from this section because it does not link to a specific itemID, so item-details.html cannot populate
+        - alternative is controller pulls random item from DB, but what would the purpose of this function be?
+      -->
+      <!-- <div class="col-md-6 col-lg-3">
         <div class="card h-100 shadow-sm portal-card">
           <div class="card-body">
             <h3 class="h5 fw-bold">View Item Details</h3>
@@ -400,7 +394,7 @@
           </div>
         </div>
       </div>
-
+      
       <div class="col-md-6 col-lg-3">
         <div class="card h-100 shadow-sm portal-card">
           <div class="card-body">
@@ -411,7 +405,7 @@
             </p>
           </div>
         </div>
-      </div>
+      </div> -->
 
       <div class="col-md-6 col-lg-3">
         <div class="card h-100 shadow-sm portal-card">
