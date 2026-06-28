@@ -1,218 +1,221 @@
 <!-- Submitted by LU - My Access Requests Page - Jinja version -->
-{% extends "base_template.html" %}
-
-{% block title %}My Access Requests{% endblock %}
-
-{% block content %}
+{% extends "base_template.html" %} {% block title %}My Access Requests{%
+endblock %} {% block content %}
 
 <!-- Page Header -->
 <header class="item-page-header py-5">
-    <div class="container px-4">
-        <p class="section-label text-warning mb-2">User Access Area</p>
-        <h1 class="fw-bold mb-2">My Access Requests</h1>
-        <p class="mb-0 page-subtitle">
-            Track submitted access requests, review progress, decisions and access conditions for Indigenous
-            collection items.
-        </p>
-    </div>
+  <div class="container px-4">
+    <p class="section-label text-warning mb-2">User Access Area</p>
+    <h1 class="fw-bold mb-2">My Access Requests</h1>
+    <p class="mb-0 page-subtitle">
+      Track submitted access requests, review progress, decisions and access
+      conditions for Indigenous collection items.
+    </p>
+  </div>
 </header>
 
 <!-- Main Content -->
 <main class="item-details-area py-5">
-    <div class="container px-4">
-
-        <!-- Flash messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="mb-4">
-            {% for category, message in messages %}
-            <div class="alert alert-{{ category }} mb-2" role="alert">
-                {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endwith %}
-
-        <div class="alert cultural-alert mb-4" role="alert">
-            <strong>Access request history:</strong>
-            Submitted requests and review outcomes are listed below. Some restricted or culturally sensitive items
-            may require additional consultation before a decision is recorded.
-        </div>
-
-        <!-- Summary Cards -->
-        <div class="row g-4 mb-4">
-
-            <div class="col-md-4">
-                <div class="content-card h-100">
-                    <h2 class="h5 fw-bold">Submitted Requests</h2>
-                    <p class="display-6 fw-bold mb-0">{{ total_requests }}</p>
-                    <p class="text-muted mb-0">Total access requests submitted.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="content-card h-100">
-                    <h2 class="h5 fw-bold">Pending Review</h2>
-                    <p class="display-6 fw-bold mb-0">{{ pending_requests }}</p>
-                    <p class="text-muted mb-0">Awaiting staff or community review.</p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="content-card h-100">
-                    <h2 class="h5 fw-bold">Decisions Recorded</h2>
-                    <p class="display-6 fw-bold mb-0">{{ decided_requests }}</p>
-                    <p class="text-muted mb-0">Requests with a recorded access decision.</p>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Request List -->
-        <div class="card item-card mb-4">
-            <div class="card-body">
-                <h2 class="h4 fw-bold">Request History</h2>
-                <p class="text-muted">
-                    View submitted access requests, current review status, decision outcomes and approved access
-                    conditions.
-                </p>
-
-                {% if access_requests %}
-                <div class="table-responsive">
-                    <table class="table table-bordered align-middle metadata-table">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Request Date</th>
-                                <th>Purpose</th>
-                                <th>Status</th>
-                                <th>Decision / Conditions</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for request_item in access_requests %}
-                            <tr>
-                                <td>
-                                    <strong>{{ request_item.title }}</strong><br>
-                                    <span class="small text-muted">
-                                        {{ request_item.itemType }} collection item
-                                    </span>
-                                </td>
-
-                                <td>
-                                    {{ request_item.requestDate if request_item.requestDate else "Not recorded" }}
-                                </td>
-
-                                <td>
-                                    {{ request_item.purpose if request_item.purpose else "No purpose recorded" }}
-                                </td>
-
-                                <td>
-                                    <span class="badge
-                                                    {% if request_item.requestStatus == 'Approved' %}bg-success
-                                                    {% elif request_item.requestStatus == 'Rejected' %}bg-danger
-                                                    {% elif request_item.requestStatus == 'Pending Review' %}bg-warning text-dark
-                                                    {% else %}bg-secondary
-                                                    {% endif %}">
-                                        {{ request_item.requestStatus }}
-                                    </span>
-                                </td>
-
-                                <td>
-                                    {{ request_item.decisionConditions if request_item.decisionConditions else "Awaiting
-                                    review outcome." }}
-                                </td>
-
-                                <td>
-                                    <a href="{{ url_for('item_details', item_id=request_item.itemID) }}"
-                                        class="btn btn-primary btn-sm">
-                                        View Item
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                {% else %}
-                <div class="alert alert-secondary" role="alert">
-                    You have not submitted any access requests yet.
-                </div>
-
-                <a href="{{ url_for('catalogue') }}" class="btn btn-primary">
-                    Browse Catalogue
-                </a>
-                {% endif %}
-
-                <p class="text-muted small mb-0 mt-3">
-                    Approved requests may include supervised viewing instructions, use conditions and restrictions
-                    on copying, photography, publication or redistribution.
-                </p>
-            </div>
-        </div>
-
-        <!-- Request Lifecycle -->
-        <div class="card item-card">
-            <div class="card-body">
-                <h2 class="h4 fw-bold">Access Request Lifecycle</h2>
-
-                <div class="timeline mt-4">
-
-                    <div class="timeline-entry role-system">
-                        <h3 class="h6 fw-bold mb-1">1. Request Submitted</h3>
-                        <p class="mb-1">
-                            The user submits an access request from the item details page.
-                        </p>
-                        <p class="small text-muted mb-0">
-                            Request date, user account and item record are recorded.
-                        </p>
-                    </div>
-
-                    <div class="timeline-entry role-lib-adm">
-                        <h3 class="h6 fw-bold mb-1">2. Staff Review</h3>
-                        <p class="mb-1">
-                            Library staff review the request reason, item metadata and current access status.
-                        </p>
-                        <p class="small text-muted mb-0">Metadata and access conditions are checked.</p>
-                    </div>
-
-                    <div class="timeline-entry role-ce-adm">
-                        <h3 class="h6 fw-bold mb-1">3. Community / Elder Review</h3>
-                        <p class="mb-1">
-                            Community reviewers or cultural advisors may provide comments for culturally sensitive
-                            items.
-                        </p>
-                        <p class="small text-muted mb-0">Consultation comments are recorded.</p>
-                    </div>
-
-                    <div class="timeline-entry role-system">
-                        <h3 class="h6 fw-bold mb-1">4. Decision Recorded</h3>
-                        <p class="mb-1">
-                            The final access decision is recorded and the user can view the outcome.
-                        </p>
-                        <p class="small text-muted mb-0">
-                            Status may be approved, rejected or require further review.
-                        </p>
-                    </div>
-
-                    <div class="timeline-entry role-lib-adm">
-                        <h3 class="h6 fw-bold mb-1">5. Library Viewing Arranged</h3>
-                        <p class="mb-1">
-                            Approved users receive access conditions and instructions for viewing materials at the
-                            physical library.
-                        </p>
-                        <p class="small text-muted mb-0">
-                            Some materials may require supervised viewing in a designated library space.
-                        </p>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
+  <div class="container px-4">
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="mb-4">
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} mb-2" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
     </div>
+    {% endif %} {% endwith %}
+
+    <div class="alert cultural-alert mb-4" role="alert">
+      <strong>Access request history:</strong>
+      Submitted requests and review outcomes are listed below. Some restricted
+      or culturally sensitive items may require additional consultation before a
+      decision is recorded.
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-4">
+        <div class="content-card h-100">
+          <h2 class="h5 fw-bold">Submitted Requests</h2>
+          <p class="display-6 fw-bold mb-0">{{ total_requests }}</p>
+          <p class="text-muted mb-0">Total access requests submitted.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="content-card h-100">
+          <h2 class="h5 fw-bold">Pending Review</h2>
+          <p class="display-6 fw-bold mb-0">{{ pending_requests }}</p>
+          <p class="text-muted mb-0">Awaiting staff or community review.</p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="content-card h-100">
+          <h2 class="h5 fw-bold">Decisions Recorded</h2>
+          <p class="display-6 fw-bold mb-0">{{ decided_requests }}</p>
+          <p class="text-muted mb-0">
+            Requests with a recorded access decision.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Request List -->
+    <div class="card item-card mb-4">
+      <div class="card-body">
+        <h2 class="h4 fw-bold">Request History</h2>
+        <p class="text-muted">
+          View submitted access requests, current review status, decision
+          outcomes and approved access conditions.
+        </p>
+
+        {% if access_requests %}
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle metadata-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Request Date</th>
+                <th>Purpose</th>
+                <th>Status</th>
+                <th>Decision / Conditions</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for request_item in access_requests %}
+              <tr>
+                <td>
+                  <strong>{{ request_item.title }}</strong><br />
+                  <span class="small text-muted">
+                    {{ request_item.itemType }} collection item
+                  </span>
+                </td>
+
+                <td>
+                  {{ request_item.requestDate if request_item.requestDate else
+                  "Not recorded" }}
+                </td>
+
+                <td>
+                  {{ request_item.purpose if request_item.purpose else "No
+                  purpose recorded" }}
+                </td>
+
+                <td>
+                  <span
+                    class="badge {% if request_item.requestStatus == 'Approved' %}bg-success {% elif request_item.requestStatus == 'Rejected' %}bg-danger {% elif request_item.requestStatus == 'Pending Review' %}bg-warning text-dark {% else %}bg-secondary {% endif %}"
+                  >
+                    {{ request_item.requestStatus }}
+                  </span>
+                </td>
+
+                <td>
+                  {{ request_item.decisionConditions if
+                  request_item.decisionConditions else "Awaiting review
+                  outcome." }}
+                </td>
+
+                <td>
+                  <a
+                    href="{{ url_for('views.item_details', item_id=request_item.itemID) }}"
+                    class="btn btn-primary btn-sm"
+                  >
+                    View Item
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="alert alert-secondary" role="alert">
+          You have not submitted any access requests yet.
+        </div>
+
+        <a href="{{ url_for('views.catalogue') }}" class="btn btn-primary">
+          Browse Catalogue
+        </a>
+        {% endif %}
+
+        <p class="text-muted small mb-0 mt-3">
+          Approved requests may include supervised viewing instructions, use
+          conditions and restrictions on copying, photography, publication or
+          redistribution.
+        </p>
+      </div>
+    </div>
+
+    <!-- Request Lifecycle -->
+    <div class="card item-card">
+      <div class="card-body">
+        <h2 class="h4 fw-bold">Access Request Lifecycle</h2>
+
+        <div class="timeline mt-4">
+          <div class="timeline-entry role-system">
+            <h3 class="h6 fw-bold mb-1">1. Request Submitted</h3>
+            <p class="mb-1">
+              The user submits an access request from the item details page.
+            </p>
+            <p class="small text-muted mb-0">
+              Request date, user account and item record are recorded.
+            </p>
+          </div>
+
+          <div class="timeline-entry role-lib-adm">
+            <h3 class="h6 fw-bold mb-1">2. Staff Review</h3>
+            <p class="mb-1">
+              Library staff review the request reason, item metadata and current
+              access status.
+            </p>
+            <p class="small text-muted mb-0">
+              Metadata and access conditions are checked.
+            </p>
+          </div>
+
+          <div class="timeline-entry role-ce-adm">
+            <h3 class="h6 fw-bold mb-1">3. Community / Elder Review</h3>
+            <p class="mb-1">
+              Community reviewers or cultural advisors may provide comments for
+              culturally sensitive items.
+            </p>
+            <p class="small text-muted mb-0">
+              Consultation comments are recorded.
+            </p>
+          </div>
+
+          <div class="timeline-entry role-system">
+            <h3 class="h6 fw-bold mb-1">4. Decision Recorded</h3>
+            <p class="mb-1">
+              The final access decision is recorded and the user can view the
+              outcome.
+            </p>
+            <p class="small text-muted mb-0">
+              Status may be approved, rejected or require further review.
+            </p>
+          </div>
+
+          <div class="timeline-entry role-lib-adm">
+            <h3 class="h6 fw-bold mb-1">5. Library Viewing Arranged</h3>
+            <p class="mb-1">
+              Approved users receive access conditions and instructions for
+              viewing materials at the physical library.
+            </p>
+            <p class="small text-muted mb-0">
+              Some materials may require supervised viewing in a designated
+              library space.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </main>
 
 {% endblock %}

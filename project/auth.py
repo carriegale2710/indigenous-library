@@ -1,5 +1,6 @@
 from flask import  Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
+from project.forms import RegistrationForm, LoginForm
 from project import mysql
 import MySQLdb
 
@@ -21,44 +22,36 @@ def register():
             -> If Valid, will create the new user row in DB with hashed password -> Redirects to the login page.
     """
     
-    if request.method == 'POST':
-        fullname = request.form['fullname']
-        username = request.form['username']
-        email = request.form['email']
-        password = request.form['password']
-        confirmPassword = request.form['confirmPassword']
+    form = RegistrationForm()
+
+    if form.validate_on_submit():
+        fullname = form.fullname.data
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+
+        cur = mysql.connection.cursor()
         error = None
 
-        if not fullname:
-            error = 'Full name required.'
-        elif not username:
-            error = 'Username is required.'
-        elif not email:
-            error = 'Email is required.'
-        elif not password:
-            error = 'Password is required.'
-        elif confirmPassword != password:
-            error = 'Password confirm does not match.'
+        # Save to mySQL database
+        try:
+            cur.execute(
+                "INSERT INTO user (fullname, username, email, passwordHash) VALUES (%s, %s, %s, %s)",
+                (fullname, username, email, generate_password_hash(password)) #!NOTE: For security, never store raw password! Always hash!
+            )
+            mysql.connection.commit()
+        except MySQLdb.IntegrityError:
+            error = f"User {username} or email {email} is already registered."
+        finally:
+            cur.close()
 
         if error is None:
-            cur = mysql.connection.cursor()
-            try:
-                cur.execute(
-                    "INSERT INTO user (fullname, username, email, password) VALUES (%s, %s, %s, %s)",
-                    (fullname, username, email, generate_password_hash(password))
-                )
-                mysql.connection.commit()
-            except MySQLdb.IntegrityError:
-                error = f"User {username} or email {email} is already registered."
-            finally:
-                cur.close()
-
-            if error is None:
-                return redirect(url_for("auth.login"))
+            flash("Temporary registration submitted successfully.", "success")
+            return redirect(url_for("auth.login"))
             
-        flash(error)
+        flash(error, "error")
            
-    return render_template('auth/register.html') 
+    return render_template('auth/register.html', form=form) 
 
 @auth_bp.route('/login', methods=('GET','POST'))
 def login():
@@ -73,28 +66,38 @@ def login():
 
     """
 
-    if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        error = None
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
 
         cur = mysql.connection.cursor()
+
+        # Search user database with inputted email
         cur.execute('SELECT * FROM user WHERE email = %s', (email,))
         user = cur.fetchone()
         cur.close()
 
-        if email is None:
-            error = 'Incorrect email.'
-        elif not check_password_hash(user['password'],password):
-            error = 'Incorrect password.'
-        else:
+        error = None
+
+        # Error handling
+        if user is None or not check_password_hash(user['passwordHash'],password):
+            error = 'Incorrect email or password.' # NOTE: Security measure - So attackers don't know if email is in a database.
+        
+        # Store user details in new login session
+        if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('views.home'))
-        
-        flash(error)
+            session['fullname'] = user['fullname']
+            session["email"] = user['email']
 
-    return render_template('auth/login.html') 
+            flash("Temporary login successful.", "success")
+            return redirect(url_for('views.catalogue'))
+        
+        flash(error, "error")
+
+    return render_template('auth/login.html', form=form) 
 
 @auth_bp.before_app_request 
 def load_logged_in_user():
@@ -131,4 +134,5 @@ def logout():
     This will clear all data from current session, including user_id. Redirects to index page.
     """
     session.clear()
-    return redirect(url_for('views.home'))
+    flash("You have been logged out.", "success")
+    return redirect(url_for('auth.login'))

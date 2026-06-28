@@ -1,36 +1,32 @@
 <!-- Submitted by LU - Error Page -- Updated --->
-{% extends "base_template.html" %}
-
-{% block title %}{{ error_code }} Error{% endblock %}
-
-{% block content %}
+{% extends "base_template.html" %} {% block title %}{{ error_code }} Error{%
+endblock %} {% block content %}
 <header class="item-page-header py-5">
-    <div class="container px-4">
-        <p class="section-label text-warning mb-2">Application Error</p>
-        <h1 class="fw-bold mb-2">{{ error_code }}</h1>
-        <p class="mb-0 page-subtitle">
-            {{ error_message }}
-        </p>
-    </div>
+  <div class="container px-4">
+    <p class="section-label text-warning mb-2">Application Error</p>
+    <h1 class="fw-bold mb-2">{{ error_code }}</h1>
+    <p class="mb-0 page-subtitle">{{ error_message }}</p>
+  </div>
 </header>
 
 <main class="item-details-area py-5">
-    <div class="container px-4">
-        <div class="card item-card">
-            <div class="card-body p-4 p-md-5 text-center">
-                <h2 class="h4 fw-bold">{{ error_title }}</h2>
-                <p class="text-muted">
-                    {{ error_description }}
-                </p>
+  <div class="container px-4">
+    <div class="card item-card">
+      <div class="card-body p-4 p-md-5 text-center">
+        <h2 class="h4 fw-bold">{{ error_title }}</h2>
+        <p class="text-muted">{{ error_description }}</p>
 
-                <a href="{{ url_for('home') }}" class="btn btn-primary">
-                    Return Home
-                </a>
-                <a href="{{ url_for('catalogue') }}" class="btn btn-outline-dark ms-md-2">
-                    Browse Catalogue
-                </a>
-            </div>
-        </div>
+        <a href="{{ url_for('home') }}" class="btn btn-primary">
+          Return Home
+        </a>
+        <a
+          href="{{ url_for('views.catalogue') }}"
+          class="btn btn-outline-dark ms-md-2"
+        >
+          Browse Catalogue
+        </a>
+      </div>
     </div>
+  </div>
 </main>
 {% endblock %}

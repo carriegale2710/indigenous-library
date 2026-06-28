@@ -3,7 +3,7 @@
 # ============================================================
 
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, StringField, SubmitField, PasswordField, FileField
+from wtforms import TextAreaField, StringField, SubmitField, PasswordField, FileField, BooleanField
 from wtforms.fields.choices import SelectField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length, ValidationError
 from flask_wtf.file import FileAllowed
@@ -15,19 +15,20 @@ from flask_wtf.file import FileAllowed
 class AccessRequestForm(FlaskForm):
     requestReason = TextAreaField('Reason for Request', validators=[DataRequired()])
     supportingDocuments = StringField('Supporting Documents', validators=[Optional()])
+    # supportingDocuments = FileField("Supporting Documents") NOTE - from lona's app.py - which do we use?
     submit = SubmitField('Submit Request')
 
 # ------------------------------------------------------------
 # Registration Form — Rebecca
 # ------------------------------------------------------------
 class RegistrationForm(FlaskForm):
-    fullName = StringField('Enter your Full Name', validators=[DataRequired()])
-    username = StringField('Enter your username', validators=[DataRequired()])
-    email = StringField('Enter your email address', validators=[DataRequired(), Email()])
-    password = PasswordField('', validators=[DataRequired(), Length(min=8)])
-    confirmPassword = PasswordField('', validators=[DataRequired(), EqualTo('password')])
-    submit = SubmitField('Submit Registration')
-
+    fullName = StringField('Full Name', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email address', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
+    confirmPassword = PasswordField('Confirm Password',validators=[DataRequired(), EqualTo('password', message='Passwords must match.')])
+    agreeTerms = BooleanField('I agree to terms and conditions', validators=[DataRequired(message='You must agree to terms and conditions.')])
+    submit = SubmitField('Create Account')
 # ------------------------------------------------------------
 # Collection Item Form — Rebecca
 # ------------------------------------------------------------

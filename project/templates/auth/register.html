@@ -1,0 +1,258 @@
+<!-- Submitted by LU - Register Page - Jinja version -->
+{% extends "base_template.html" %} {% block title %}Register{% endblock %} {%
+block content %}
+<!-- Register Header -->
+<header class="login-page-header py-5">
+  <div class="container px-4">
+    <p class="section-label text-warning mb-2">Account Registration</p>
+    <h1 class="fw-bold mb-2">Create an Account</h1>
+    <p class="mb-0 page-subtitle">
+      Register to submit cultural access requests, track request outcomes and
+      receive instructions for viewing approved materials at the library.
+    </p>
+  </div>
+</header>
+
+<!-- Register Main Content -->
+<main class="login-area py-5">
+  <div class="container px-4">
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="mb-4">
+      {% for category, message in messages %}
+      <div class="alert alert-{{ category }} mb-2" role="alert">
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
+    <div class="row g-4 align-items-stretch">
+      <!-- Registration Form -->
+      <div class="col-lg-7">
+        <div class="card login-card h-100">
+          <div class="card-body p-4 p-md-5">
+            <p class="section-label">Register for Access</p>
+            <h2 class="h3 fw-bold mb-3">Create your library account</h2>
+
+            <p class="text-muted">
+              Public users can create an account to request access to restricted
+              collection items and track review outcomes. Staff and reviewer
+              permissions are assigned by the library.
+            </p>
+
+            <form
+              action="{{ url_for('auth.register') }}"
+              method="POST"
+              novalidate
+            >
+              <!-- CSRF token / hidden field  -->
+              {{ form.hidden_tag() }}
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="fullname" class="form-label fw-semibold"
+                    >Full Name</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="fullname"
+                    name="fullname"
+                    placeholder="Enter full name"
+                    required
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="username" class="form-label fw-semibold"
+                    >User Name</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="username"
+                    name="username"
+                    placeholder="Enter user name"
+                    required
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label for="email" class="form-label fw-semibold"
+                    >Email Address</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="email"
+                    name="email"
+                    placeholder="Enter your email address"
+                    required
+                  />
+                  <div class="form-text">
+                    Use an email address that library staff can use for access
+                    request updates.
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <label for="password" class="form-label fw-semibold"
+                    >Password</label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    required
+                  />
+                </div>
+
+                <div class="col-md-6">
+                  <label for="confirmPassword" class="form-label fw-semibold"
+                    >Confirm Password</label
+                  >
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    placeholder="Confirm password"
+                    required
+                  />
+                </div>
+
+                <div class="col-12">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      value="agree"
+                      id="agreeTerms"
+                      name="agreeTerms"
+                      required
+                    />
+                    <label for="agreeTerms" class="form-check-label">
+                      I agree to follow the access conditions, privacy
+                      expectations and responsible use requirements of the
+                      Indigenous Academic Library.
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100 mt-4">
+                Create Account
+              </button>
+
+              <p class="text-muted small mt-3 mb-0">
+                Staff and community reviewer accounts may require approval
+                before protected review areas become available.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Registration Information Panel -->
+      <div class="col-lg-5">
+        <div class="card login-info-card h-100">
+          <div class="card-body p-4 p-md-5">
+            <p class="section-label">Before You Register</p>
+            <h2 class="h3 fw-bold mb-3">Account Access Information</h2>
+
+            <p>
+              Registration allows users to submit access requests and track
+              decisions for restricted or culturally sensitive collection items.
+            </p>
+
+            <div class="role-info-box role-public mb-3">
+              <h3 class="h6 fw-bold">Public and Research Users</h3>
+              <p class="mb-0">
+                Can browse catalogue records, request access to restricted
+                materials and view request outcomes through their account.
+              </p>
+            </div>
+
+            <div class="role-info-box role-lib-adm mb-3">
+              <h3 class="h6 fw-bold">Library Staff Accounts</h3>
+              <p class="mb-0">
+                Staff accounts are used to support request administration,
+                catalogue management and supervised access arrangements at the
+                library.
+              </p>
+            </div>
+
+            <div class="role-info-box role-ce-adm mb-3">
+              <h3 class="h6 fw-bold">Reviewer Accounts</h3>
+              <p class="mb-0">
+                Community reviewers and Elders may review culturally sensitive
+                records, add consultation comments and support access decisions.
+              </p>
+            </div>
+
+            <div class="permission-note">
+              <strong>Access reminder:</strong>
+              Approval to view restricted material does not automatically allow
+              copying, photography, publication or redistribution. Conditions
+              are recorded with each decision.
+            </div>
+
+            <div class="mt-4">
+              <a
+                href="{{ url_for('auth.login') }}"
+                class="btn btn-primary me-md-2"
+              >
+                Already have an account?
+              </a>
+              <a
+                href="{{ url_for('views.access_privacy') }}"
+                class="btn btn-outline-dark mt-2 mt-md-0"
+              >
+                Access & Privacy
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Access Process Reminder -->
+    <section class="mt-5">
+      <div class="content-card">
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-8">
+            <p class="section-label">After Registration</p>
+            <h2 class="h4 fw-bold">Requesting Access to Collection Items</h2>
+            <p class="text-muted mb-lg-0">
+              After signing in, users can open an item record, submit an access
+              request and provide a reason for use. Approved requests may
+              include instructions for viewing materials at the physical library
+              under supervised conditions.
+            </p>
+          </div>
+
+          <div class="col-lg-4 text-lg-end">
+            <a
+              href="{{ url_for('views.catalogue') }}"
+              class="btn btn-primary me-md-2"
+            >
+              Browse Catalogue
+            </a>
+            <a
+              href="{{ url_for('views.item_details', item_id=1) }}"
+              class="btn btn-outline-dark mt-2 mt-md-0"
+            >
+              View Sample Item
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+{% endblock %}
