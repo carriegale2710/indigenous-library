@@ -45,24 +45,6 @@ content %}
                 {% endfor %}
               </div>
 
-              <!-- <div class="mb-3">
-                <label for="email" class="form-label fw-semibold"
-                  >Email Address</label
-                >
-                <input
-                  type="email"
-                  class="form-control"
-                  id="email"
-                  name="email"
-                  placeholder="Enter your email address"
-                  value="{{ request.form.get('email', '') }}"
-                  required
-                />
-                <div class="form-text">
-                  Use the email address linked to your library account.
-                </div>
-              </div> -->
-
               <div class="mb-3">
                 {{ form.password.label(class="form-label fw-semibold")}} 
                 {{form.password(class="form-control", placeholder="Enter your password") }} 
@@ -70,20 +52,6 @@ content %}
                 <div class="text-danger">{{ error }}</div>
                 {% endfor %}
               </div>
-
-              <!-- <div class="mb-3">
-                <label for="password" class="form-label fw-semibold"
-                  >Password</label
-                >
-                <input
-                  type="password"
-                  class="form-control"
-                  id="password"
-                  name="password"
-                  placeholder="Enter your password"
-                  required
-                />
-              </div> -->
 
               <!-- Remember / forgot password features out of scope for now -->
               <!-- <div

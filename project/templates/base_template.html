@@ -180,23 +180,37 @@
               </ul>
             </li>
 
-            <!-- Login Button -->
-            <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-              <a
-                class="nav-link nav-button login-btn"
-                href="{{ url_for('auth.login') }}"
-                >Login</a
-              >
-            </li>
+            <!-- Dynamic Login/Register/Logout Buttons -->
+            {% if g.user %}
+              <span>Hi, {{ g.user.username }}</span>
+              <!-- Logout Button -->
+              <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                  <a
+                    class="nav-link nav-button login-btn"
+                    href="{{ url_for('auth.logout') }}"
+                    >Log Out</a
+                  >
+                </li>
+            {% else %}
+              <!-- Login Button -->
+              <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                <a
+                  class="nav-link nav-button login-btn"
+                  href="{{ url_for('auth.login') }}"
+                  >Login</a
+                >
+              </li>
+              <!-- Register Button -->
+              <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
+                <a
+                  class="nav-link nav-button login-btn"
+                  href="{{ url_for('auth.register') }}"
+                  >Register</a
+                >
+              </li>
+            {% endif %}
 
-            <!-- Register Button -->
-            <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
-              <a
-                class="nav-link nav-button login-btn"
-                href="{{ url_for('auth.register') }}"
-                >Register</a
-              >
-            </li>
+
           </ul>
         </div>
       </div>
