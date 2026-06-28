@@ -175,29 +175,27 @@ INSERT INTO `User` (userID, roleID, fullName, username, email, passwordHash, acc
 (8, 3, 'Priya Singh', 'psingh', 'p.singh@library.qut.edu.au', '$2b$12$Rt6...staffhash', 'inactive', '2025-09-13');
 
 INSERT INTO CollectionItem (itemID, collectionID, statusID, title, authorCreator, `year`, itemType, summary, thumbnailPath, nextReviewDate) VALUES
-(1, 1, 1, 'Kalaw Lagaw Ya Dictionary', 'Torres Strait Language Centre', 2018, 'book', 'A community dictionary of the Kalaw Lagaw Ya language.', '/img/items/1.jpg', NULL),
-(2, 1, 2, 'Recordings of Meriam Mir Speakers', 'Dr Anne Foster', 2005, 'recording', 'Audio recordings of fluent Meriam Mir speakers.', '/img/items/2.jpg', '2026-11-15'),
-(3, 2, 2, 'Creation Songline of the Seven Sisters', 'Recorded with community Elders', 1998, 'recording', 'A recorded songline shared under cultural protocol.', '/img/items/3.jpg', '2026-12-01'),
-(4, 2, 1, 'Oral History: Mission Days', 'Community History Project', 2010, 'recording', 'Interviews recalling life on the missions.', '/img/items/4.jpg', NULL),
-(5, 3, 1, 'Weaving Patterns of the Yolngu', 'Buku-Larrnggay Mulka Centre', 2015, 'image', 'Photographs documenting traditional weaving patterns.', '/img/items/5.jpg', NULL),
-(6, 3, 2, 'Ceremony Photographs Collection', 'Unknown photographer', 1972, 'image', 'A restricted set of ceremony photographs.', '/img/items/IC_Logo.jpg', '2026-09-20'),
-(7, 1, 1, 'Children''s Picture Book in Yumplatok', 'Torres Strait Language Centre', 2020, 'book', 'An illustrated children''s book in Yumplatok (Torres Strait Creole).', '/img/items/7.jpg', NULL),
-(8, 2, 2, 'Men''s Business Recordings', 'Recorded with community Elders', 1985, 'recording', 'Restricted recordings held under cultural protocol.', '/img/items/IC_Logo.jpg', '2027-01-10'),
-(9, 3, 1, 'Bark Painting Records', 'Arnhem Land Art Project', 2012, 'image', 'Catalogue of bark paintings with artist notes.', '/img/items/9.jpg', NULL),
-(10, 2, 3, 'Restricted Ceremony Audio', 'Recorded with community Elders', 1990, 'recording', 'Ceremony audio with an access request under assessment.', '/img/items/10.jpg', '2026-08-05'),
-(11, 1, 1, 'Yolngu Matha Language Primer', 'Yirrkala Community School', 2017, 'book', 'An introductory primer for Yolngu Matha.', '/img/items/11.jpg', NULL),
-(12, 2, 2, 'Sacred Site Survey Notes', 'Heritage Survey Team', 2003, 'manuscript', 'Field notes referencing restricted sacred sites.', '/img/items/IC_Logo.jpg', '2026-10-30'),
-(13, 3, 1, 'Community Festival Photographs', 'Community Media Unit', 2019, 'image', 'Photographs from annual community festivals.', '/img/items/13.jpg', NULL),
-(14, 2, 3, 'Initiation Recordings', 'Recorded with community Elders', 1988, 'recording', 'Initiation recordings with an access request under assessment.', '/img/items/14.jpg', '2026-08-05'),
-(15, 2, 1, 'Dreaming Stories Anthology', 'Community Storytellers', 2014, 'book', 'A published anthology of Dreaming stories cleared for public access.', '/img/items/15.jpg', NULL),
-(16, 4, 1, 'Seasonal Plant Knowledge Cards', 'Community Health Project', 2021, 'resource', 'Illustrated cards describing traditional plant uses and seasonal gathering calendars, cleared for public education.', '/img/items/16.jpg', NULL),
-(17, 4, 3, 'Healing Practices Recordings', 'Recorded with senior knowledge holders', 1996, 'recording', 'Recordings of healing practices and plant preparation methods shared under specific cultural conditions.', '/img/items/IC_Logo.jpg', '2026-09-01'),
-(18, 5, 1, 'Caring for Sea Country Photo Series', 'Coastal Rangers Program', 2022, 'image', 'Photographs documenting sea country management, ranger programs and community-led conservation work.', '/img/items/18.jpg', NULL),
-(19, 5, 2, 'Land Management Oral Histories', 'Community History Project', 2009, 'recording', 'Interviews with Elders describing traditional land management and fire practices, access restricted pending family consent.', '/img/items/IC_Logo.jpg', '2026-10-15'),
--- Pending items: newly catalogued by Library Staff, awaiting Community Elder review.
--- No CulturalMetadata row and no AccessRequest yet; statusID 4 = Pending.
-(20, 2, 4, 'Recently Donated Community Recordings', 'Donated by community member', 2023, 'recording', 'Newly catalogued recordings awaiting cultural review before an access status is set.', '/img/items/IC_Logo.jpg', NULL),
-(21, 3, 4, 'Uncatalogued Photograph Series', 'Unknown photographer', NULL, 'image', 'A set of photographs recently added to the catalogue and awaiting Elder review.', '/img/items/IC_Logo.jpg', NULL);
+(1, 1, 1, 'Kalaw Lagaw Ya Dictionary', 'Torres Strait Language Centre', 2018, 'book', 'A community dictionary of the Kalaw Lagaw Ya language.', 'kalaw-lagaw-ya-dictionary.svg', NULL),
+(2, 1, 2, 'Recordings of Meriam Mir Speakers', 'Dr Anne Foster', 2005, 'recording', 'Audio recordings of fluent Meriam Mir speakers.', 'recordings-of-meriam-mir-speakers.svg', '2026-11-15'),
+(3, 2, 2, 'Creation Songline of the Seven Sisters', 'Recorded with community Elders', 1998, 'recording', 'A recorded songline shared under cultural protocol.', 'creation-songline-of-the-seven-sisters.svg', '2026-12-01'),
+(4, 2, 1, 'Oral History: Mission Days', 'Community History Project', 2010, 'recording', 'Interviews recalling life on the missions.', 'oral-history-mission-days.svg', NULL),
+(5, 3, 1, 'Weaving Patterns of the Yolngu', 'Buku-Larrnggay Mulka Centre', 2015, 'image', 'Photographs documenting traditional weaving patterns.', 'weaving-patterns-of-the-yolngu.svg', NULL),
+(6, 3, 2, 'Ceremony Photographs Collection', 'Unknown photographer', 1972, 'image', 'A restricted set of ceremony photographs.', 'ceremony-photographs-collection.svg', '2026-09-20'),
+(7, 1, 1, 'Children''s Picture Book in Yumplatok', 'Torres Strait Language Centre', 2020, 'book', 'An illustrated children''s book in Yumplatok (Torres Strait Creole).', 'childrens-picture-book-in-yumplatok.svg', NULL),
+(8, 2, 2, 'Men''s Business Recordings', 'Recorded with community Elders', 1985, 'recording', 'Restricted recordings held under cultural protocol.', 'mens-business-recordings.svg', '2027-01-10'),
+(9, 3, 1, 'Bark Painting Records', 'Arnhem Land Art Project', 2012, 'image', 'Catalogue of bark paintings with artist notes.', 'bark-painting-records.svg', NULL),
+(10, 2, 3, 'Restricted Ceremony Audio', 'Recorded with community Elders', 1990, 'recording', 'Ceremony audio with an access request under assessment.', 'restricted-ceremony-audio.svg', '2026-08-05'),
+(11, 1, 1, 'Yolngu Matha Language Primer', 'Yirrkala Community School', 2017, 'book', 'An introductory primer for Yolngu Matha.', 'yolngu-matha-language-primer.svg', NULL),
+(12, 2, 2, 'Sacred Site Survey Notes', 'Heritage Survey Team', 2003, 'manuscript', 'Field notes referencing restricted sacred sites.', 'sacred-site-survey-notes.svg', '2026-10-30'),
+(13, 3, 1, 'Community Festival Photographs', 'Community Media Unit', 2019, 'image', 'Photographs from annual community festivals.', 'community-festival-photographs.svg', NULL),
+(14, 2, 3, 'Initiation Recordings', 'Recorded with community Elders', 1988, 'recording', 'Initiation recordings with an access request under assessment.', 'initiation-recordings.svg', '2026-08-05'),
+(15, 2, 1, 'Dreaming Stories Anthology', 'Community Storytellers', 2014, 'book', 'A published anthology of Dreaming stories cleared for public access.', 'dreaming-stories-anthology.svg', NULL),
+(16, 4, 1, 'Seasonal Plant Knowledge Cards', 'Community Health Project', 2021, 'resource', 'Illustrated cards describing traditional plant uses and seasonal gathering calendars, cleared for public education.', 'seasonal-plant-knowledge-cards.svg', NULL),
+(17, 4, 3, 'Healing Practices Recordings', 'Recorded with senior knowledge holders', 1996, 'recording', 'Recordings of healing practices and plant preparation methods shared under specific cultural conditions.', 'healing-practices-recordings.svg', '2026-09-01'),
+(18, 5, 1, 'Caring for Sea Country Photo Series', 'Coastal Rangers Program', 2022, 'image', 'Photographs documenting sea country management, ranger programs and community-led conservation work.', 'caring-for-sea-country-photo-series.svg', NULL),
+(19, 5, 2, 'Land Management Oral Histories', 'Community History Project', 2009, 'recording', 'Interviews with Elders describing traditional land management and fire practices, access restricted pending family consent.', 'land-management-oral-histories.svg', '2026-10-15'),
+(20, 2, 4, 'Recently Donated Community Recordings', 'Donated by community member', 2023, 'recording', 'Newly catalogued recordings awaiting cultural review before an access status is set.', 'recently-donated-community-recordings.svg', NULL),
+(21, 3, 4, 'Uncatalogued Photograph Series', 'Unknown photographer', NULL, 'image', 'A set of photographs recently added to the catalogue and awaiting Elder review.', 'uncatalogued-photograph-series.svg', NULL);
 
 INSERT INTO CulturalMetadata (metadataID, itemID, communityGroup, language, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations) VALUES
 (1, 1, 'Torres Strait Islander', 'Kalaw Lagaw Ya', 'Western Torres Strait', 'Language', 'None', 'Freely shareable for education', 'Open access'),
