@@ -126,7 +126,7 @@ item.title }}{% endblock %} {% block content %}
 
             <form
               method="POST"
-              action="{{ url_for('request_access', item_id=item.itemID) }}"
+              action="{{ url_for('items_bp.request_access', item_id=item.itemID) }}"
               enctype="multipart/form-data"
               novalidate
             >

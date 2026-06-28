@@ -186,6 +186,19 @@ class User:
         rows = cur.fetchone()
         cur.close()
         return rows
+    
+    @staticmethod
+    def get_by_email(email):
+        """
+        SELECT one User by email. The login route calls this, then checks
+        the password with verify_password(). Returns a row or None.
+        """
+        cur = _get_cursor()
+        cur.execute("SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM `User` WHERE email = %s", (email,))
+        rows = cur.fetchone()
+        cur.close()
+        return rows
+
 
     @staticmethod
     def get_by_id(user_id):
