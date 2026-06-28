@@ -9,6 +9,10 @@ items_bp = Blueprint('items_bp', __name__)
 @items_bp.route('/items/<int:item_id>/request', methods=['GET', 'POST'])
 
 def request_access(item_id):
+    """
+    Displays AccessRequestForm to allow a Public User to submit an access request to a resticted item.
+
+    """
     item = CollectionItem.get_by_id(item_id)
     if item is None:
         return render_template("error.html", error_code=404)

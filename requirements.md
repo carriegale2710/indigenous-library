@@ -20,16 +20,19 @@ Your home page must:
 - [ ] include a functional navigation bar and footer on all pages
 - [ ] be fully responsive across desktop, tablet, and mobile devices.
 
-Collection items may include (but are not limited to):
+- [ ] Collection items may include (but are not limited to):
+  - Historical photographs
+  - Audio recordings of oral histories
+  - Archival manuscripts or documents
+  - Artwork created by Indigenous artists
+  - Cultural artefact records
+  - Language preservation materials
 
-- [ ] Historical photographs
-- [ ] Audio recordings of oral histories
-- [ ] Archival manuscripts or documents
-- [ ] Artwork created by Indigenous artists
-- [ ] Cultural artefact records
-- [ ] Language preservation materials
-
-Each item must include appropriate cultural metadata such as cultural group, sensitivity notes, review status, and access level.
+- [ ] Each item must include appropriate cultural metadata such as:
+  - cultural group
+  - sensitivity notes
+  - review status
+  - access level.
 
 ### Item Details Page
 
@@ -46,7 +49,7 @@ The page must:
 - [ ] validate all form inputs and provide clear feedback for invalid submissions
 - [ ] prevent unauthorised actions based on user role.
 
-Users must not be able to access restricted data by manipulating URLs.
+- [ ] Users must not be able to access restricted data by manipulating URLs.
 
 ### Item Assessment Page (Restricted aCcess)
 

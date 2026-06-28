@@ -1,13 +1,13 @@
 # ============================================================
 # IFQ582 Assignment 2 | Group 1D | Forms
 # ============================================================
-
 from flask_wtf import FlaskForm
 from wtforms import TextAreaField, StringField, SubmitField, PasswordField, FileField, BooleanField
 from wtforms.fields.choices import SelectField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length, ValidationError
 from flask_wtf.file import FileAllowed
 
+# TODO -  add error messages to all forms below
 
 # ------------------------------------------------------------
 # Access Request Form — Rebecca
@@ -15,7 +15,7 @@ from flask_wtf.file import FileAllowed
 class AccessRequestForm(FlaskForm):
     requestReason = TextAreaField('Reason for Request', validators=[DataRequired()])
     supportingDocuments = StringField('Supporting Documents', validators=[Optional()])
-    # supportingDocuments = FileField("Supporting Documents") NOTE - from lona's app.py - which do we use?
+    # supportingDocuments = FileField("Supporting Documents") # REVIEW - ask reb - this from lona's app.py - which FieldType do we use?
     submit = SubmitField('Submit Request')
 
 # ------------------------------------------------------------
@@ -29,6 +29,7 @@ class RegistrationForm(FlaskForm):
     confirmPassword = PasswordField('Confirm Password',validators=[DataRequired(), EqualTo('password', message='Passwords must match.')])
     agreeTerms = BooleanField('I agree to terms and conditions', validators=[DataRequired(message='You must agree to terms and conditions.')])
     submit = SubmitField('Create Account')
+
 # ------------------------------------------------------------
 # Collection Item Form — Rebecca
 # ------------------------------------------------------------
@@ -42,7 +43,6 @@ class CollectionItemForm(FlaskForm):
     thumbnailPath = FileField('Image', validators=[Optional(), FileAllowed(['jpg', 'png', 'svg'])])
     submit = SubmitField('Submit Item to Collection')
 
-
 # ------------------------------------------------------------
 # Cultural Metadata Form — Rebecca
 # ------------------------------------------------------------
@@ -55,6 +55,7 @@ class CulturalMetadataForm(FlaskForm):
     culturalProtocolNotes = TextAreaField('Cultural Protocol Notes', validators=[Optional()])
     accessRecommendations = TextAreaField('Access Recommendations', validators=[Optional()])
     submit = SubmitField('Submit Cultural Metadata')
+
 # ------------------------------------------------------------
 # Community Comment Form — pending team confirmation (Carrie)
 # ------------------------------------------------------------
@@ -65,7 +66,6 @@ class CommunityCommentForm(FlaskForm):
 # ------------------------------------------------------------
 # Review Decision Form — Carrie
 # ------------------------------------------------------------
-
 class RequiredIfDecision: # for accessConditions validation logic
     def __call__(self, form, field):
         if form.decisionType.data == "approve" and not field.data:
@@ -74,13 +74,13 @@ class RequiredIfDecision: # for accessConditions validation logic
 class ReviewDecisionForm(FlaskForm):
     decisionType = SelectField('Decision Type', choices=[('approve', 'Approve'), ('reject', 'Reject')], validators=[DataRequired()])
     decisionNotes = TextAreaField('Decision Notes', validators=[Optional()])
-    accessConditions = TextAreaField('Access Conditions', validators=[RequiredIfDecision()]) # Note - TEST THIS
+    accessConditions = TextAreaField('Access Conditions', validators=[RequiredIfDecision()]) # NOTE - TEST THIS
 
 # ------------------------------------------------------------
 # Login Form — Carrie
 # ------------------------------------------------------------
 class LoginForm(FlaskForm):
-    # username = StringField('Enter your username', validators=[DataRequired()]) # NOTE ask rebecca - login in with username as option?
+    # username = StringField('Enter your username', validators=[DataRequired()]) # REVIEW ask rebecca - login in with username as option?
     email = StringField('Enter your email address', validators=[DataRequired(), Email()])  
     password = PasswordField('Enter your password', validators=[DataRequired()])
     submit = SubmitField('Log In')

@@ -1,3 +1,6 @@
+# ============================================================
+# IFQ582 Assignment 2 | Group 1D | Authorisation - Register/Login/Logout
+# ============================================================
 from flask import  Blueprint, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from project.forms import RegistrationForm, LoginForm
@@ -37,7 +40,7 @@ def register():
         try:
             cur.execute(
                 "INSERT INTO user (fullname, username, email, passwordHash) VALUES (%s, %s, %s, %s)",
-                (fullname, username, email, generate_password_hash(password)) #!NOTE: For security, never store raw password! Always hash!
+                (fullname, username, email, generate_password_hash(password)) # NOTE : For security, never store raw password! Always hash!
             )
             mysql.connection.commit()
         except MySQLdb.IntegrityError:
