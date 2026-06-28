@@ -92,7 +92,7 @@ def login():
             session['username'] = user['username']
             session["email"] = user['email']
 
-            flash(f"Login for username '{session['username']}' with email '{session["email"]}' successful.", "success")
+            flash(f"Login for username '{session['username']}' with email '{session['email']}' successful.", "success")
             return redirect(url_for('views.catalogue'))
         
         flash(error, "danger")
