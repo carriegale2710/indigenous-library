@@ -21,6 +21,21 @@
   </head>
 
   <body>
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %}
+    <div class="mb-4">
+      {% for category, message in messages %}
+      <div
+        class="alert alert-{{'danger' if category == 'error' else category }} mb-2"
+        role="alert"
+      >
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %} {% endwith %}
+
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-sm py-3 shadow">
       <div class="container px-4">

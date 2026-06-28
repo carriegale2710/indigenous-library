@@ -16,18 +16,6 @@ block content %}
 <!-- Register Main Content -->
 <main class="login-area py-5">
   <div class="container px-4">
-    <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %}
-    <div class="mb-4">
-      {% for category, message in messages %}
-      <div class="alert alert-{{ category }} mb-2" role="alert">
-        {{ message }}
-      </div>
-      {% endfor %}
-    </div>
-    {% endif %} {% endwith %}
-
     <div class="row g-4 align-items-stretch">
       <!-- Registration Form -->
       <div class="col-lg-7">
