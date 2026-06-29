@@ -1,3 +1,12 @@
+"""CRUD Functionality
+- The System must support:
+> Create, Read, Update, Delete Operations for collection items
+> Submission of access requests
+> Recording of review decisions
+> Status transitions (Under Review -> Public/Restricted)
+
+All CRUD operations must interact dynamically with the database and respect role permissions. """
+
 from flask import Blueprint, render_template, redirect, flash, url_for, session
 
 from project.model import CollectionItem, AccessRequest, CulturalMetadata, Collection
