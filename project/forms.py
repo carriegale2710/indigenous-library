@@ -2,7 +2,7 @@
 # IFQ582 Assignment 2 | Group 1D | Forms
 # ============================================================
 from flask_wtf import FlaskForm
-from wtforms import TextAreaField, StringField, SubmitField, PasswordField, FileField, BooleanField
+from wtforms import TextAreaField, StringField, SubmitField, PasswordField, FileField, BooleanField, DateField
 from wtforms.fields.choices import SelectField
 from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length, ValidationError
 from flask_wtf.file import FileAllowed
@@ -51,6 +51,7 @@ class CollectionItemForm(FlaskForm):
     collection = SelectField('Collection', choices=[], validators=[DataRequired()])
     itemType = SelectField('Item Type', choices=[('book','Book'), ('recording','Recording'),('image','Image'),('manuscript','Manuscript'),('resource','Resource')], validators=[DataRequired()])
     thumbnailPath = FileField('Image', validators=[Optional(), FileAllowed(['jpg', 'png', 'svg'])])
+    nextReviewDate = DateField('Next Review Date', validators=[Optional()])
     submit = SubmitField('Submit Item to Collection')
 
 # ------------------------------------------------------------

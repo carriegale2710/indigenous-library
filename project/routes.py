@@ -1,12 +1,14 @@
 from flask import Blueprint, render_template, redirect, flash, url_for, session
+
 from project.model import CollectionItem, AccessRequest
-from project.forms import AccessRequestForm
-#from project.auth import login_required
+from project.forms import AccessRequestForm, CollectionItemForm
+from project.decorators import login_required
 
 items_bp = Blueprint('items_bp', __name__)
 
-#@login_required -- confirm decorator name with Carrie
+
 @items_bp.route('/items/<int:item_id>/request', methods=['GET', 'POST'])
+@login_required
 
 def request_access(item_id):
     """
@@ -27,4 +29,52 @@ def request_access(item_id):
         flash('Your access request has been submitted', 'success')
         return redirect(url_for('items_bp.request_access', item_id=item_id))
 
-    return render_template("request_form.html", item=item, form=form)
+    return render_template("request-form.html", item=item, form=form)
+
+
+@items_bp.route('/items/<int:item_id>/edit', methods=['GET', 'POST'])
+@login_required
+
+def collection_item_update(item_id):
+    item = CollectionItem.get_by_id(item_id)
+    if item is None:
+        return render_template("error.html", error_code=404)
+
+    form = CollectionItemForm(
+        title = item['title'],
+        authorCreator = item['authorCreator'],
+        year=item['year'],
+        summary=item['summary'],
+        collection=item['collectionID'],
+        itemType=item['itemType'],
+        thumbnailPath=item['thumbnailPath'],
+        nextReviewDate=item['nextReviewDate']
+    )
+    if form.validate_on_submit():
+        CollectionItem.update(
+           item_id,
+           title = form.title.data,
+           authorCreator = form.authorCreator.data,
+           summary = form.summary.data,
+           collectionID = form.collection.data,
+           year = form.year.data,
+           itemType = form.itemType.data,
+           thumbnailPath = form.thumbnailPath.data,
+           nextReviewDate = form.nextReviewDate.data
+        )
+        flash('Your collection item has been updated', 'success')
+        return redirect(url_for('views.item_details', item_id=item_id))
+
+    return render_template("collection-item-form.html", item=item, form=form)
+
+
+@items_bp.route('/items/<int:item_id>/delete', methods=['POST'])
+@login_required
+
+def collection_item_delete(item_id):
+    item = CollectionItem.get_by_id(item_id)
+    if item is None:
+        return render_template("error.html", error_code=404)
+    CollectionItem.delete(item_id)
+    flash('Your collection item has been deleted', 'success')
+    return redirect(url_for('views.home'))
