@@ -281,7 +281,7 @@ class CollectionItem:
 
         Tip: build the SQL with a growing list of conditions and a params list,
         then join the conditions with " AND ". Always use %s placeholders, never
-        string formatting, so you are safe from SQL injection.
+        string formatting, so you are safe from SQL injection. 
         """
         sql = """
             SELECT 
@@ -301,6 +301,8 @@ class CollectionItem:
                     ON ci.collectionID = c.collectionID
                 JOIN AccessStatus ast 
                     ON ci.statusID = ast.statusID
+                LEFT JOIN CulturalMetadata cm
+                    ON ci.itemID = cm.itemID
             """
 
         # Collect a condition + value for each filter that was actually passed
@@ -308,8 +310,13 @@ class CollectionItem:
         params = []
 
         if search:
-            conditions.append("ci.title LIKE %s OR ci.summary LIKE %s")
-            params.extend(f"%{search}%", f"%{search}%")
+            like = f"%{search}%"
+            conditions.append(
+                "(ci.title LIKE %s OR ci.summary LIKE %s OR ci.authorCreator LIKE %s "
+                "OR cm.communityGroup LIKE %s OR cm.`language` LIKE %s "
+                "OR cm.location LIKE %s OR cm.subjectArea LIKE %s)"
+            )
+            params.extend([like] * 7)
         if collection_id:
             conditions.append("ci.collectionID = %s")
             params.append(collection_id)
@@ -351,6 +358,9 @@ class CollectionItem:
             ORDER BY RAND()
             LIMIT 3
         """)
+        rows = cur.fetchall()
+        cur.close()
+        return rows
     
     
     @staticmethod
@@ -427,7 +437,7 @@ class CollectionItem:
         Decide which columns staff may edit, build a SET clause from the passed
         fields, commit. Returns nothing (or the affected row count).
         """
-        editable = {"collectionID", "statusID", "title", "authorCreator",
+        editable = {"collectionID", "title", "authorCreator",
                     "year", "itemType", "summary", "thumbnailPath", "nextReviewDate"}
 
         set_parts = []
@@ -637,7 +647,7 @@ class AccessRequest:
                 ar.requestStatus,
                 ci.title
             FROM AccessRequest ar
-                JOIN CollectionItem
+                JOIN CollectionItem ci
                     ON ar.itemID = ci.itemID
             WHERE ar.userID = %s
             ORDER BY ar.requestDate DESC
@@ -804,7 +814,7 @@ class CommunityComment:
                 u.fullName
             FROM CommunityComment cc
                 JOIN `User` u
-                    ON CommunityComment.reviewerID = u.userID
+                    ON cc.reviewerID = u.userID
             WHERE cc.requestID = %s
             ORDER BY cc.createdDate
             """,
