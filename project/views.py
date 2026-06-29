@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, flash, abort, url_for, session, request
-from app import get_item_by_id, get_sample_items # from project.model import CollectionItem, AccessRequest, CulturalMetadata, ReviewDecision, CommunityComment
+from project.model import CollectionItem, AccessRequest, CulturalMetadata, ReviewDecision, CommunityComment
 
 # Views blueprints are for route for displaying information to the user
 views_bp = Blueprint('views',__name__) 
@@ -11,54 +11,31 @@ views_bp = Blueprint('views',__name__)
 
 @views_bp.route("/")
 def home():
-    """
-    Entry point for website.
-    """
-    return render_template("index.html")
+    """Home page. Shows a few featured items pulled from the catalogue."""
+    featured_items = CollectionItem.get_featured_items()
+    return render_template("index.html", featured_items=featured_items)
 
 @views_bp.route("/catalogue")
 def catalogue():
-    """
-    Displays list of items in a catalogue page.
+    # read the three filter values from the query string
+    search = request.args.get("search", "").strip()
+    item_type = request.args.get("item_type", "").strip()
+    status = request.args.get("status", "").strip()
 
-    The page must:
-    - [ ] dynamically display collection items from the database
-    - [ ] support search and filtering (e.g. by category, cultural group, access level, keyword)
-    - [ ] handle empty result scenarios gracefully (e.g. 'No items found')
-    - [ ] include a functional navigation bar and footer on all pages
-    - [ ] be fully responsive across desktop, tablet, and mobile devices.
-    """
-    items = get_sample_items() # TODO - remove hardcoded data for mySQLdb
+    # the dropdown sends a status NAME, but the model filters on statusID
+    status_ids = {"Open": 1, "Restricted": 2, "Culturally Sensitive": 3}
+    status_id = status_ids.get(status)
 
-    # REVIEW - Test this search logic in browser, with mySQLdb - making sure keys match with columns
-    search = request.args.get("search", "").strip().lower()
-    item_type = request.args.get("item_type", "").strip().lower()
-    status = request.args.get("status", "").strip().lower()
+    # search and status are filtered in SQL by the model
+    items = CollectionItem.get_all(search=search, status_id=status_id)
 
-    if search:
-        items = [
-            item for item in items
-            if search in item["title"].lower()
-            or search in item["summary"].lower()
-            or search in item["collectionName"].lower()
-            or search in item["itemType"].lower()
-            or search in item["statusName"].lower()
-        ]
-
-    if item_type and item_type != "all item types":
-        items = [
-            item for item in items
-            if item["itemType"].lower() == item_type
-        ]
-
-    if status and status != "all statuses":
-        items = [
-            item for item in items
-            if item["statusName"].lower() == status
-        ]
+    # itemType isn't a model filter, and the DB stores it lowercase
+    if item_type and item_type != "All item types":
+        items = [item for item in items if item["itemType"].lower() == item_type.lower()]
 
     return render_template("catalogue.html", items=items)
 
+  
 @views_bp.route("/item-details/<int:item_id>", methods=["GET", "POST"])
 def item_details(item_id):
     """
@@ -78,29 +55,26 @@ def item_details(item_id):
     - [ ] Users must not be able to access restricted data by manipulating URLs.
     
     """
-    item = get_item_by_id(item_id)
-
+    item = CollectionItem.get_by_id(item_id)
     if item is None:
         abort(404)
 
-    # TODO - remove hardcoded data below once synced to mySQL db
 
-    metadata = {
-        "communityGroup": "Torres Strait Islander community",
-        "language": "Meriam Mir",
-        "location": "Murray Island / Mer Island",
-        "subjectArea": "Language, oral history and cultural memory",
-        "culturalSensitivityNotes": "This item may contain culturally sensitive language knowledge.",
-        "culturalProtocolNotes": "Because the recordings may include culturally sensitive language content and community knowledge, access is restricted until a review has been completed.",
-        "accessRecommendations": "Research use only; no reproduction without further permission"
-    }
+    metadata = item
+     
 
     related_items = [
-        related_item for related_item in get_sample_items()
-        if related_item["itemID"] != item_id and related_item["collectionName"] == item["collectionName"]
+    other for other in CollectionItem.get_all(collection_id=item["collectionID"])
+    if other["itemID"] != item_id
     ][:3]
 
     existing_request = None
+    user_id = session.get("userID")
+    if user_id:
+        for req in AccessRequest.get_by_user(user_id):
+            if req["itemID"] == item_id:
+                existing_request = req
+                break
 
     return render_template(
         "item-details.html",
