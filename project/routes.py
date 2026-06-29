@@ -2,13 +2,13 @@ from flask import Blueprint, render_template, redirect, flash, url_for, session
 
 from project.model import CollectionItem, AccessRequest, CulturalMetadata, Collection
 from project.forms import AccessRequestForm, CollectionItemForm, CulturalMetadataForm
-from project.decorators import login_required
+from project.decorators import login_required, role_required
 
 items_bp = Blueprint('items_bp', __name__)
 
 
 @items_bp.route('/items/<int:item_id>/request', methods=['GET', 'POST'])
-@login_required
+@login_required                 #Any Logged in user can submit
 def request_access(item_id):
     """
     Displays AccessRequestForm to allow a Public User to submit an access request to a restricted item.
@@ -31,7 +31,7 @@ def request_access(item_id):
 
 
 @items_bp.route('/items/<int:item_id>/edit', methods=['GET', 'POST'])
-@login_required
+@role_required(1,3)        #Admin and Library Staff Only
 def collection_item_update(item_id):
     item = CollectionItem.get_by_id(item_id)
     if item is None:
@@ -71,7 +71,7 @@ def collection_item_update(item_id):
 
 
 @items_bp.route('/items/<int:item_id>/delete', methods=['POST'])
-@login_required
+@role_required(1,3)         # Admin and Library Staff only
 def collection_item_delete(item_id):
     item = CollectionItem.get_by_id(item_id)
     if item is None:
@@ -82,8 +82,8 @@ def collection_item_delete(item_id):
 
 
 @items_bp.route('/items/<int:item_id>/metadata', methods=['GET', 'POST'])
-@login_required
-# TODO: restrict to ADM and CE roles only (Carrie)
+@role_required(1,2)             # Admin and Community Reviewer/Elder only
+
 def cultural_metadata(item_id):
     item = CollectionItem.get_by_id(item_id)
     if item is None:
