@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, flash, url_for, session
 
-from project.model import CollectionItem, AccessRequest
-from project.forms import AccessRequestForm, CollectionItemForm
+from project.model import CollectionItem, AccessRequest, CulturalMetadata
+from project.forms import AccessRequestForm, CollectionItemForm, CulturalMetadataForm
 from project.decorators import login_required
 
 items_bp = Blueprint('items_bp', __name__)
@@ -78,3 +78,54 @@ def collection_item_delete(item_id):
     CollectionItem.delete(item_id)
     flash('Your collection item has been deleted', 'success')
     return redirect(url_for('views.home'))
+
+@items_bp.route('/items/<int:item_id>/metadata', methods=['GET', 'POST'])
+@login_required
+#TODO: restrict to ADM and CE roles only (Carrie)
+
+def cultural_metadata(item_id):
+    metadata = CulturalMetadata.get_by_item(item_id)
+
+    if metadata:
+        form = CulturalMetadataForm(
+            communityGroup = metadata['communityGroup'],
+            language = metadata['language'],
+            location = metadata['location'],
+            subjectArea = metadata['subjectArea'],
+            culturalSensitivityNotes = metadata['culturalSensitivityNotes'],
+            culturalProtocolNotes = metadata['culturalProtocolNotes'],
+            accessRecommendations = metadata['accessRecommendations'],
+        )
+
+    else:
+        form = CulturalMetadataForm()
+
+    if form.validate_on_submit():
+        if metadata is None:
+            CulturalMetadata.create(
+                itemID = item_id,
+                communityGroup = form.communityGroup.data,
+                language = form.language.data,
+                location = form.location.data,
+                subjectArea = form.subjectArea.data,
+                culturalSensitivityNotes = form.culturalSensitivityNotes.data,
+                culturalProtocolNotes = form.culturalProtocolNotes.data,
+                accessRecommendations = form.accessRecommendations.data,
+            )
+        else:
+            CulturalMetadata.update(
+                item_id,
+                communityGroup = form.communityGroup.data,
+                language = form.language.data,
+                location = form.location.data,
+                subjectArea = form.subjectArea.data,
+                culturalSensitivityNotes = form.culturalSensitivityNotes.data,
+                culturalProtocolNotes = form.culturalProtocolNotes.data,
+                accessRecommendations = form.accessRecommendations.data,
+            )
+
+        flash('Cultural metadata saved successfully.', 'success')
+        return redirect(url_for('views.item_details', item_id=item_id))
+
+    return render_template("cultural-metadata-form.html", metadata=metadata, form=form)
+

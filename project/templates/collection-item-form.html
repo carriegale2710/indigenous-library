@@ -1,0 +1,235 @@
+<!-- Controller branch | Rebecca | Collection Item Edit Form -->
+{% extends "base_template.html" %} {% block title %}Edit Item | {{ item.title }}{% endblock %} {% block content %}
+
+<!-- Page Header -->
+<header class="item-page-header py-5">
+  <div class="container px-4">
+    <p class="section-label text-warning mb-2">Collection Management</p>
+    <h1 class="fw-bold mb-2">Edit Collection Item</h1>
+    <p class="mb-0 page-subtitle">
+      Update the details for this collection item. Changes will be saved to the
+      catalogue immediately. Cultural metadata is managed separately.
+    </p>
+  </div>
+</header>
+
+<!-- Main Edit Area -->
+<main class="item-details-area py-5">
+  <div class="container px-4">
+    <div class="row g-4">
+
+      <!-- Left Column: Item Summary -->
+      <div class="col-lg-4">
+        <div class="card item-card mb-4">
+          {% if item.thumbnailPath %}
+          <img
+            src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
+            alt="{{ item.title }}"
+            class="item-thumbnail"
+          />
+          {% endif %}
+
+          <div class="card-body">
+            <h2 class="h4 fw-bold">Item Summary</h2>
+
+            <p class="section-label mb-1">Catalogue Item</p>
+            <h3 class="h5 fw-bold">{{ item.title }}</h3>
+
+            <p class="text-muted small mb-2">
+              {{ item.collectionName if item.collectionName else "Collection not recorded" }} |
+              {{ item.itemType if item.itemType else "Item type not recorded" }} |
+              {{ item.year if item.year else "Year unknown" }}
+            </p>
+
+            {% if item.summary %}
+            <p>{{ item.summary }}</p>
+            {% endif %}
+
+            <div class="mb-3">
+              <span class="badge
+                {% if item.statusName == 'Open' %}status-open
+                {% elif item.statusName == 'Restricted' %}status-restricted
+                {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive
+                {% elif item.statusName == 'Pending' %}status-pending
+                {% else %}bg-secondary{% endif %}">
+                {{ item.statusName }}
+              </span>
+            </div>
+
+            <a
+              href="{{ url_for('views.item_details', item_id=item.itemID) }}"
+              class="btn btn-outline-dark"
+            >
+              Back to Item Details
+            </a>
+          </div>
+        </div>
+
+        <div class="card item-card">
+          <div class="card-body">
+            <h2 class="h4 fw-bold">Edit Notice</h2>
+            <div class="status-panel mb-3">
+              <p class="mb-1">
+                <strong>Access Status:</strong> {{ item.statusName }}
+              </p>
+              <p class="mb-0">
+                <strong>Note:</strong> Access status is managed by Cultural Metadata, not this form.
+              </p>
+            </div>
+            <p class="small text-muted mb-0">
+              Only authorised library staff may edit collection item details.
+              All changes are recorded for audit purposes.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Edit Form -->
+      <div class="col-lg-8">
+        <div class="alert cultural-alert mb-4" role="alert">
+          <strong>Staff access only:</strong>
+          This form is restricted to authorised library staff. Changes to
+          collection items are logged and subject to review.
+        </div>
+
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} mb-4" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div class="card item-card">
+          <div class="card-body p-4 p-md-5">
+            <p class="section-label">Item Details</p>
+            <h2 class="h3 fw-bold mb-3">Edit Item</h2>
+
+            <p class="text-muted">
+              Update the fields below and click Save Changes to update
+              this item in the catalogue.
+            </p>
+
+            <form
+              method="POST"
+              action="{{ url_for('items_bp.collection_item_update', item_id=item.itemID) }}"
+              enctype="multipart/form-data"
+              novalidate
+            >
+              {{ form.hidden_tag() }}
+
+              <!-- Title -->
+              <div class="mb-4">
+                {{ form.title.label(class="form-label fw-semibold") }}
+                {{ form.title(class="form-control") }}
+                {% if form.title.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.title.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Author / Creator -->
+              <div class="mb-4">
+                {{ form.authorCreator.label(class="form-label fw-semibold") }}
+                {{ form.authorCreator(class="form-control") }}
+                {% if form.authorCreator.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.authorCreator.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Year -->
+              <div class="mb-4">
+                {{ form.year.label(class="form-label fw-semibold") }}
+                {{ form.year(class="form-control", placeholder="e.g. 2018") }}
+                {% if form.year.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.year.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Collection -->
+              <div class="mb-4">
+                {{ form.collection.label(class="form-label fw-semibold") }}
+                {{ form.collection(class="form-select") }}
+                {% if form.collection.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.collection.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Item Type -->
+              <div class="mb-4">
+                {{ form.itemType.label(class="form-label fw-semibold") }}
+                {{ form.itemType(class="form-select") }}
+                {% if form.itemType.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.itemType.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Summary -->
+              <div class="mb-4">
+                {{ form.summary.label(class="form-label fw-semibold") }}
+                {{ form.summary(class="form-control", rows="4") }}
+                {% if form.summary.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.summary.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Thumbnail -->
+              <div class="mb-4">
+                {{ form.thumbnailPath.label(class="form-label fw-semibold") }}
+                {{ form.thumbnailPath(class="form-control") }}
+                {% if form.thumbnailPath.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.thumbnailPath.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% else %}
+                <div class="form-text">Accepted formats: JPG, PNG, SVG.</div>
+                {% endif %}
+              </div>
+
+              <!-- Next Review Date -->
+              <div class="mb-4">
+                {{ form.nextReviewDate.label(class="form-label fw-semibold") }}
+                {{ form.nextReviewDate(class="form-control") }}
+                {% if form.nextReviewDate.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.nextReviewDate.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% else %}
+                <div class="form-text">Optional. Leave blank if no review date is scheduled.</div>
+                {% endif %}
+              </div>
+
+              <div class="d-flex flex-wrap gap-2">
+                {{ form.submit(class="btn btn-primary") }}
+                <a
+                  href="{{ url_for('views.item_details', item_id=item.itemID) }}"
+                  class="btn btn-outline-dark"
+                >
+                  Cancel
+                </a>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+{% endblock %}
