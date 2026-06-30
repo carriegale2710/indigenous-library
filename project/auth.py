@@ -5,7 +5,7 @@ from flask import  Blueprint, g, session, redirect, render_template, url_for,fla
 from werkzeug.security import  generate_password_hash
 from project.model import User
 from project.forms import RegistrationForm, LoginForm
-from sqlalchemy.exc import IntegrityError
+from MySQLdb import IntegrityError
 
 # The authentication blueprint will have views to register new users and to log in and log out.
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -49,8 +49,9 @@ def register():
             return redirect(url_for("auth.login"))
         
         except IntegrityError:
-            # Required after failed insert/commit when using ORM/session patterns
-            session.rollback()
+            # Duplicate username/email broke a UNIQUE constraint, so undo the failed INSERT.
+            from project import mysql
+            mysql.connection.rollback()
             form.email.errors.append("Registration failed due to a duplicate value.")
             
     return render_template('auth/register.html', form=form) 
@@ -83,12 +84,16 @@ def login():
             error = errorMessage
         elif not User.verify_password(user['passwordHash'], password):
             error = errorMessage
+        elif user['accountStatus'] != 'active':
+            error = 'This account is inactive. Please contact a library administrator.'
         
         # Store user details in new logged in session
         if error is None:
             session.clear()
             session['userID'] = user['userID']
+            session['roleID'] = user['roleID']
             session['fullName'] = user['fullName']
+            session['full_name'] = user['fullName']
             session['username'] = user['username']
             session["email"] = user['email']
 

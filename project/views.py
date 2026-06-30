@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, redirect, flash, abort, url_for, session, request
 from project.model import CollectionItem, AccessRequest, CulturalMetadata, ReviewDecision, CommunityComment
+from project.decorators import role_required
+
 
 # Views blueprints are for route for displaying information to the user
 views_bp = Blueprint('views',__name__) 
@@ -85,7 +87,9 @@ def item_details(item_id):
     )
 
 @views_bp.route("/item-assessment")
+@role_required(1,2)
 def item_assessment():
+    
     """
     Displays full item metadata and features for item assessment, community comments, access requests and review decisions between authorised users. Restricted Access.
 
