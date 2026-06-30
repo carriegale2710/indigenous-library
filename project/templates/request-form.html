@@ -121,10 +121,6 @@ TESTMARKER123
             Submitting as: <strong>{{ session.get('fullName', '') }}</strong> ({{ session.get('email', '') }})
             </p>
 
-            <p class="text-muted mb-4">
-              Submitting as: <strong>{{ session.get('fullName', '') }}</strong> ({{ session.get('email', '') }})
-            </p>
-
             <form
               method="POST"
               action="{{ url_for('views.request_access', item_id=item.itemID) }}"
