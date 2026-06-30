@@ -122,7 +122,7 @@
 
             <form
               method="POST"
-              action="{{ url_for('items_bp.cultural_metadata', item_id=item.itemID) }}"
+              action="{{ url_for('views.cultural_metadata', item_id=item.itemID) }}"
               novalidate
             >
               {{ form.hidden_tag() }}
