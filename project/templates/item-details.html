@@ -102,7 +102,7 @@
             </div>
 
             {% if item.statusName != 'Open' %}
-            <a href="#request-form" class="btn btn-primary">Request Access</a>
+            <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-primary">Request Access</a>
             {% endif %}
           </div>
         </div>
@@ -340,7 +340,7 @@
                 Restricted or culturally sensitive items require a logged-in
                 access request.
               </p>
-              <a href="#request-form" class="btn btn-primary">Request Access</a>
+              <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-primary">Request Access</a>
             </div>
             {% else %}
             <div class="request-state-card role-system">
@@ -390,128 +390,6 @@
                 >Browse More Items</a
               >
             </div>
-          </div>
-        </div>
-        {% endif %}
-
-        <!-- Request Form -->
-        {% if item.statusName != 'Open' and session.get('userID') and not
-        existing_request %}
-        <div class="card item-card" id="request-form">
-          <div class="card-body">
-            <h2 class="h4 fw-bold">Request to View Item</h2>
-
-            <p>
-              Complete the request details below. This form submits an access
-              request record to the database for staff and community review.
-            </p>
-
-            <form
-              method="POST"
-              action="{{ url_for('views.item_details', item_id=item.itemID) }}"
-              enctype="multipart/form-data"
-            >
-              <div class="row g-3">
-                <div class="col-md-6">
-                  <label for="requestName" class="form-label">Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="requestName"
-                    name="requestName"
-                    value="{{ session.get('full_name', '') }}"
-                    required
-                  />
-                </div>
-
-                <div class="col-md-6">
-                  <label for="requestEmail" class="form-label">Email</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="requestEmail"
-                    name="requestEmail"
-                    value="{{ session.get('email', '') }}"
-                    required
-                  />
-                </div>
-
-                <div class="col-md-6">
-                  <label for="requestPurpose" class="form-label"
-                    >Purpose of Request</label
-                  >
-                  <select
-                    class="form-select"
-                    id="requestPurpose"
-                    name="requestPurpose"
-                    required
-                  >
-                    <option value="" selected disabled>
-                      Choose purpose...
-                    </option>
-                    <option value="Academic research">Academic research</option>
-                    <option value="Teaching or learning">
-                      Teaching or learning
-                    </option>
-                    <option value="Community access">Community access</option>
-                    <option value="Library staff review">
-                      Library staff review
-                    </option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label for="preferredDate" class="form-label"
-                    >Preferred Viewing Date</label
-                  >
-                  <input
-                    type="date"
-                    class="form-control"
-                    id="preferredDate"
-                    name="preferredDate"
-                  />
-                </div>
-
-                <div class="col-12">
-                  <label for="supportingDocuments" class="form-label"
-                    >Supporting Documents</label
-                  >
-                  <input
-                    type="file"
-                    class="form-control"
-                    id="supportingDocuments"
-                    name="supportingDocuments"
-                    multiple
-                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                  />
-                  <div class="form-text">
-                    Optional: Upload documents that support your request, such
-                    as a research proposal, approval letter, community
-                    permission, or teaching-related document.
-                  </div>
-                </div>
-
-                <div class="col-12">
-                  <label for="requestReason" class="form-label"
-                    >Reason for Request</label
-                  >
-                  <textarea
-                    class="form-control"
-                    id="requestReason"
-                    name="requestReason"
-                    rows="4"
-                    placeholder="Explain why you would like to view this item."
-                    required
-                  ></textarea>
-                </div>
-
-                <div class="col-12">
-                  <button type="submit" class="btn btn-primary">
-                    Submit Request
-                  </button>
-                </div>
-              </div>
-            </form>
           </div>
         </div>
         {% endif %}

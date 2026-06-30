@@ -1,7 +1,7 @@
 <!-- Submitted by LU - Request Access Form Page - Jinja version -->
 {% extends "base_template.html" %} {% block title %}Request Access | {{
 item.title }}{% endblock %} {% block content %}
-
+TESTMARKER123
 <!-- Page Header -->
 <header class="item-page-header py-5">
   <div class="container px-4">
@@ -112,6 +112,19 @@ item.title }}{% endblock %} {% block content %}
               protocol requirements.
             </p>
 
+            <!-- Identity fields (name, email) are displayed read-only from session,
+            not collected as form inputs. This prevents users from submitting
+            a request under a false identity and keeps userID/identity data
+            tied to the authenticated session rather than user-editable input. -->
+
+            <p class="text-muted mb-4">
+            Submitting as: <strong>{{ session.get('fullName', '') }}</strong> ({{ session.get('email', '') }})
+            </p>
+
+            <p class="text-muted mb-4">
+              Submitting as: <strong>{{ session.get('fullName', '') }}</strong> ({{ session.get('email', '') }})
+            </p>
+
             <form
               method="POST"
               action="{{ url_for('views.request_access', item_id=item.itemID) }}"
@@ -123,9 +136,7 @@ item.title }}{% endblock %} {% block content %}
               <div class="mb-4">
                 {{ form.requestReason.label(class="form-label fw-semibold") }}
                 {{ form.requestReason( class="form-control", rows="5",
-                placeholder="Explain why you would like to view this item,
-                including your research, teaching, learning, community, or
-                library-related purpose." ) }} {% if form.requestReason.errors
+                placeholder="Explain why you would like to view this item, including your research, teaching, learning, community, or library-related purpose." ) }} {% if form.requestReason.errors
                 %}
                 <div class="text-danger small mt-2">
                   {% for error in form.requestReason.errors %}

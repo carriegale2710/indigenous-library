@@ -142,7 +142,16 @@ def request_access(item_id):
     if form.validate_on_submit():
         userID = session['userID']
         requestReason = form.requestReason.data
+        # MVP NOTE: supportingDocuments is a FileField so the form correctly
+        # prompts the user to upload a file. However, this MVP does not implement
+        # file storage (saving to disk/cloud, generating a unique filename,
+        # storing the file path in the database). Currently we only capture the
+        # filename for record-keeping, not the file content itself.
+        # If operational: the uploaded file would be saved to a dedicated
+        # uploads folder, the file path stored in AccessRequest.supportingDocuments,
+        # and a download link surfaced on the assessment page for reviewers.
         supportingDocuments = form.supportingDocuments.data
+
         AccessRequest.create(userID, item_id, requestReason, supportingDocuments)
         flash('Your access request has been submitted', 'success')
         return redirect(url_for('views.request_access', item_id=item_id))
