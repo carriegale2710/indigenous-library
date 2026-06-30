@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, redirect, flash, abort, url_for, session, request
-from project.model import CollectionItem, AccessRequest, CulturalMetadata, ReviewDecision, CommunityComment
+from project.model import CollectionItem, Collection, AccessRequest, CulturalMetadata, ReviewDecision, CommunityComment
+from project.decorators import login_required, role_required
+from project.forms import AccessRequestForm, CollectionItemForm, CulturalMetadataForm
 
 # Views blueprints are for route for displaying information to the user
 views_bp = Blueprint('views',__name__) 
