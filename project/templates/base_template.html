@@ -32,6 +32,16 @@
           />
         </a>
 
+        <!-- User Info summary -->
+        {% if session.get('userID') %}
+          <span class="px-3 px-lg-0 py-1 py-lg-4" >
+            Hi, {{ session.get('username') }}! 
+            userID: {{ session.get('userID')}} |
+            roleID: {{ session.get('roleID') }} |
+            email: {{ session.get('email')}} 
+          </span>
+        {% endif %}
+
         <button
           class="navbar-toggler border-0"
           type="button"
@@ -160,37 +170,50 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
-                Cultural Access
+                Item Access
               </a>
               <ul class="dropdown-menu">
                 <li>
                   <a
                     class="dropdown-item"
-                    href="{{ url_for('views.catalogue') }}"
-                    >Request to View Item</a
+                    href="{{ url_for('views.access_privacy') }}#cultural-access-protocols"
+                    >Cultural Access Protocols</a
+                  >
+                </li>
+                <li>
+                  <a 
+                    class="dropdown-item"
+                    href="{{ url_for('views.access_privacy') }}#privacy-notice"
+                    >Privacy Notice</a
                   >
                 </li>
                 <li>
                   <a
                     class="dropdown-item"
-                    href="{{ url_for('views.item_assessment') }}"
-                    >Assessment Panel</a
+                    href="{{ url_for('views.access_privacy') }}#responsible-data-use"
+                    >Responsible Data Use</a
+                  >
+                </li>
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="{{ url_for('views.access_privacy') }}#contact-library-staff"
+                    >Contact Library Staff</a
                   >
                 </li>
               </ul>
             </li>
 
             <!-- Dynamic Login/Register/Logout Buttons -->
-            {% if g.user %}
-              <span>Hi, {{ g.user.username }}</span>
-              <!-- Logout Button -->
+            {% if session.get('userID') %}
+               <!-- Logout Button -->
               <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
                   <a
                     class="nav-link nav-button login-btn"
                     href="{{ url_for('auth.logout') }}"
                     >Log Out</a
                   >
-                </li>
+              </li>
             {% else %}
               <!-- Login Button -->
               <li class="nav-item px-3 px-lg-0 py-1 py-lg-4">
@@ -209,11 +232,12 @@
                 >
               </li>
             {% endif %}
-
-
           </ul>
+          
+          
         </div>
       </div>
+
     </nav>
 
     <!-- Flash messages -->
@@ -259,11 +283,6 @@
               <li><a href="{{ url_for('views.home') }}">Home</a></li>
               <li>
                 <a href="{{ url_for('views.catalogue') }}">Browse Catalogue</a>
-              </li>
-              <li>
-                <a href="{{ url_for('views.item_assessment') }}"
-                  >Assessment Panel</a
-                >
               </li>
             </ul>
           </div>

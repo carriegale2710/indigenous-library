@@ -376,37 +376,6 @@
         </div>
       </div>
 
-      <!-- CONSIDER: 
-        - removing the below 'View Item Details' card from this section because it does not link to a specific itemID, so item-details.html cannot populate
-        - alternative is controller pulls random item from DB, but what would the purpose of this function be?
-      -->
-      <!-- <div class="col-md-6 col-lg-3">
-        <div class="card h-100 shadow-sm portal-card">
-          <div class="card-body">
-            <h3 class="h5 fw-bold">View Item Details</h3>
-            <p>
-              Open a detailed catalogue record with item metadata, access
-              conditions, cultural notes and request options.
-            </p>
-            <a href="item-details.html" class="btn btn-primary"
-              >View Sample Item</a
-            >
-          </div>
-        </div>
-      </div>
-      
-      <div class="col-md-6 col-lg-3">
-        <div class="card h-100 shadow-sm portal-card">
-          <div class="card-body">
-            <h3 class="h5 fw-bold">My Access Requests</h3>
-            <p>
-              Logged-in users can track submitted access requests, review
-              progress, access conditions and final decisions.
-            </p>
-          </div>
-        </div>
-      </div> -->
-
       <div class="col-md-6 col-lg-3">
         <div class="card h-100 shadow-sm portal-card">
           <div class="card-body">
@@ -416,9 +385,9 @@
               comments and update access decisions through the assessment panel.
             </p>
             <a
-              href="{{ url_for('views.item_assessment') }}"
+              href="{{ url_for('views.access_privacy') }}"
               class="btn btn-primary"
-              >Open Review Page</a
+              >View our access privacy policy</a
             >
           </div>
         </div>

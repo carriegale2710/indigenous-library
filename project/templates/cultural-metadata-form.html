@@ -125,8 +125,9 @@
               action="{{ url_for('views.cultural_metadata', item_id=item.itemID) }}"
               novalidate
             >
+              <!-- CSRF token / hidden field  -->
               {{ form.hidden_tag() }}
-
+              
               <!-- Community Group -->
               <div class="mb-4">
                 {{ form.communityGroup.label(class="form-label fw-semibold") }}
