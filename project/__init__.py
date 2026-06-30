@@ -29,9 +29,6 @@ def create_app():
 
     from project.views import views_bp
     app.register_blueprint(views_bp)
-   
-    from project.routes import items_bp
-    app.register_blueprint(items_bp)
 
     from project.auth import auth_bp
     app.register_blueprint(auth_bp)
