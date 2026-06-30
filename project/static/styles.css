@@ -258,6 +258,41 @@ h3,
     font-size: 1.15rem;
 }
 
+/* Mobile fix for Acknowledgement of Country text */
+@media (max-width: 576px) {
+    #acknowledgement {
+        min-height: auto;
+        padding: 2rem 0;
+        overflow-x: hidden;
+    }
+
+    #acknowledgement .container {
+        max-width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .acknowledgement-box {
+        width: 100%;
+        max-width: 100%;
+        padding: 1.25rem;
+        box-sizing: border-box;
+    }
+
+    #acknowledgement h1 {
+        font-size: 1.75rem;
+        line-height: 1.2;
+        word-break: normal;
+        overflow-wrap: anywhere;
+    }
+
+    #acknowledgement p {
+        font-size: 0.95rem;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+}
+
 #web-app-intro {
     background-color: var(--white);
 }
@@ -898,6 +933,7 @@ h3,
 .featured-item-card:hover {
     transform: translateY(-3px);
 }
+
 /* =========================================================
    Request Access Form Page
    ========================================================= */
