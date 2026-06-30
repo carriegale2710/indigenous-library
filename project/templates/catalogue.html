@@ -24,22 +24,11 @@ block content %}
         or access status.
       </p>
 
-      <form
-        method="GET"
-        action="{{ url_for('views.catalogue') }}"
-        class="row g-3"
-      >
+      <form method="GET" action="{{ url_for('views.catalogue') }}" class="row g-3">
         <div class="col-lg-5">
-          <label for="catalogueSearch" class="form-label"
-            >Search catalogue</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="catalogueSearch"
-            name="search"
-            placeholder="Search by title, collection, language or keyword"
-          />
+          <label for="catalogueSearch" class="form-label">Search catalogue</label>
+          <input type="text" class="form-control" id="catalogueSearch" name="search"
+            placeholder="Search by title, collection, language or keyword" />
         </div>
 
         <div class="col-md-4 col-lg-3">
@@ -81,17 +70,13 @@ block content %}
       {% for item in items %}
       <div class="col-md-6 col-lg-4">
         <div class="card h-100 catalogue-card">
-          <img
-            src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
-            class="card-img-top catalogue-image"
-            alt="{{ item.title }}"
-          />
+          <img src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
+            class="card-img-top catalogue-image" alt="{{ item.title }}" />
 
           <div class="card-body">
             <span
-              class="badge {% if item.statusName == 'Open' %}status-open {% elif item.statusName == 'Restricted' %}status-restricted {% else %}status-sensitive {% endif %} mb-2"
-              >{{ item.statusName }}</span
-            >
+              class="badge {% if item.statusName == 'Open' %}status-open {% elif item.statusName == 'Restricted' %}status-restricted {% else %}status-sensitive {% endif %} mb-2">{{
+              item.statusName }}</span>
 
             <h3 class="h5 fw-bold">{{ item.title }}</h3>
 
@@ -102,13 +87,13 @@ block content %}
 
             <p>{{ item.summary }}</p>
 
-            <a
-              href="{{ url_for('views.item_details', item_id=item.itemID) }}"
-              class="btn btn-primary"
-              >View Item</a
-            >
+            <a href="{{ url_for('views.item_details', item_id=item.itemID) }}" class="btn btn-primary">View Item</a>
           </div>
         </div>
+      </div>
+      {% else %}
+      <div class="col-12">
+        <p class="text-muted">No items found. Try adjusting your search or filters.</p>
       </div>
       {% endfor %}
     </div>
