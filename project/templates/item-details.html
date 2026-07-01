@@ -276,6 +276,13 @@
                 </tr>
               </tbody>
             </table>
+            {% if session['roleID'] and session['roleID'] == 1 or session['roleID'] == 2 %}
+            <a
+            class="btn btn-primary mt-2"
+            href="{{ url_for('assessment.cultural_metadata', item_id=item.itemID) }}"
+            >Edit Metadata</a
+            >  
+            {% endif %}
           </div>
         </div>
 
