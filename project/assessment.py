@@ -108,7 +108,7 @@ def add_comment(request_id): # Comment form renders in item-assessment.html - no
 @assessment_bp.route('/items/assessment/<int:request_id>/decision', methods=['GET', 'POST'])
 @login_required
 @role_required(1,2) # Admin and Community Elder access only
-def save_review_decision(request_id): #REVIEW
+def save_review_decision(request_id): 
     """
     Uses ReviewDecision WTForm.
     A reviewer's ruling on a request. This is the AUDIT record: reviewerID and
@@ -131,11 +131,18 @@ def save_review_decision(request_id): #REVIEW
         decisionNotes = form.decisionNotes.data
         accessConditions = form.accessConditions.data
         ReviewDecision.create(request_id, reviewerID, decisionType, decisionNotes, accessConditions)
+
+        if decisionType == 'Approve':
+            AccessRequest.update_status(request_id, 'Approved')  
+            CollectionItem.update_status(item_id, 1)  # Update item status to 'Open' only if approved
+        else:
+            AccessRequest.update_status(request_id, 'Rejected')
+
         flash('Your review decision has been submitted', 'success')
         return redirect(url_for('assessment.item_assessment', item_id=item_id))
 
     flash('Your review decision could not be submitted. Please try again', 'danger')
-    return render_template("review-decision-form.html", item=item, request=request, form=form) #REVIEW create review-decision-form.html
+    return render_template("review-decision-form.html", item=item, request=request, form=form) 
 
 
 @assessment_bp.route('/items/<int:item_id>/metadata', methods=['GET', 'POST'])

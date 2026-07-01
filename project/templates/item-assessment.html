@@ -385,12 +385,11 @@
                             <div class="timeline mt-4">
                                 {% for request in closed_requests %}
                                 
-                                    <div >
+                                    <div class="timeline-item mb-4 p-3 border rounded bg-light">
                                         <div class="timeline-entry-header">
                                             <h3 class="h6 fw-bold mb-1">
-                                                {{ request.requestDate }} — Request ID: {{request.requestID}}
+                                                {{ request.requestDate }} — Request #{{request.requestID}} ({{ request.requestStatus }})
                                             </h3>
-                                            <p class="mb-1">Outcome: {{ request.requestStatus }}</p>
                                             <p class="mb-1">Reason: {{ request.requestReason }}</p>
                                             <p class="mb-1">Supporting Documents: 
                                                 {% if request.supportingDocuments %}

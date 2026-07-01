@@ -81,7 +81,7 @@ class RequiredIfDecision: # for accessConditions validation logic
             raise ValidationError("Access Conditions are required when approving.")
 
 class ReviewDecisionForm(FlaskForm):
-    decisionType = SelectField('Decision Type', choices=[('approve', 'Approve'), ('reject', 'Reject')], validators=[DataRequired()])
+    decisionType = SelectField('Decision Type', choices=[('Approve', 'Approve'), ('Reject', 'Reject')], validators=[DataRequired()])
     decisionNotes = TextAreaField('Decision Notes', validators=[Optional()])
     accessConditions = TextAreaField('Access Conditions', validators=[RequiredIfDecision()]) 
     submit = SubmitField('Submit Review Decision')
