@@ -70,7 +70,7 @@ class CulturalMetadataForm(FlaskForm):
 # Community Comment Form — pending team confirmation (Carrie)
 # ------------------------------------------------------------
 class CommunityCommentForm(FlaskForm):
-    commentText = TextAreaField('Community Comment', validators=[DataRequired()])
+    commentText = TextAreaField('Add Community Comment', validators=[DataRequired()])
     submit =  SubmitField('Submit Community Comment')
 
 # ------------------------------------------------------------

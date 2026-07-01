@@ -673,7 +673,42 @@ class AccessRequest:
         rows = cur.fetchall()
         cur.close()
         return rows
-
+    
+    @staticmethod
+    def get_all_by_item(item_id):
+        """
+        SELECT all access requests for one item, joined to User and CollectionItem.
+        Returns a list of rows.
+        """
+        cur = _get_cursor()
+        cur.execute(
+            """
+            SELECT 
+                ar.requestID,
+                ar.userID,
+                ar.itemID,
+                ar.requestReason,
+                ar.supportingDocuments,
+                ar.requestDate,
+                ar.requestStatus,
+                u.fullName,
+                u.username,
+                u.email,
+                CollectionItem.title
+            FROM AccessRequest ar
+                JOIN `User` u
+                    ON ar.userID = u.userID
+                JOIN CollectionItem
+                    ON ar.itemID = CollectionItem.itemID
+            WHERE ar.itemID = %s
+            ORDER BY ar.requestDate DESC
+            """,
+            (item_id,)
+        )
+        rows = cur.fetchall()
+        cur.close()
+        return rows
+    
     @staticmethod
     def update_status(request_id, new_status):
         """
@@ -760,6 +795,35 @@ class ReviewDecision:
             ORDER BY rd.decisionDate
             """,
             (request_id,)
+        )
+        rows = cur.fetchall()
+        cur.close()
+        return rows
+    
+    @staticmethod
+    def get_all_by_item(item_id):
+        """
+        SELECT all review decisions by item_id. Returns a list. Sorted by newest first.
+        """
+        cur = _get_cursor()
+        cur.execute(
+            """
+            SELECT
+                rd.decisionID,
+                rd.requestID,
+                rd.reviewerID,
+                rd.decisionType,
+                rd.decisionNotes,
+                rd.accessConditions,
+                rd.decisionDate,
+                u.fullName
+            FROM ReviewDecision rd
+                JOIN `User` u
+                    ON rd.reviewerID = u.userID
+            WHERE rd.requestID = %s
+            ORDER BY rd.decisionDate DESC
+            """,
+            (item_id)
         )
         rows = cur.fetchall()
         cur.close()

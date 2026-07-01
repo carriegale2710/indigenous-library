@@ -35,7 +35,7 @@ from project.decorators import login_required, role_required
 
 assessment_bp = Blueprint('assessment',__name__) 
 
-@assessment_bp.route("/items/<int:item_id>", methods=["GET", "POST"])
+@assessment_bp.route("/items/assessment/<int:item_id>", methods=["GET", "POST"])
 @login_required
 @role_required(1,2) # Admin and Community Elder access only
 def item_assessment(item_id): #REVIEW
@@ -45,45 +45,37 @@ def item_assessment(item_id): #REVIEW
     Access status should be dynamically updated upon access request approvals.
 
     """
+    form = CommunityCommentForm() # for add_comment feature
     
     item = CollectionItem.get_by_id(item_id) 
     if item is None:
         abort(404)
     metadata = CulturalMetadata.get_by_item(item_id) 
-
-    access_request = AccessRequest.get_by_id(item_id) # ('request summary' in html)
     access_status = AccessStatus.get_by_id(item['statusID'])
+    request_history = AccessRequest.get_all_by_item(item_id) 
 
-    if access_request is None:
-        access_request_submitter = []
-        access_request_comments = []
-        review_decision_history = []
-    else:
-        access_request_comments = CommunityComment.get_by_request(access_request['requestID']) # ('consultation comments'in html)
-        review_decision_history = ReviewDecision.get_by_request(access_request['requestID']) # ('assessment history' in html)
-        access_request_submitter = User.get_by_id(access_request['userID']) 
+    # store comments and decisions for each request
+    for req in request_history:
+        req['comments'] = CommunityComment.get_by_request(req['requestID'])  
+        if req['requestStatus'] != 'Pending':  
+            req['decision'] = ReviewDecision.get_by_request(req['requestID'])  #stores userName of reviewer too
 
-        for comment in access_request_comments:
-            user = User.get_by_id(comment['reviewerID'])
-            comment['fullName'] = user['fullName']
-            comment['username'] = user['fullname']
-
-    form = CommunityCommentForm() # for add_comment feature
+    pending_requests = [req for req in request_history if req['requestStatus'] == 'Pending']  # filter for pending requests
+    closed_requests = [req for req in request_history if req['requestStatus'] != 'Pending']  # filter for closed requests
 
     return render_template(
         "item-assessment.html",
         item=item,
         metadata=metadata,
-        access_status=access_status,
-        access_request=access_request,
-        access_request_submitter=access_request_submitter,
-        access_request_comments=access_request_comments,
-        review_decision_history=review_decision_history,
+        access_status=access_status ,                                   
+        request_history=request_history,
+        pending_requests=pending_requests,
+        closed_requests=closed_requests,
         form=form
     )
 
 
-@assessment_bp.route('/items/<int:request_id>/comment', methods=['GET', 'POST'])
+@assessment_bp.route('/items/assessment/<int:request_id>/comment', methods=['GET', 'POST'])
 @login_required
 @role_required(1,2) # Admin and Community Elder access only
 def add_comment(request_id): #REVIEW - comment form renders in item-assessment.html
@@ -118,7 +110,7 @@ def add_comment(request_id): #REVIEW - comment form renders in item-assessment.h
     )
 
 
-@assessment_bp.route('/items/<int:request_id>/decision', methods=['GET', 'POST'])
+@assessment_bp.route('/items/assessment/<int:request_id>/decision', methods=['GET', 'POST'])
 @login_required
 @role_required(1,2) # Admin and Community Elder access only
 def save_review_decision(request_id): #REVIEW
@@ -153,7 +145,6 @@ def save_review_decision(request_id): #REVIEW
 
 @assessment_bp.route('/items/<int:item_id>/metadata', methods=['GET', 'POST'])
 @role_required(1,2)             # Admin and Community Reviewer/Elder only
-
 def cultural_metadata(item_id):
     item = CollectionItem.get_by_id(item_id)
     if item is None:
