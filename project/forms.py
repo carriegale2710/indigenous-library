@@ -15,8 +15,7 @@ from project.model import User
 # ------------------------------------------------------------
 class AccessRequestForm(FlaskForm):
     requestReason = TextAreaField('Reason for Request', validators=[DataRequired()])
-    supportingDocuments = StringField('Supporting Documents', validators=[Optional()])
-    # supportingDocuments = FileField("Supporting Documents") # REVIEW - ask reb - this from lona's app.py - which FieldType do we use?
+    supportingDocuments = FileField('Supporting Documents', validators=[Optional(), FileAllowed(['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'])]) #changed to FileField for supporting documents
     submit = SubmitField('Submit Request')
 
 # ------------------------------------------------------------

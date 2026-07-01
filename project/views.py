@@ -92,6 +92,79 @@ def item_details(item_id):
         existing_request=existing_request
     )
 
+@views_bp.route("/item-assessment")
+@role_required(1,2)
+def item_assessment():
+    
+    """
+    Displays full item metadata and features for item assessment, community comments, access requests and review decisions between authorised users. Restricted Access.
+
+    This page must:
+
+    - [ ] be accessible only to authorised roles (e.g. Admin, Community Reviewer/Elder)
+    - [ ] display full item metadata, including cultural notes and access history
+    - [ ] allow authorised reviewers to add:
+    - [ ] discussion comments
+    - [ ] update cultural metadata
+    - [ ] approve or reject access.
+    - [ ] dynamically update the item’s access status in the database
+    - [ ] record review decisions, reviewer identity, and timestamp for audit purposes.
+
+    The system must implement the following workflow:
+
+    1. [ ] A Public User submits an access request.
+    2. [ ] The item may transition to 'Under Review'.
+    3. [ ] A Community Reviewer or Admin records a decision (Approved/Rejected).
+    4. [ ] The item’s access status is updated accordingly.
+    5. [ ] All decisions are stored in the database.
+
+    - [ ] Items must not change access status without a recorded review decision.
+    - [ ] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
+
+    """
+    # TODO - implement logic
+
+    return render_template("item-assessment.html")
+
+@views_bp.route("/access-privacy")
+def access_privacy():
+    """
+    Displays access privacy notice to users.
+    """
+    return render_template("access-privacy.html")
+
+@views_bp.route('/items/<int:item_id>/request', methods=['GET', 'POST'])
+@login_required                 #Any Logged in user can submit
+def request_access(item_id):
+    """
+    Displays AccessRequestForm to allow a Public User to submit an access request to a restricted item.
+    """
+    item = CollectionItem.get_by_id(item_id)
+    if item is None:
+        return render_template("error.html", error_code=404)
+
+    form = AccessRequestForm()
+
+    if form.validate_on_submit():
+        userID = session['userID']
+        requestReason = form.requestReason.data
+        # MVP NOTE: supportingDocuments is a FileField so the form correctly
+        # prompts the user to upload a file. However, this MVP does not implement
+        # file storage (saving to disk/cloud, generating a unique filename,
+        # storing the file path in the database). Currently we only capture the
+        # filename for record-keeping, not the file content itself.
+        # If operational: the uploaded file would be saved to a dedicated
+        # uploads folder, the file path stored in AccessRequest.supportingDocuments,
+        # and a download link surfaced on the assessment page for reviewers.
+        supportingDocuments = form.supportingDocuments.data
+
+        AccessRequest.create(userID, item_id, requestReason, supportingDocuments)
+        flash('Your access request has been submitted', 'success')
+        return redirect(url_for('views.request_access', item_id=item_id))
+
+    return render_template("request-form.html", item=item, form=form)
+
+
 @views_bp.route('/items/<int:item_id>/edit', methods=['GET', 'POST'])
 @role_required(1,3)        #Admin and Library Staff Only
 def collection_item_update(item_id):

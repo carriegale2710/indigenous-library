@@ -1,7 +1,7 @@
 <!-- Submitted by LU - Request Access Form Page - Jinja version -->
 {% extends "base_template.html" %} {% block title %}Request Access | {{
 item.title }}{% endblock %} {% block content %}
-
+TESTMARKER123
 <!-- Page Header -->
 <header class="item-page-header py-5">
   <div class="container px-4">
@@ -110,6 +110,15 @@ item.title }}{% endblock %} {% block content %}
               Complete the form below. Your request will be recorded and
               reviewed according to the item's access status and cultural
               protocol requirements.
+            </p>
+
+            <!-- Identity fields (name, email) are displayed read-only from session,
+            not collected as form inputs. This prevents users from submitting
+            a request under a false identity and keeps userID/identity data
+            tied to the authenticated session rather than user-editable input. -->
+
+            <p class="text-muted mb-4">
+            Submitting as: <strong>{{ session.get('fullName', '') }}</strong> ({{ session.get('email', '') }})
             </p>
 
             <form
