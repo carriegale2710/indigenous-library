@@ -101,16 +101,16 @@ You must include the following roles and enforced permissions:
 - [t] Full system access.
 - [t] Create, edit, and delete collection items.
 - [ ] Assign roles to users.
-- [t] View and manage all access requests.
+- [X] View and manage all access requests.
 - [X] Participate in review decisions.
 - [t] Modify metadata and access status.
 
 2. Community Reviewer/Elder
 
 - [X] View items under review.
-- [t] Add comments.
+- [X] Add comments.
 - [t] Approve or reject access.
-- [t] Update cultural metadata.
+- [X] Update cultural metadata.
 - [ ] Cannot delete items or manage users.
 
 3. Library Staff
@@ -125,7 +125,7 @@ You must include the following roles and enforced permissions:
 - [X] Browse publicly available items
 - [X] View item details.
 - [X] Submit access requests.
-- [ ] Cannot edit items or access assessment pages.
+- [T] Cannot edit items or access assessment pages.
 
 ## 3. CRUD Functionality
 
@@ -155,10 +155,10 @@ The submitted database.sql file must be pre-populated and runnable.
 ## 5. Error Handling
 
 - [X] Use an error.html template.
-- [t] Flask @app.errorhandler should manage redirection and display.
+- [X] Flask @app.errorhandler should manage redirection and display.
 - [t] Default Flask error pages must not be shown.
 - [t] Handle and display custom error pages for at least:
-  - [ ] 404 Not Found page.
+  - [X] 404 Not Found page.
   - [ ] 500 Internal Server Error page.
 
 ## 6. Professional User Interface

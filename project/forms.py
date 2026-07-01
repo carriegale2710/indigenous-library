@@ -8,7 +8,6 @@ from wtforms.validators import DataRequired, Optional, Email, EqualTo, Length, V
 from flask_wtf.file import FileAllowed
 from project.model import User
 
-# TODO -  add error messages to all forms below
 
 # ------------------------------------------------------------
 # Access Request Form — Rebecca
@@ -70,8 +69,8 @@ class CulturalMetadataForm(FlaskForm):
 # Community Comment Form — pending team confirmation (Carrie)
 # ------------------------------------------------------------
 class CommunityCommentForm(FlaskForm):
-    commentText = TextAreaField('Add Community Comment', validators=[DataRequired()])
-    submit =  SubmitField('Submit Community Comment')
+    commentText = TextAreaField('Add Comment', validators=[DataRequired()])
+    submit =  SubmitField('Submit Comment')
 
 # ------------------------------------------------------------
 # Review Decision Form — Carrie
@@ -84,13 +83,13 @@ class RequiredIfDecision: # for accessConditions validation logic
 class ReviewDecisionForm(FlaskForm):
     decisionType = SelectField('Decision Type', choices=[('approve', 'Approve'), ('reject', 'Reject')], validators=[DataRequired()])
     decisionNotes = TextAreaField('Decision Notes', validators=[Optional()])
-    accessConditions = TextAreaField('Access Conditions', validators=[RequiredIfDecision()]) # NOTE - TEST THIS
+    accessConditions = TextAreaField('Access Conditions', validators=[RequiredIfDecision()]) 
+    submit = SubmitField('Submit Review Decision')
 
 # ------------------------------------------------------------
 # Login Form — Carrie
 # ------------------------------------------------------------
 class LoginForm(FlaskForm):
-    # username = StringField('Enter your username', validators=[DataRequired()]) # REVIEW ask rebecca - login in with username as option?
     email = StringField('Enter your email address', validators=[DataRequired(), Email()])  
     password = PasswordField('Enter your password', validators=[DataRequired()])
     submit = SubmitField('Log In')

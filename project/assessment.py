@@ -5,18 +5,18 @@ Displays full item metadata and features for item assessment, community comments
 
 This page must:
 
-- [t] be accessible only to authorised roles (e.g. Admin, Community Reviewer/Elder)
-- [t] display full item metadata, including cultural notes and access history
+- [X] be accessible only to authorised roles (e.g. Admin, Community Reviewer/Elder)
+- [X] display full item metadata, including cultural notes and access history
 - [ ] allow authorised reviewers to add:
-    - [ ] discussion comments
-    - [t] update cultural metadata
+    - [X] discussion comments
+    - [X] update cultural metadata
     - [ ] approve or reject access.
     - [ ] dynamically update the item’s access status in the database
-    - [ ] record review decisions, reviewer identity, and timestamp for audit purposes.
+- [X] record review decisions, reviewer identity, and timestamp for audit purposes.
 
 The system must implement the following workflow:
 
-1. [t] A Public User submits an access request.
+1. [X] A Public User submits an access request.
 2. [ ] The item may transition to 'Under Review'.
 3. [ ] A Community Reviewer or Admin records a decision (Approved/Rejected).
 4. [ ] The item’s access status is updated accordingly.
@@ -24,7 +24,7 @@ The system must implement the following workflow:
 
 Check:
 - [ ] Items must not change access status without a recorded review decision.
-- [ ] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
+- [X] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
 
 """
 from flask import Blueprint, render_template, redirect, flash, url_for, abort, session, g
@@ -58,7 +58,7 @@ def item_assessment(item_id): #REVIEW
     for req in request_history:
         req['comments'] = CommunityComment.get_by_request(req['requestID'])  
         if req['requestStatus'] != 'Pending':  
-            req['decision'] = ReviewDecision.get_by_request(req['requestID'])  #stores userName of reviewer too
+            req['decision'] = ReviewDecision.get_by_request(req['requestID'])  # stores userName of reviewer too #FIXME - not fetching anything
 
     pending_requests = [req for req in request_history if req['requestStatus'] == 'Pending']  # filter for pending requests
     closed_requests = [req for req in request_history if req['requestStatus'] != 'Pending']  # filter for closed requests
@@ -99,15 +99,10 @@ def add_comment(request_id): #REVIEW - comment form renders in item-assessment.h
         commentText = form.commentText.data
         CommunityComment.add_comment(request_id, reviewerID, commentText)
         flash("Your community comment has been submitted", "success")
-        return redirect(url_for("assessment.itemassessment", itemid=itemid))
+        return redirect(url_for("assessment.item_assessment", item_id=itemid))
 
     flash("Your community comment could not be submitted. Please try again", "danger")
-    return render_template(
-        "item-assessment.html",
-        item=item,
-        request=request_obj,
-        form=form,
-    )
+    return redirect(url_for("assessment.item_assessment", item_id=itemid))
 
 
 @assessment_bp.route('/items/assessment/<int:request_id>/decision', methods=['GET', 'POST'])
@@ -137,7 +132,7 @@ def save_review_decision(request_id): #REVIEW
         accessConditions = form.accessConditions.data
         ReviewDecision.create(request_id, reviewerID, decisionType, decisionNotes, accessConditions)
         flash('Your review decision has been submitted', 'success')
-        return redirect(url_for('item_assessment.html', item_id))
+        return redirect(url_for('assessment.item_assessment', item_id=item_id))
 
     flash('Your review decision could not be submitted. Please try again', 'danger')
     return render_template("review-decision-form.html", item=item, request=request, form=form) #REVIEW create review-decision-form.html

@@ -876,6 +876,7 @@ class CommunityComment:
                 cc.reviewerID,
                 cc.commentText,
                 cc.createdDate,
+                u.roleID,
                 u.fullName
             FROM CommunityComment cc
                 JOIN `User` u

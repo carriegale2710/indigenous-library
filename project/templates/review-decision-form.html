@@ -114,7 +114,7 @@ item.title }}{% endblock %} {% block content %}
 
             <form
               method="POST"
-              action="{{ url_for('assessment.save_review_decision', decision_id=decision.decisionID) }}"
+              action="{{ url_for('assessment.save_review_decision', request_id=request.requestID) }}"
               enctype="multipart/form-data"
               novalidate
             >
@@ -124,13 +124,21 @@ item.title }}{% endblock %} {% block content %}
                 {{ form.decisionType.label(class="form-label fw-semibold")}}
                 {{ form.decisionType( class="form-control",
                 placeholder="Approve or reject the request." ) }} 
+
                 {% if form.decisionType.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.decisionType.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+                {% endif %}
               </div>
 
               <div class="mb-4">
                 {{ form.decisionNotes.label(class="form-label fw-semibold") }}
                 {{ form.decisionNotes( class="form-control", rows="5",
                 placeholder="Write down any decision notes." ) }} 
+
                 {% if form.decisionNotes.errors %}
                 <div class="text-danger small mt-2">
                   {% for error in form.decisionNotes.errors %}
@@ -149,6 +157,7 @@ item.title }}{% endblock %} {% block content %}
                 {{ form.accessConditions.label(class="form-label fw-semibold") }}
                 {{ form.accessConditions( class="form-control", rows="5",
                 placeholder="Write down any access conditions." ) }} 
+
                 {% if form.accessConditions.errors %}
                 <div class="text-danger small mt-2">
                   {% for error in form.accessConditions.errors %}

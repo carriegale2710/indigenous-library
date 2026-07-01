@@ -280,15 +280,32 @@
                             <!-- Consultation Comments -->
                             <div class="card-body">
                                 <div class="mt-4">
-                                    <h1 class="h4 fw-bold mb-3">Previous Comments</h1>
+                                    <h1 class="h4 fw-bold mb-3">Comments</h1>
+                                    <p class="small text-muted">
+                                        If you are a Indigenous community member, please share your thoughts on how this item should be accessed. 
+                                    </p>
                                     {% if request.comments %}
                                         {% for comment in request.comments %}
-                                            <div class="comment-card role-ce-adm">
+                                            <div class="comment-card role-ce-adm 
+                                                {% if comment.roleID == 1 %}
+                                                    role-adm
+                                                {% elif comment.roleID == 2 %}
+                                                    role-ce
+                                                {% elif comment.roleID == 3 %}
+                                                    role-staff
+                                                {% endif %}">
                                                 <p class="mb-1">
-                                                    <strong>{{ comment.fullName }}:</strong>
+                                                    <strong>{{ comment.fullName }}</strong>
+                                                    {% if comment.roleID == 1 %}
+                                                    <span class="badge bg-primary text-light ms-2">Admin</span>
+                                                    {% elif comment.roleID == 2 %}
+                                                    <span class="badge bg-success text-light ms-2">Community Reviewer</span>
+                                                    {% elif comment.roleID == 3 %}
+                                                    <span class="badge bg-warning text-dark ms-2">Library Staff</span>
+                                                    {% endif %}
+                                                    <p>{{ comment.commentText }}</p>
+                                                    <p class="small text-muted mb-0 align-end">{{ comment.createdDate }}</p>
                                                 </p>
-                                                <p>{{ comment.commentText }}</p>
-                                                <p class="small text-muted mb-0">Recorded: {{ comment.createdDate }}</p>
                                             </div>
                                         {% endfor %}  
                                     {% else %}
@@ -307,7 +324,8 @@
                                         <div class="mb-4">
                                             {{ form.commentText.label(class="form-label fw-semibold") }}
                                             {{ form.commentText( class="form-control", rows="5",
-                                            placeholder="Record consultation notes from authorised reviewers. Include enough detail for staff or reviewers to understand the reason behind your comment." ) }} 
+                                            placeholder="Enter your consultation comment here..." ) }} 
+                                            
                                             {% if form.commentText.errors %}
                                             <div class="text-danger small mt-2">
                                                 {% for error in form.commentText.errors %}
@@ -318,7 +336,7 @@
                                         </div>
 
                                         <div class="d-grid gap-1">
-                                            {{ form.submit(class="btn btn-primary") }}
+                                            {{ form.submit(class="btn btn-primary") }} 
                                         </div>
                                     </div>
 
