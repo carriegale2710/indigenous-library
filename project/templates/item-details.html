@@ -42,6 +42,7 @@
           </div>
         </div>
 
+
         <!-- Access Information -->
         <div class="card item-card mb-4">
           <div class="card-body">
@@ -66,14 +67,27 @@
               <strong>Review Required:</strong>
               {{ "No" if item.statusName == "Open" else "Yes" }}
             </p>
-            {% if item.statusName != 'Open'
-            and not existing_request
-            and session.get('userID') == 3 or session.get('userID') == 4
-            %}
+
+            <div class="d-flex flex-column justify-content-between mt-3">
+            {% if session.get('roleID') in [1, 2, 3] %}
+              
+            <a href="{{ url_for('assessment.item_assessment', item_id=item.itemID) }}" class="btn btn-primary small">
+                 Go to Item Assessment Panel
+              </a>
+              {% elif item.statusName != 'Open' and not g.user  %}  
+              <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to Request Access</a>
+
+            {% elif item.statusName != 'Open' and g.user and not existing_request%}
             <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-primary">
               Request Access
             </a>
+            {% elif item.statusName != 'Open' and existing_request %}
+            <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-secondary disabled">
+              Request submitted
+            </a>
             {% endif %}
+            </div>
+
           </div>
         </div>
 
@@ -90,18 +104,12 @@
             {% endif %}
           </p>
         </div>
+
         <!-- Request Access Display State -->
         <div class="card item-card mb-4">
           <div class="card-body">
             <h2 class="h4 fw-bold">Access this Item</h2>
-
-            {% if item.statusName != 'Open' %}
-            <p class="small text-muted">
-              Users must provide a reason for requesting access. Requests are reviewed by authorised library staff and
-              may involve community consultation.
-            </p>
-            {% endif %}
-
+            
             {% if item.statusName == 'Open' %}
             <div class="request-state-card role-public">
               <h3 class="h6 fw-bold">Open Item</h3>
@@ -109,7 +117,21 @@
               <div class="badge bg-success">Open Access Available</div>
             </div>
 
-            {% elif session.get('roleID') == 1 or session.get('roleID') == 2 %}
+            {% elif item.statusName != 'Open' and not g.user %}
+            <p class="small text-muted">
+              Users must provide a reason for requesting access. Requests are reviewed by authorised library staff and
+              may involve community consultation.
+            </p>
+            <div class="request-state-card role-system">
+              <h3 class="h6 fw-bold">Login Required</h3>
+              <p class="small">
+                Please log in before submitting an access request for this item.
+              </p>
+              <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to Request Access</a>
+            </div>
+
+
+            {% elif session.get('roleID') != 4 and not existing_request %}
             <div class="request-state-card role-system">
               <h3 class="h6 fw-bold">Review Item Access Requests</h3>
               <p class="small">
@@ -128,7 +150,7 @@
               </p>
             </div>
 
-            {% elif session.get('roleID') == 4 or session.get('roleID') == 3 %}
+            {% elif session.get('roleID') == 4 %}
             <div class="request-state-card role-ce-adm">
               <h3 class="h6 fw-bold">Restricted Item</h3>
               <p class="small">
@@ -140,21 +162,13 @@
               </a>
             </div>
 
-            {% else %}
-            <div class="request-state-card role-system">
-              <h3 class="h6 fw-bold">Login Required</h3>
-              <p class="small">
-                Please log in before submitting an access request for this item.
-              </p>
-              <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to Request Access</a>
-            </div>
 
             {% endif %}
 
           </div>
         </div>
-        <!-- Back to Catalogue -->
 
+        <!-- Back to Catalogue -->
         <div class="card-body">
           <a href="{{ url_for('views.catalogue') }}" class="btn btn-outline-dark">Back to Catalogue</a>
         </div>
@@ -167,124 +181,129 @@
         <div class="card item-card mb-4">
           <div class="card-body">
             <h2 class="fw-bold portal-heading">{{ item.title }}</h2>
-
             <p>{{ item.summary }}</p>
 
+          <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <span class="badge bg-secondary">{{ item.itemType|title }}</span>
+                <span class="badge bg-secondary">{{ item.collectionName }}</span>
+              </div>
+              <div>
+                <span class="badge {% if item.statusName == 'Open' %}status-open {% elif item.statusName == 'Restricted' %}status-restricted {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive {% elif item.statusName == 'Pending' %}status-pending {% else %}bg-secondary {% endif %}">
+                  {{ item.statusName }}
+                </span>
+              </div>
+          </div>
 
           </div>
-        </div>
-
-
-
-        <!-- Metadata Table -->
-        <div class="card item-card mb-4">
-          <div class="card-body">
-            <h2 class="h4 fw-bold">Detailed Item Metadata</h2>
-
-            <table class="table table-bordered metadata-table mt-3">
-              <tbody>
-                <tr>
-                  <th scope="row">Item ID</th>
-                  <td>CI-{{ "%03d"|format(item.itemID) }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Title</th>
-                  <td>{{ item.title }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Item Type</th>
-                  <td>{{ item.itemType|title }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Collection</th>
-                  <td>{{ item.collectionName }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Creator / Contributor</th>
-                  <td>
-                    {{ item.authorCreator if item.authorCreator else "Unknown"
-                    }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Community / Cultural Group</th>
-                  <td>
-                    {{ metadata.communityGroup if metadata and
-                    metadata.communityGroup else "Not recorded" }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Language</th>
-                  <td>
-                    {{ metadata.language if metadata and metadata.language else
-                    "Not recorded" }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Location</th>
-                  <td>
-                    {{ metadata.location if metadata and metadata.location else
-                    "Not recorded" }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Subject Area</th>
-                  <td>
-                    {{ metadata.subjectArea if metadata and metadata.subjectArea
-                    else "Not recorded" }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Format</th>
-                  <td>{{ item.itemType|title }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Access Level</th>
-                  <td>{{ item.statusName }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Sensitivity Level</th>
-                  <td>
-                    {% if item.statusName == 'Culturally Sensitive' %} High {%
-                    elif item.statusName == 'Restricted' %} Medium {% else %}
-                    Low {% endif %}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Review Status</th>
-                  <td>
-                    {% if item.nextReviewDate %} Review scheduled
-                    {% elif item.statusName == 'Open' %} No review required
-                    {% else %} Community review required
-                    {% endif %}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Access Recommendation</th>
-                  <td>
-                    {{ metadata.accessRecommendations
-                    if metadata and metadata.accessRecommendations
-                    else "No recommendation recorded" }}
-                  </td>
-                </tr>
-                <tr>
-                  <th scope="row">Next Review Date</th>
-                  <td>
-                    {{ item.nextReviewDate
-                    if item.nextReviewDate
-                    else "Not scheduled" }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            {% if session['roleID'] and session['roleID'] == 1 or session['roleID'] == 2 %}
-            <a
-            class="btn btn-primary mt-2"
-            href="{{ url_for('assessment.cultural_metadata', item_id=item.itemID) }}"
-            >Edit Metadata</a
-            >  
-            {% endif %}
-          </div>
+          <!-- Metadata Table -->
+            <div class="card-body">
+              <h2 class="h4 fw-bold">Detailed Item Metadata</h2>
+  
+              <table class="table table-bordered metadata-table mt-3">
+                <tbody>
+                  <tr>
+                    <th scope="row">Item ID</th>
+                    <td>CI-{{ "%03d"|format(item.itemID) }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Title</th>
+                    <td>{{ item.title }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Item Type</th>
+                    <td>{{ item.itemType|title }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Collection</th>
+                    <td>{{ item.collectionName }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Creator / Contributor</th>
+                    <td>
+                      {{ item.authorCreator if item.authorCreator else "Unknown"
+                      }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Community / Cultural Group</th>
+                    <td>
+                      {{ metadata.communityGroup if metadata and
+                      metadata.communityGroup else "Not recorded" }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Language</th>
+                    <td>
+                      {{ metadata.language if metadata and metadata.language else
+                      "Not recorded" }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Location</th>
+                    <td>
+                      {{ metadata.location if metadata and metadata.location else
+                      "Not recorded" }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Subject Area</th>
+                    <td>
+                      {{ metadata.subjectArea if metadata and metadata.subjectArea
+                      else "Not recorded" }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Format</th>
+                    <td>{{ item.itemType|title }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Access Level</th>
+                    <td>{{ item.statusName }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Sensitivity Level</th>
+                    <td>
+                      {% if item.statusName == 'Culturally Sensitive' %} High {%
+                      elif item.statusName == 'Restricted' %} Medium {% else %}
+                      Low {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Review Status</th>
+                    <td>
+                      {% if item.nextReviewDate %} Review scheduled
+                      {% elif item.statusName == 'Open' %} No review required
+                      {% else %} Community review required
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Access Recommendation</th>
+                    <td>
+                      {{ metadata.accessRecommendations
+                      if metadata and metadata.accessRecommendations
+                      else "No recommendation recorded" }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Next Review Date</th>
+                    <td>
+                      {{ item.nextReviewDate
+                      if item.nextReviewDate
+                      else "Not scheduled" }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              {% if session['roleID'] and session['roleID'] == 1 or session['roleID'] == 2 %}
+              <a
+              class="btn btn-primary mt-2"
+              href="{{ url_for('assessment.cultural_metadata', item_id=item.itemID) }}"
+              >Edit Metadata</a
+              >  
+              {% endif %}
+            </div>
         </div>
 
         <!-- Access Conditions -->
@@ -329,12 +348,37 @@
               login state.
             </p>
 
-            {% if item.statusName == 'Open' %}
+{% if item.statusName == 'Open' %}
             <div class="request-state-card role-public">
               <h3 class="h6 fw-bold">Open Item</h3>
               <p class="small">Open items do not require an access request.</p>
-              <span class="badge bg-success">Open Access Available</span>
+              <div class="badge bg-success">Open Access Available</div>
             </div>
+
+            {% elif item.statusName != 'Open' and not g.user %}
+            <p class="small text-muted">
+              Users must provide a reason for requesting access. Requests are reviewed by authorised library staff and
+              may involve community consultation.
+            </p>
+            <div class="request-state-card role-system">
+              <h3 class="h6 fw-bold">Login Required</h3>
+              <p class="small">
+                Please log in before submitting an access request for this item.
+              </p>
+              <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to Request Access</a>
+            </div>
+
+
+            {% elif session.get('roleID') != 4 and not existing_request %}
+            <div class="request-state-card role-system">
+              <h3 class="h6 fw-bold">Review Item Access Requests</h3>
+              <p class="small">
+                Review access requests for this item.
+              </p>
+              <a href="{{ url_for('assessment.item_assessment', item_id=item.itemID) }}" class="btn btn-primary">Review
+                requests</a>
+            </div>
+
             {% elif existing_request %}
             <div class="request-state-card role-system">
               <h3 class="h6 fw-bold">Request Already Submitted</h3>
@@ -343,24 +387,20 @@
                 }}.
               </p>
             </div>
-            {% elif session.get('userID') %}
+
+            {% elif session.get('roleID') == 4 %}
             <div class="request-state-card role-ce-adm">
               <h3 class="h6 fw-bold">Restricted Item</h3>
               <p class="small">
-                Restricted or culturally sensitive items require a logged-in
+                Restricted or culturally sensitive items require an
                 access request.
               </p>
-              <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-primary">Request
-                Access</a>
+              <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-primary">
+                Request Access
+              </a>
             </div>
-            {% else %}
-            <div class="request-state-card role-system">
-              <h3 class="h6 fw-bold">Login Required</h3>
-              <p class="small">
-                Please log in before submitting an access request for this item.
-              </p>
-              <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Login to Request Access</a>
-            </div>
+
+
             {% endif %}
           </div>
         </div>
@@ -407,6 +447,7 @@
           </div>
         </div>
         {% endif %}
+      </section>
     </div>
   </div>
   </div>
