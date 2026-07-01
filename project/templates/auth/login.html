@@ -36,6 +36,7 @@
             <form action="{{ url_for('auth.login') }}" method="POST" novalidate>
               <!-- CSRF token / hidden field  -->
               {{ form.hidden_tag() }}
+              <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
 
               <div class="mb-3">
                 {{ form.email.label(class="form-label fw-semibold") }} 
