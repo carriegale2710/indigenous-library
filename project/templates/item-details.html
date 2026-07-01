@@ -52,10 +52,15 @@
                 <strong>Current Access Level:</strong>
               </p>
 
-              <span
-                class="badge {% if item.statusName == 'Open' %}bg-success {% elif item.statusName == 'Restricted' %}bg-danger {% else %}bg-warning text-dark {% endif %}">
+              <div class="item-status-bar
+                  {% if item.statusName == 'Open' %}status-open
+                  {% elif item.statusName == 'Restricted' %}status-restricted
+                  {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive
+                  {% elif item.statusName == 'Pending' %}status-pending
+                  {% else %}bg-secondary
+                  {% endif %}">
                 {{ item.statusName }}
-              </span>
+              </div>
             </div>
             <p class="mb-1">
               <strong>Review Required:</strong>
@@ -367,10 +372,15 @@
                   <p class="small mb-3">{{ related_item.summary }}</p>
 
                   <div class="related-item-actions mt-auto">
-                    <span
-                      class="badge {% if related_item.statusName == 'Open' %}bg-success {% elif related_item.statusName == 'Restricted' %}bg-danger {% else %}bg-warning text-dark {% endif %}">
+                    <div class="item-status-bar
+                        {% if related_item.statusName == 'Open' %}status-open
+                        {% elif related_item.statusName == 'Restricted' %}status-restricted
+                        {% elif related_item.statusName == 'Culturally Sensitive' %}status-sensitive
+                        {% elif related_item.statusName == 'Pending' %}status-pending
+                        {% else %}bg-secondary
+                        {% endif %}">
                       {{ related_item.statusName }}
-                    </span>
+                    </div>
 
                     <div class="mt-3">
                       <a href="{{ url_for('views.item_details', item_id=related_item.itemID) }}"
