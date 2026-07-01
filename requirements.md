@@ -55,8 +55,8 @@ The page must:
 
 ### Item Assessment Page (Restricted aCcess)
 
-- [ ] Items must not change access status without a recorded review decision.
-- [t] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
+- [X] Items must not change access status without a recorded review decision.
+- [X] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
 
 This page must:
 
@@ -65,17 +65,17 @@ This page must:
 - allow authorised reviewers to add:
   - [X] discussion comments
   - [X] update cultural metadata
-  - [ ] approve or reject access.
-  - [ ] dynamically update the item’s access status in the database
-- [ ] record review decisions, reviewer identity, and timestamp for audit purposes.
+  - [X] approve or reject access.
+  - [X] dynamically update the item’s access status in the database
+- [X] record review decisions, reviewer identity, and timestamp for audit purposes.
 
 The system must implement the following workflow:
 
-1. [ ] A Public User submits an access request.
-2. [ ] The item may transition to 'Under Review'.
-3. [ ] A Community Reviewer or Admin records a decision (Approved/Rejected).
-4. [ ] The item’s access status is updated accordingly.
-5. [ ] All decisions are stored in the database.
+1. [X] A Public User submits an access request.
+2. [X] The item may transition to 'Under Review'.
+3. [X] A Community Reviewer or Admin records a decision (Approved/Rejected).
+4. [X] The item’s access status is updated accordingly.
+5. [X] All decisions are stored in the database.
 
 ## 2. Authentication and Access Controls
 
@@ -90,7 +90,7 @@ Role Permissions
 
 - [X] Users must not be able to access, modify, or manipulate data outside their assigned role permissions.
 - [X] Access control must be enforced at the route level using custom decorators (e.g., @admin_required) or Flask-Login session-based role checks.
-- [t] Unauthorised access attempts must be handled gracefully (e.g., redirect to login or show an appropriate error page).
+- [X] Unauthorised access attempts must be handled gracefully (e.g., redirect to login or show an appropriate error page).
 
 > Do not use Flask-Admin.
 
@@ -98,44 +98,44 @@ You must include the following roles and enforced permissions:
 
 1. Admin
 
-- [t] Full system access.
+- [X] Full system access.
 - [t] Create, edit, and delete collection items.
 - [ ] Assign roles to users.
 - [X] View and manage all access requests.
 - [X] Participate in review decisions.
-- [t] Modify metadata and access status.
+- [X] Modify metadata and access status.
 
 2. Community Reviewer/Elder
 
 - [X] View items under review.
 - [X] Add comments.
-- [t] Approve or reject access.
+- [X] Approve or reject access.
 - [X] Update cultural metadata.
 - [ ] Cannot delete items or manage users.
 
 3. Library Staff
 
-- [t] Create and edit collection items.
-- [t] Upload images and metadata.
-- [ ] View access requests.
-- [ ] Cannot finalise review decisions unless assigned reviewer role.
+- [X] Create and edit collection items.
+- [X] Upload images and metadata.
+- [X] View access requests.
+- [t] Cannot finalise review decisions unless assigned reviewer role.
 
 4. Public User
 
 - [X] Browse publicly available items
 - [X] View item details.
 - [X] Submit access requests.
-- [T] Cannot edit items or access assessment pages.
+- [X] Cannot edit items or access assessment pages.
 
 ## 3. CRUD Functionality
 
 The system must support:
 
 - [t] Create, Read, Update, Delete operations for collection items
-- [t] Metadata updates
-- [t] Submission of access requests
-- [ ] Recording of review decisions
-- [ ] Status transitions (Under Review → Public/Restricted)
+- [X] Metadata updates
+- [X] Submission of access requests
+- [X] Recording of review decisions
+- [X] Status transitions (Under Review → Public/Restricted)
 
 - [ ] All CRUD operations must interact dynamically with the database and respect role permissions.
 

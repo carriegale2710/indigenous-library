@@ -7,23 +7,23 @@ This page must:
 
 - [X] be accessible only to authorised roles (e.g. Admin, Community Reviewer/Elder)
 - [X] display full item metadata, including cultural notes and access history
-- [ ] allow authorised reviewers to add:
+- [X] allow authorised reviewers to add:
     - [X] discussion comments
     - [X] update cultural metadata
-    - [ ] approve or reject access.
-    - [ ] dynamically update the item’s access status in the database
+    - [X] approve or reject access.
+    - [X] dynamically update the item’s access status in the database
 - [X] record review decisions, reviewer identity, and timestamp for audit purposes.
 
 The system must implement the following workflow:
 
 1. [X] A Public User submits an access request.
-2. [ ] The item may transition to 'Under Review'.
-3. [ ] A Community Reviewer or Admin records a decision (Approved/Rejected).
-4. [ ] The item’s access status is updated accordingly.
-5. [ ] All decisions are stored in the database.
+2. [X] The item may transition to 'Under Review'.
+3. [X] A Community Reviewer or Admin records a decision (Approved/Rejected).
+4. [X] The item’s access status is updated accordingly.
+5. [X] All decisions are stored in the database.
 
 Check:
-- [ ] Items must not change access status without a recorded review decision.
+- [X] Items must not change access status without a recorded review decision.
 - [X] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
 
 """
@@ -38,7 +38,7 @@ assessment_bp = Blueprint('assessment',__name__)
 @assessment_bp.route("/items/assessment/<int:item_id>", methods=["GET", "POST"])
 @login_required
 @role_required(1,2,3) # only accessible by Admin, Community Reviewer/Elder, and Library Staff
-def item_assessment(item_id): #REVIEW
+def item_assessment(item_id): 
     """
     View to display item details and metadata including: cultural notes, access requests, review decision history.
     Only accessible by Admin, Community Reviewer/Elder roles. Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
@@ -141,7 +141,7 @@ def save_review_decision(request_id):
         flash('Your review decision has been submitted', 'success')
         return redirect(url_for('assessment.item_assessment', item_id=item_id))
 
-    flash('Your review decision could not be submitted. Please try again', 'danger')
+    flash('Your review decision could not be submitted. Please try again', 'danger') #FIXME - shows on first page load
     return render_template("review-decision-form.html", item=item, request=request, form=form) 
 
 

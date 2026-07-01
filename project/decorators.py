@@ -1,12 +1,13 @@
-"""IFQ582 Decorators - Role-based Permissions for the Indigenous Collections System
-
+"""
+IFQ582 Decorators - Role-based Permissions for the Indigenous Collections System
 
 - Users must not be able to access, modify, or manipulate data outside their assigned role permissions
 - Access control must be enforced at the route level using custom decorators (e.g., @admin_required)
 or Flask-Login session-based role checks
 - Unauthorised access attempts must be handled gracefully (e.g., redirect to login or show an
 appropriate error page)
-- Do not use Flask-Admin. """
+- Do not use Flask-Admin. 
+"""
 
 
 from functools import wraps
