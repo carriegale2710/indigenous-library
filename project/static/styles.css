@@ -470,6 +470,17 @@ h3,
     color: var(--white);
 }
 
+/* Catalogue card button alignment */
+.catalogue-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.catalogue-card .btn {
+    margin-top: auto;
+    align-self: flex-start;
+}
+
 /* =========================================================
    Item Details Page
    ========================================================= */
@@ -524,6 +535,30 @@ h3,
     border-radius: 12px;
     padding: 1rem;
     height: 100%;
+}
+
+/* Item Details Page: image and card alignment fixes */
+.item-preview-card .card-body {
+    padding: 1.25rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item-thumbnail-contained {
+    max-width: 100%;
+    max-height: 320px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+.related-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.related-item-actions {
+    margin-top: auto;
 }
 
 /* Request Access display states */
