@@ -33,6 +33,8 @@ def create_app():
     from project.auth import auth_bp
     app.register_blueprint(auth_bp)
 
+    from project.assessment import assessment_bp
+    app.register_blueprint(assessment_bp)
 
     return app
 
