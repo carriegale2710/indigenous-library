@@ -53,7 +53,7 @@ Roles and enforced permissions:
 
 
 """
-from flask import  Blueprint, g, session, redirect, render_template, url_for,flash, request
+from flask import  Blueprint, abort, g, session, redirect, render_template, url_for,flash, request
 from werkzeug.security import  generate_password_hash
 from project.model import User
 from project.forms import RegistrationForm, LoginForm
@@ -95,7 +95,7 @@ def register():
 
             if user is None:
                 flash("Registration failed. Please try again.", "danger")
-                return render_template("error.html", error_code = 500)
+                abort(500)  # Internal Server Error
             
             flash(f"Registration for email {email} successful. UserID = {user}", "success")
             return redirect(url_for("auth.login"))

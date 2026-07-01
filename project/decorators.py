@@ -10,7 +10,7 @@ appropriate error page)
 
 
 from functools import wraps
-from flask import redirect, url_for, g, flash, request
+from flask import abort, redirect, url_for, g, flash, request
 
 def login_required(f):
     @wraps(f)
@@ -29,6 +29,7 @@ def role_required(*allowed_roles):
                 flash('You must be logged in to perform this action.', 'info')
                 return redirect(url_for('auth.login', next=request.path))
             if g.user['roleID'] not in allowed_roles:
+                abort(403)  # Forbidden
                 flash('You do not have permission to access this page', 'danger')
                 return redirect(url_for('views.home'))
             return f(*args, **kwargs)

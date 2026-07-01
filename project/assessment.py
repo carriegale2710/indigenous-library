@@ -37,7 +37,7 @@ assessment_bp = Blueprint('assessment',__name__)
 
 @assessment_bp.route("/items/assessment/<int:item_id>", methods=["GET", "POST"])
 @login_required
-@role_required(1,2) # Admin and Community Elder access only
+@role_required(1,2,3) # only accessible by Admin, Community Reviewer/Elder, and Library Staff
 def item_assessment(item_id): #REVIEW
     """
     View to display item details and metadata including: cultural notes, access requests, review decision history.
@@ -49,7 +49,7 @@ def item_assessment(item_id): #REVIEW
     
     item = CollectionItem.get_by_id(item_id) 
     if item is None:
-        abort(404)
+        abort(500)
     metadata = CulturalMetadata.get_by_item(item_id) 
     access_status = AccessStatus.get_by_id(item['statusID'])
     request_history = AccessRequest.get_all_by_item(item_id) 
@@ -77,20 +77,20 @@ def item_assessment(item_id): #REVIEW
 
 @assessment_bp.route('/items/assessment/<int:request_id>/comment', methods=['GET', 'POST'])
 @login_required
-@role_required(1,2) # Admin and Community Elder access only
-def add_comment(request_id): #REVIEW - comment form renders in item-assessment.html
+@role_required(1,2,3) # Admin, Community Reviewer/Elder, and Library Staff access only
+def add_comment(request_id): # Comment form renders in item-assessment.html - no separate template needed
     """
     A reviewer's note on a request. Several reviewers can comment on one. 
     Uses CommunityComment WTForm.
     """
     request_obj = AccessRequest.get_by_id(request_id)
     if request_obj is None:
-        abort(404)
+        abort(500)
 
     itemid = request_obj['itemID']
     item = CollectionItem.get_by_id(itemid)
     if item is None:
-        abort(404)
+        abort(500)
 
     form = CommunityCommentForm()
 
@@ -116,12 +116,12 @@ def save_review_decision(request_id): #REVIEW
     """
     request = AccessRequest.get_by_id(request_id)
     if request is None:
-        abort(404)
+        abort(500)
 
     item_id=request['itemID']
     item = CollectionItem.get_by_id(item_id)
     if item is None:
-        abort(404)
+        abort(500)
 
     form = ReviewDecisionForm()
 
@@ -139,11 +139,11 @@ def save_review_decision(request_id): #REVIEW
 
 
 @assessment_bp.route('/items/<int:item_id>/metadata', methods=['GET', 'POST'])
-@role_required(1,2)             # Admin and Community Reviewer/Elder only
+@role_required(1,2,3) # Admin, Community Reviewer/Elder, and Library Staff access only
 def cultural_metadata(item_id):
     item = CollectionItem.get_by_id(item_id)
     if item is None:
-        return render_template("error.html", error_code=404)
+        abort(500)
 
     metadata = CulturalMetadata.get_by_item(item_id)
 

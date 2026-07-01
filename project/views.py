@@ -30,6 +30,10 @@ def catalogue():
 
     # search and status are filtered in SQL by the model
     items = CollectionItem.get_all(search=search, status_id=status_id)
+    if items is None:
+        abort(500)
+    if not items:
+        flash("No items found matching your search criteria.", "info")
 
     # itemType isn't a model filter, and the DB stores it lowercase
     if item_type and item_type != "All item types":
@@ -42,23 +46,17 @@ def item_details(item_id):
     """
     Display information to user about an item.
 
-    The item details page must display:
-    - [ ] Title
-    - [ ] Image (if applicable)
-    - [ ] Description, including cultural metadata and access notes
-    - [ ] Current access status (Public / Restricted / Under Review)
+    The item details page displays: Title, Image (if applicable), Description (including cultural metadata and access notes) and Current access status (Public / Restricted / Under Review).
 
-    The page must:
-    - [ ] allow Public Users to submit an access request for restricted items
-    - [ ] validate all form inputs and provide clear feedback for invalid submissions
-    - [ ] prevent unauthorised actions based on user role.
-
-    - [ ] Users must not be able to access restricted data by manipulating URLs.
+    The page :
+    - [x] allows Public Users to submit an access request for restricted items
+    - [x] validates all form inputs and provide clear feedback for invalid submissions
+    - [x] prevents unauthorised actions based on user role, including access restricted data by manipulating URLs.
     
     """
     item = CollectionItem.get_by_id(item_id)
     if item is None:
-        abort(404)
+        abort(500)
 
 
     metadata = item
@@ -100,7 +98,7 @@ def request_access(item_id):
     """
     item = CollectionItem.get_by_id(item_id)
     if item is None:
-        return render_template("error.html", error_code=404)
+        abort(500)
 
     form = AccessRequestForm()
 
@@ -128,7 +126,7 @@ def request_access(item_id):
 def collection_item_update(item_id):
     item = CollectionItem.get_by_id(item_id)
     if item is None:
-        return render_template("error.html", error_code=404)
+        abort(500)
 
     collections = Collection.get_all()
     collection_choices = [(str(c['collectionID']), c['collectionName']) for c in collections]
@@ -163,11 +161,11 @@ def collection_item_update(item_id):
     return render_template("collection-item-form.html", item=item, form=form)
 
 @views_bp.route('/items/<int:item_id>/delete', methods=['POST'])
-@role_required(1,3)         # Admin and Library Staff only
+@role_required(1)         # Admin only
 def collection_item_delete(item_id):
     item = CollectionItem.get_by_id(item_id)
     if item is None:
-        return render_template("error.html", error_code=404)
+        abort(500)
     CollectionItem.delete(item_id)
     flash('Your collection item has been deleted', 'success')
     return redirect(url_for('views.home'))

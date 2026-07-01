@@ -63,10 +63,10 @@ This page must:
 - [t] be accessible only to authorised roles (e.g. Admin, Community Reviewer/Elder)
 - [X] display full item metadata, including cultural notes and access history
 - allow authorised reviewers to add:
-- [ ] discussion comments
-- [ ] update cultural metadata
-- [ ] approve or reject access.
-- [ ] dynamically update the item’s access status in the database
+  - [X] discussion comments
+  - [X] update cultural metadata
+  - [ ] approve or reject access.
+  - [ ] dynamically update the item’s access status in the database
 - [ ] record review decisions, reviewer identity, and timestamp for audit purposes.
 
 The system must implement the following workflow:
