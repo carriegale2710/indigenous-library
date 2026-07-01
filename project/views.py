@@ -174,6 +174,14 @@ def collection_item_delete(item_id):
     flash('Your collection item has been deleted', 'success')
     return redirect(url_for('views.home'))
 
+# CollectionItem.create — OUT OF SCOPE for MVP.
+# Assumption: all catalogue items pre-exist in the database for MVP demo purposes
+# Phase 2: Admin and Library Staff would use CollectionItemForm to add new items directly
+# from the routes layer. The model method (CollectionItem.create) already exists
+# and defaults new items to statusID 4 (Pending) — this aligns with CARE's
+# Authority to Control, ensuring no item is publicly visible/classified until
+# a Community Elder has reviewed and set its access status.
+
 
 @views_bp.route('/items/<int:item_id>/metadata', methods=['GET', 'POST'])
 @role_required(1,2)             # Admin and Community Reviewer/Elder only
