@@ -53,7 +53,7 @@ Roles and enforced permissions:
 
 
 """
-from flask import  Blueprint, g, session, redirect, render_template, url_for,flash
+from flask import  Blueprint, g, session, redirect, render_template, url_for,flash, request
 from werkzeug.security import  generate_password_hash
 from project.model import User
 from project.forms import RegistrationForm, LoginForm
@@ -150,6 +150,9 @@ def login():
             session["email"] = user['email']
 
             flash(f"Login for username '{session['username']}' with email '{session['email']}' successful.", "success")
+            next_page = request.form.get('next') or request.args.get('next')
+            if next_page and next_page.startswith('/'):
+                return redirect(next_page)
             return redirect(url_for('views.catalogue'))
         
         flash(error, "danger")
