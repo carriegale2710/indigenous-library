@@ -30,7 +30,7 @@ Check:
 from flask import Blueprint, render_template, redirect, flash, url_for, abort, session, g
 
 from project.model import User, CollectionItem, CulturalMetadata, AccessStatus, AccessRequest, CommunityComment, ReviewDecision
-from project.forms import CommunityCommentForm, ReviewDecisionForm
+from project.forms import CommunityCommentForm, ReviewDecisionForm, CulturalMetadataForm
 from project.decorators import login_required, role_required
 
 assessment_bp = Blueprint('assessment',__name__) 
@@ -149,3 +149,57 @@ def save_review_decision(request_id): #REVIEW
 
     flash('Your review decision could not be submitted. Please try again', 'danger')
     return render_template("review-decision-form.html", item=item, request=request, form=form) #REVIEW create review-decision-form.html
+
+
+@assessment_bp.route('/items/<int:item_id>/metadata', methods=['GET', 'POST'])
+@role_required(1,2)             # Admin and Community Reviewer/Elder only
+
+def cultural_metadata(item_id):
+    item = CollectionItem.get_by_id(item_id)
+    if item is None:
+        return render_template("error.html", error_code=404)
+
+    metadata = CulturalMetadata.get_by_item(item_id)
+
+    if metadata:
+        form = CulturalMetadataForm(
+            communityGroup=metadata['communityGroup'],
+            language=metadata['language'],
+            location=metadata['location'],
+            subjectArea=metadata['subjectArea'],
+            culturalSensitivityNotes=metadata['culturalSensitivityNotes'],
+            culturalProtocolNotes=metadata['culturalProtocolNotes'],
+            accessRecommendations=metadata['accessRecommendations']
+        )
+    else:
+        form = CulturalMetadataForm()
+
+    if form.validate_on_submit():
+        if metadata is None:
+            CulturalMetadata.create(
+                itemID=item_id,
+                communityGroup=form.communityGroup.data,
+                language=form.language.data,
+                location=form.location.data,
+                subjectArea=form.subjectArea.data,
+                culturalSensitivityNotes=form.culturalSensitivityNotes.data,
+                culturalProtocolNotes=form.culturalProtocolNotes.data,
+                accessRecommendations=form.accessRecommendations.data
+            )
+        else:
+            CulturalMetadata.update(
+                item_id,
+                communityGroup=form.communityGroup.data,
+                language=form.language.data,
+                location=form.location.data,
+                subjectArea=form.subjectArea.data,
+                culturalSensitivityNotes=form.culturalSensitivityNotes.data,
+                culturalProtocolNotes=form.culturalProtocolNotes.data,
+                accessRecommendations=form.accessRecommendations.data
+            )
+        flash('Cultural metadata saved successfully.', 'success')
+        return redirect(url_for('views.item_details', item_id=item_id))
+
+    return render_template("cultural-metadata-form.html", item=item, metadata=metadata, form=form)
+
+

@@ -137,7 +137,7 @@ The system must support:
 - [ ] Recording of review decisions
 - [ ] Status transitions (Under Review → Public/Restricted)
 
-All CRUD operations must interact dynamically with the database and respect role permissions.
+- [ ] All CRUD operations must interact dynamically with the database and respect role permissions.
 
 ## 4. Database Integration
 
