@@ -386,6 +386,7 @@ class CollectionItem:
                 ci.nextReviewDate,
                 c.collectionName,
                 ast.statusName,
+                ast.statusDescription,
                 cm.communityGroup,
                 cm.language,
                 cm.location,

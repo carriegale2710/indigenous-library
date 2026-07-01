@@ -61,17 +61,17 @@
                             <p><strong>Summary:</strong> {{ item.summary }}</p>
 
                             <p><strong>Access Level:</strong>
-                                {% if access_status.statusID == 1 %}
-                                    <span class="badge bg-success text-dark">{{ access_status.statusName }}</span>
-                                {% elif access_status.statusID == 2 %}
-                                    <span class="badge bg-danger text-dark">{{ access_status.statusName }}</span>
-                                {% elif access_status.statusID == 3 %}
-                                    <span class="badge bg-warning text-dark">{{ access_status.statusName }}</span>
+                                {% if item.statusID == 1 %}
+                                    <span class="badge bg-success text-dark">{{ item.statusName }}</span>
+                                {% elif item.statusID == 2 %}
+                                    <span class="badge bg-danger text-dark">{{ item.statusName }}</span>
+                                {% elif item.statusID == 3 %}
+                                    <span class="badge bg-warning text-dark">{{ item.statusName }}</span>
                                 {% else %}
-                                    <span class="badge bg-secondary text-dark">{{ access_status.statusName }}</span>
+                                    <span class="badge bg-secondary text-dark">{{ item.statusName }}</span>
                                 {% endif %}
                             </p>
-                            <p class="small" >{{ access_status.statusDescription }}</p>
+                            <p class="small" >{{ item.statusDescription }}</p>
 
                             <a href="{{ url_for('views.item_details', item_id=item.itemID) }}" class="btn btn-primary mt-2">
                                 Open Full Item Record
