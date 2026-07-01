@@ -42,9 +42,11 @@
 
                     <!-- Item Summary -->
                     <div class="card assessment-card mb-4">
-                        <img src="{{ url_for('static', filename=item.thumbnailPath) }}" 
-                            alt="{{ item.title }}"
-                            class="item-thumbnail">
+                        <!-- Item Preview -->
+                        <div class="card-body text-center">
+                            <img src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}" alt="{{ item.title }}"
+                            class="item-thumbnail item-thumbnail-contained" />
+                        </div>
 
                         <div class="card-body">
                             <h2 class="h4 fw-bold">Item Summary</h2>
@@ -59,12 +61,14 @@
                             <p><strong>Summary:</strong> {{ item.summary }}</p>
 
                             <p><strong>Access Level:</strong>
-                                {% if access_status.statusName == "Open" %}
+                                {% if access_status.statusID == 1 %}
                                     <span class="badge bg-success text-dark">{{ access_status.statusName }}</span>
-                                {% elif access_status.statusName == "Restricted" %}
+                                {% elif access_status.statusID == 2 %}
                                     <span class="badge bg-danger text-dark">{{ access_status.statusName }}</span>
-                                {% else %}
+                                {% elif access_status.statusID == 3 %}
                                     <span class="badge bg-warning text-dark">{{ access_status.statusName }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary text-dark">{{ access_status.statusName }}</span>
                                 {% endif %}
                             </p>
                             <p class="small" >{{ access_status.statusDescription }}</p>
