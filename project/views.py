@@ -123,7 +123,6 @@ def request_access(item_id):
 
     return render_template("request-form.html", item=item, form=form)
 
-
 @views_bp.route('/items/<int:item_id>/edit', methods=['GET', 'POST'])
 @role_required(1,3)        #Admin and Library Staff Only
 def collection_item_update(item_id):
@@ -163,7 +162,6 @@ def collection_item_update(item_id):
 
     return render_template("collection-item-form.html", item=item, form=form)
 
-
 @views_bp.route('/items/<int:item_id>/delete', methods=['POST'])
 @role_required(1,3)         # Admin and Library Staff only
 def collection_item_delete(item_id):
@@ -173,57 +171,5 @@ def collection_item_delete(item_id):
     CollectionItem.delete(item_id)
     flash('Your collection item has been deleted', 'success')
     return redirect(url_for('views.home'))
-
-
-@views_bp.route('/items/<int:item_id>/metadata', methods=['GET', 'POST'])
-@role_required(1,2)             # Admin and Community Reviewer/Elder only
-
-def cultural_metadata(item_id):
-    item = CollectionItem.get_by_id(item_id)
-    if item is None:
-        return render_template("error.html", error_code=404)
-
-    metadata = CulturalMetadata.get_by_item(item_id)
-
-    if metadata:
-        form = CulturalMetadataForm(
-            communityGroup=metadata['communityGroup'],
-            language=metadata['language'],
-            location=metadata['location'],
-            subjectArea=metadata['subjectArea'],
-            culturalSensitivityNotes=metadata['culturalSensitivityNotes'],
-            culturalProtocolNotes=metadata['culturalProtocolNotes'],
-            accessRecommendations=metadata['accessRecommendations']
-        )
-    else:
-        form = CulturalMetadataForm()
-
-    if form.validate_on_submit():
-        if metadata is None:
-            CulturalMetadata.create(
-                itemID=item_id,
-                communityGroup=form.communityGroup.data,
-                language=form.language.data,
-                location=form.location.data,
-                subjectArea=form.subjectArea.data,
-                culturalSensitivityNotes=form.culturalSensitivityNotes.data,
-                culturalProtocolNotes=form.culturalProtocolNotes.data,
-                accessRecommendations=form.accessRecommendations.data
-            )
-        else:
-            CulturalMetadata.update(
-                item_id,
-                communityGroup=form.communityGroup.data,
-                language=form.language.data,
-                location=form.location.data,
-                subjectArea=form.subjectArea.data,
-                culturalSensitivityNotes=form.culturalSensitivityNotes.data,
-                culturalProtocolNotes=form.culturalProtocolNotes.data,
-                accessRecommendations=form.accessRecommendations.data
-            )
-        flash('Cultural metadata saved successfully.', 'success')
-        return redirect(url_for('views.item_details', item_id=item_id))
-
-    return render_template("cultural-metadata-form.html", item=item, metadata=metadata, form=form)
 
 

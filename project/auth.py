@@ -1,6 +1,58 @@
+"""
 # ============================================================
-# IFQ582 Assignment 2 | Group 1D | Authorisation - Register/Login/Logout
+# IFQ582 Assignment 2 | Group 1D | Authorisation Layer
 # ============================================================
+
+Your application must implement a complete user authentication system, including:
+
+- [X] Registration
+- [X] Login/Logout
+- [X] Hashed passwords
+- [X] Session-based authentication
+
+Role Permissions
+
+- [t] Users must not be able to access, modify, or manipulate data outside their assigned role permissions.
+- [X] Access control must be enforced at the route level using custom decorators (e.g., @admin_required) or Flask-Login session-based role checks.
+- [ ] Unauthorised access attempts must be handled gracefully (e.g., redirect to login or show an appropriate error page).
+
+> Does not use Flask-Admin.
+
+Roles and enforced permissions:
+
+1. Admin
+
+- [t] Full system access.
+- [t] Create, edit, and delete collection items.
+- [ ] Assign roles to users.
+- [t] View and manage all access requests.
+- [X] Participate in review decisions.
+- [t] Modify metadata and access status.
+
+2. Community Reviewer/Elder
+
+- [X] View items under review.
+- [t] Add comments.
+- [t] Approve or reject access.
+- [t] Update cultural metadata.
+- [ ] Cannot delete items or manage users.
+
+3. Library Staff
+
+- [t] Create and edit collection items.
+- [t] Upload images and metadata.
+- [ ] View access requests.
+- [ ] Cannot finalise review decisions unless assigned reviewer role.
+
+4. Public User
+
+- [X] Browse publicly available items
+- [X] View item details.
+- [X] Submit access requests.
+- [ ] Cannot edit items or access assessment pages.
+
+
+"""
 from flask import  Blueprint, g, session, redirect, render_template, url_for,flash
 from werkzeug.security import  generate_password_hash
 from project.model import User
