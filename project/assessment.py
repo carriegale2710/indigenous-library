@@ -146,7 +146,7 @@ def save_review_decision(request_id):
 
 
 @assessment_bp.route('/items/<int:item_id>/metadata', methods=['GET', 'POST'])
-@role_required(1,2,3) # Admin, Community Reviewer/Elder, and Library Staff access only
+@role_required(1,2) # Admin and Community Reviewer/Elder access only
 def cultural_metadata(item_id):
     item = CollectionItem.get_by_id(item_id)
     if item is None:
