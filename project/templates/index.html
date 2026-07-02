@@ -161,23 +161,23 @@
                 - each page refresh should populate new randomised set of featured items
             -->
       {% for item in featured_items %}
-      <div class="col-md-4">
-        <div class="featured-item-card">
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 catalogue-card">
           <img
             src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
-            alt="{{ item.title }}"
+            class="card-img-top catalogue-image" alt="{{ item.title }}"
           />
-          <div class="p-4">
-            <h3 class="h5 fw-bold">{{ item.title }}</h3>
 
-            <p>{{ item.summary }}</p>
-
-            <!-- Jinja- if statement to select correct status badge depending on each random items statusName-->
+          <div class="card-body">
             <span
               class="badge {% if item.statusName == 'Open' %}status-open {% elif item.statusName == 'Restricted' %}status-restricted {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive {% elif item.statusName == 'Pending' %}status-pending {% else %}bg-secondary {% endif %} mb-2"
             >
               {{ item.statusName }}
             </span>
+
+            <h3 class="h5 fw-bold">{{ item.title }}</h3>
+
+            <p>{{ item.summary }}</p>
 
             <p class="small text-muted">
               Review status: Community review required
