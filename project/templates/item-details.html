@@ -97,8 +97,8 @@
                 <p class="small">
                   Please log in before submitting an access request for this item.
                 </p>
-                <a href="{{ url_for('auth.login') }}" class="btn btn-primary"
-                  >Login to Request Access</a
+                <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-primary"
+                >Login to Request Access</a
                 >
               </div>
 
