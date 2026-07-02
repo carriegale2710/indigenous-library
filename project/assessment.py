@@ -49,7 +49,7 @@ def item_assessment(item_id):
     
     item = CollectionItem.get_by_id(item_id) 
     if item is None:
-        abort(500)
+        abort(404)
     metadata = CulturalMetadata.get_by_item(item_id) 
     access_status = AccessStatus.get_by_id(item['statusID'])
     request_history = AccessRequest.get_all_by_item(item_id) 
