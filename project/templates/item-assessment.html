@@ -243,17 +243,16 @@
                                 href="{{ url_for('assessment.cultural_metadata', item_id=item.itemID) }}"
                                 >Edit Cultural Metadata</a
                                 > 
-                                {% if session['roleID'] == 1 %} 
+                                {% if session['roleID'] == 1 %}
                                 <div class="mt-4">
-                                    <p class="text-danger" ><strong>DANGER ZONE</strong></p>
-                                    <a
-                                    class="btn btn-danger m-2 rounded align-self-end "
-                                    href="{{ url_for('views.collection_item_delete', item_id=item.itemID) }}"
-                                    >Permanently Delete Item</a
-                                    > 
-                                </div> 
-                            </div>
-                            {% endif %}
+                                    <p class="text-danger"><strong>DANGER ZONE</strong></p>
+                                    <form method="POST" action="{{ url_for('views.collection_item_delete', item_id=item.itemID) }}" class="m-2">
+                                        <button type="submit" class="btn btn-danger rounded align-self-end">
+                                            Permanently Delete Item
+                                        </button>
+                                    </form>
+                                </div>
+                                {% endif %}
                         </div>
                     </div>
                 
@@ -270,48 +269,45 @@
 
                         
                         {% if pending_requests  %}
-                            {% for request in pending_requests %}
+                        {% for request in pending_requests %}
 
-                            <!--  Request Summary -->
-                            <div class="status-panel">
-                                <h2 class="h4 fw-bold mb-3">Access Request #{{ request.requestID }} - {{ request.requestDate }}</h2>
-                                <div class="card-body ">
+                        <!--  Request Card-->
+                        <div class="status-panel mt-4">
+                            <h2 class="h4 fw-bold mb-3">Access Request #{{ request.requestID }} - {{ request.requestDate }}</h2>
+                            <div class="card-body ">
 
-                                    <div class="d-flex flex-wrap justify-content-end mb-3">
-                                        <div class="card-body mb-3">
-                                            <p><strong>Requested by:</strong> {{ request.fullName }} ({{ request.username }}) {{ request.email }}</p> 
-                                            <p><strong>Supporting Documents:</strong> 
-                                                {% if request.supportingDocuments %}
-                                                <a href="{{ url_for('static', filename=request.supportingDocuments) }}" target="_blank">{{ request.supportingDocuments }}</a>
-                                                {% else %}
-                                                No supporting documents provided.
-                                                {% endif %}
-                                            </p>
-                                            <p class="blockquote" ><strong>Request reason:</strong><br>'{{ request.requestReason }}'</p>
-                    
-                                        </div>
-
-                                        <div class=" flex-direction-column flex-end ">
-                                            <a
-                                            class="btn btn-primary ms-2"
-                                            href="{{ url_for('assessment.item_assessment', item_id=request.itemID) }}#add-comment"
-                                            >Add Comment</a
-                                            >    
-                                            {% if session['roleID'] in [1, 2] %}                            
-                                            <a
-                                            class="btn btn-primary ms-2"
-                                            href="{{ url_for('assessment.save_review_decision', request_id=request.requestID) }}"
-                                            >Approve/Reject Request</a
-                                            >  
+                                <div class="d-flex flex-wrap justify-content-end mb-3">
+                                    <div class="card-body mb-3">
+                                        <p><strong>Requested by:</strong> {{ request.fullName }} ({{ request.username }}) {{ request.email }}</p> 
+                                        <p><strong>Supporting Documents:</strong> 
+                                            {% if request.supportingDocuments %}
+                                            <a href="{{ url_for('static', filename=request.supportingDocuments) }}" target="_blank">{{ request.supportingDocuments }}</a>
+                                            {% else %}
+                                            No supporting documents provided.
                                             {% endif %}
-                                        </div>
+                                        </p>
+                                        <p class="blockquote" ><strong>Request reason:</strong><br>'{{ request.requestReason }}'</p>
+                
                                     </div>
 
+                                    <div class=" flex-direction-column flex-end ">
+                                        <a
+                                        class="btn btn-primary ms-2"
+                                        href="{{ url_for('assessment.item_assessment', item_id=request.itemID) }}#add-comment"
+                                        >Add Comment</a
+                                        >    
+                                        {% if session['roleID'] in [1, 2] %}                            
+                                        <a
+                                        class="btn btn-primary ms-2"
+                                        href="{{ url_for('assessment.save_review_decision', request_id=request.requestID) }}"
+                                        >Approve/Reject Request</a
+                                        >  
+                                        {% endif %}
+                                    </div>
                                 </div>
 
+                            </div>
 
-
-                            
                             <!-- Consultation Comments -->
                             <div class="card-footer">
                                 <div class="mt-4">
@@ -376,11 +372,12 @@
                                     </div>
 
                                 </form>
+                            </div>
 
-                            </div>  
-                            
-                             
-                            {% endfor %}
+                        
+                        </div>  
+
+                        {% endfor %}
                         {% else %}
                         <p class="text-muted">No pending access requests.</p>
                         {% endif %} 
