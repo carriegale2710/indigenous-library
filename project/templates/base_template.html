@@ -35,10 +35,7 @@
         <!-- User Info summary -->
         {% if session.get('userID') %}
           <span class="px-3 px-lg-0 py-1 py-lg-4" >
-            Hi, {{ session.get('username') }}! 
-            userID: {{ session.get('userID')}} |
-            roleID: {{ session.get('roleID') }} |
-            email: {{ session.get('email')}} 
+            Hi, {{ session.get('username') }}!
           </span>
         {% endif %}
 
