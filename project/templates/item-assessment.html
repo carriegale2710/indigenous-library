@@ -219,23 +219,28 @@
                             </tbody>
                             </table>
                             {% if session['roleID'] in [1, 3] %}
-                            <a
-                            class="btn btn-primary mt-2"
-                            href="{{ url_for('views.collection_item_update', item_id=item.itemID) }}"
-                            >Edit Item Details</a
-                            >  
-                            {% endif %}
-                            <a
-                            class="btn btn-primary mt-2"
-                            href="{{ url_for('assessment.cultural_metadata', item_id=item.itemID) }}"
-                            >Edit Cultural Metadata</a
-                            > 
-                            {% if session['roleID'] == 1 %} 
+                            <div  >
                                 <a
-                                class="btn btn-danger mt-2 "
-                                href="{{ url_for('views.collection_item_delete', item_id=item.itemID) }}"
-                                >Permanently Delete Item</a
+                                class="btn btn-primary mt-2"
+                                href="{{ url_for('views.collection_item_update', item_id=item.itemID) }}"
+                                >Edit Item Details</a
                                 >  
+                                {% endif %}
+                                <a
+                                class="btn btn-primary mt-2"
+                                href="{{ url_for('assessment.cultural_metadata', item_id=item.itemID) }}"
+                                >Edit Cultural Metadata</a
+                                > 
+                                {% if session['roleID'] == 1 %} 
+                                <div class="mt-4">
+                                    <p class="text-danger" ><strong>DANGER ZONE</strong></p>
+                                    <a
+                                    class="btn btn-danger m-2 rounded align-self-end "
+                                    href="{{ url_for('views.collection_item_delete', item_id=item.itemID) }}"
+                                    >Permanently Delete Item</a
+                                    > 
+                                </div> 
+                            </div>
                             {% endif %}
                         </div>
                     </div>
@@ -399,7 +404,14 @@
                                                 {% endif %}
                                             </p>
                                             <p class="small text-muted mb-0">
-                                                Submitted by: {{ request.fullName }} ({{ request.username }}) {{ request.email }}
+                                                Requested by: {{ request.fullName }} ({{ request.username }}) | {{ request.email }} <br>
+                                                {% if request['decision'] %}
+                                                {% for d in request['decision'] %}
+                                                Reviewed by: {{ d.fullName }} ({{ d.username }}) {{ d.roleName }} | Contact: {{ d.email }}
+                                                {% endfor %}
+                                                {% else %}
+                                                No review decision recorded.
+                                                {% endif %}
                                             </p>
                                         </div>
 
@@ -433,35 +445,45 @@
                 </section>
 
                 <!-- Decision History -->
-                <!-- <section class="card assessment-card mb-4">
+                <section class="card assessment-card mb-4">
                     <div class="card-body">
                         <h2 class="h4 fw-bold">Decision History</h2>
                         <p class="small text-muted">
                             This section records the history of decisions made for access requests, including the decision type, notes, and any access conditions.
                         </p>
-                        {% if request['decision'] %}
-                            <div class="timeline mt-4">
-                                {% for d in request['decision'] %}
-                                    <div class="timeline-entry role-adm">
-                                        <div class="timeline-entry-header">
-                                            <h3 class="h6 fw-bold mb-1">
-                                                {{ d.decisionDate }} — Decision ID: {{d.decisionID}}
-                                            </h3>
-                                            <p class="mb-1">Decision Type: {{ d.decisionType }}</p>
-                                            <p class="mb-1">Notes: {{ d.decisionNotes }}</p>
-                                            <p class="mb-1">Access Conditions: {{ d.accessConditions }}</p>
-                                            <p class="small text-muted mb-0">
-                                                Recorded by: {{ d.reviewerID }} - {{ d.fullName }}
-                                            </p>
-                                        </div>
+                        {% if closed_requests%}
+                            {% for request in closed_requests %}
+                    
+                                {% if request['decision'] %}
+                                    <div class="timeline mt-4">
+                                        {% for d in request['decision'] %}
+                                            <div class="timeline-entry ">
+                                                <div class="timeline-entry-header">
+                                                    <h3 class="h6 fw-bold mb-1">
+                                                       {{ d.decisionDate }} -{{ d.decisionType }} for Request #{{request.requestID}} 
+                                                       
+                                                    </div>
+                                                
+                                                       {% if d.decisionNotes %}<p class="mb-1">Notes: {{ d.decisionNotes }}</p>{% endif %}  
+                                                       {% if d.accessConditions %}<p class="mb-1">Access Conditions: {{ d.accessConditions }}</p>{% endif %}    
+                                                    <p class="small text-muted mb-0">
+                                                         Requested by: {{ request.fullName }} ({{ request.username }}) | {{ request.email }} <br>
+                                                        Reviewed by: {{ d.fullName }} ({{ d.username }}) {{ d.roleName }} | Contact: {{ d.email }}
+                                                    </p>
+                                            </div>
+                                        {% endfor %}
                                     </div>
-                                {% endfor %}
-                            </div>
 
+                                {% else %}
+                                    <p class="text-muted">No decisions have been recorded yet.</p>
+                                {% endif %}
+                            {% endfor %}
                         {% else %}
-                            <p class="text-muted">No decisions have been recorded yet.</p>
+                        <p class="text-muted">No decisions have been made yet.</p>
+
                         {% endif %}
-                </section> -->
+
+                </section>
 
             </div>
 

@@ -788,7 +788,10 @@ class ReviewDecision:
                 rd.decisionNotes,
                 rd.accessConditions,
                 rd.decisionDate,
-                u.fullName
+                u.fullName,
+                u.roleID,
+                u.username,
+                u.email
             FROM ReviewDecision rd
                 JOIN `User` u
                     ON rd.reviewerID = u.userID
@@ -817,14 +820,18 @@ class ReviewDecision:
                 rd.decisionNotes,
                 rd.accessConditions,
                 rd.decisionDate,
-                u.fullName
+                u.fullName,
+                u.roleID,
+                r.roleName
             FROM ReviewDecision rd
                 JOIN `User` u
                     ON rd.reviewerID = u.userID
+                JOIN `Role` r   
+                    ON u.roleID = r.roleID
             WHERE rd.requestID = %s
             ORDER BY rd.decisionDate DESC
             """,
-            (item_id)
+            (item_id,)
         )
         rows = cur.fetchall()
         cur.close()
