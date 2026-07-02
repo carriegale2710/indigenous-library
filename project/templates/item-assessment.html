@@ -231,17 +231,16 @@
                                 href="{{ url_for('assessment.cultural_metadata', item_id=item.itemID) }}"
                                 >Edit Cultural Metadata</a
                                 > 
-                                {% if session['roleID'] == 1 %} 
+                                {% if session['roleID'] == 1 %}
                                 <div class="mt-4">
-                                    <p class="text-danger" ><strong>DANGER ZONE</strong></p>
-                                    <a
-                                    class="btn btn-danger m-2 rounded align-self-end "
-                                    href="{{ url_for('views.collection_item_delete', item_id=item.itemID) }}"
-                                    >Permanently Delete Item</a
-                                    > 
-                                </div> 
-                            </div>
-                            {% endif %}
+                                    <p class="text-danger"><strong>DANGER ZONE</strong></p>
+                                    <form method="POST" action="{{ url_for('views.collection_item_delete', item_id=item.itemID) }}" class="m-2">
+                                        <button type="submit" class="btn btn-danger rounded align-self-end">
+                                            Permanently Delete Item
+                                        </button>
+                                    </form>
+                                </div>
+                                {% endif %}
                         </div>
                     </div>
                 
