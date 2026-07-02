@@ -62,7 +62,7 @@ CREATE TABLE CollectionItem (
     `year`         SMALLINT     NULL,
     itemType       VARCHAR(50)  NULL,
     summary        VARCHAR(500) NULL,
-    thumbnailPath  VARCHAR(255) NOT NULL DEFAULT '/img/items/IC_Logo.jpg',
+    thumbnailPath  VARCHAR(255) NOT NULL DEFAULT 'uncatalogued-item.svg',    
     nextReviewDate DATE         NULL,
     PRIMARY KEY (itemID),
     CONSTRAINT fk_item_collection
