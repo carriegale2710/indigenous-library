@@ -42,6 +42,7 @@ def catalogue():
 
     return render_template("catalogue.html", items=items)
 
+
 @views_bp.route("/item-details/<int:item_id>", methods=["GET", "POST"])
 def item_details(item_id):
     """
@@ -101,6 +102,14 @@ def request_access(item_id):
     if item is None:
         abort(500)
 
+    # Check they haven't already made a request for this item
+    user_id = session.get("userID") 
+    if user_id:
+        for req in AccessRequest.get_by_user(user_id):
+            if req["itemID"] == item_id:
+                flash("You have already made a request for this item.")
+                return redirect(url_for('views.item_details', item_id=item_id))
+    
     form = AccessRequestForm()
 
     if form.validate_on_submit():
@@ -123,8 +132,10 @@ def request_access(item_id):
         
         except IntegrityError:
             # Duplicate username/email broke a UNIQUE constraint, so undo the failed INSERT.
-            abort(IntegrityError)
+            from project import mysql
+            mysql.connection.rollback()
             flash("Database Integrity error.")
+
         
         finally:
             return redirect(url_for('views.item_details', item_id=item_id))
