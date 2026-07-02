@@ -58,7 +58,7 @@ def item_assessment(item_id):
     for req in request_history:
         req['comments'] = CommunityComment.get_by_request(req['requestID'])  
         if req['requestStatus'] != 'Pending':  
-            req['decision'] = ReviewDecision.get_by_request(req['requestID'])  # stores userName of reviewer too #FIXME - not fetching anything
+            req['decision'] = ReviewDecision.get_by_request(req['requestID'])  # stores reviewer user info too 
 
     pending_requests = [req for req in request_history if req['requestStatus'] == 'Pending']  # filter for pending requests
     closed_requests = [req for req in request_history if req['requestStatus'] != 'Pending']  # filter for closed requests
