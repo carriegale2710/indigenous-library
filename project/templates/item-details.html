@@ -60,9 +60,16 @@
 
             {% if item.statusName == 'Open' %}
               <div class="request-state-card role-public">
-                <strong>Public Item</strong>
+                <div class="d-flex justify-content-between mb-2 ">
+                  <strong>Public Item</strong>
+                  <div class="badge bg-success align-self-end">Open Access Available</div>
+                </div>
                 <p class="small">Open items do not require an access request.</p>
-                <div class="badge bg-success">Open Access Available</div>
+                <div class="mt-4">
+                  <a href="{{ url_for('assessment.item_assessment', item_id=item.itemID) }}" class="btn btn-primary"
+                  >Edit Item Data</a
+                  >
+                </div>
               </div>
 
             {% elif session.get('roleID') == 1 or session.get('roleID') == 2 or session.get('roleID') == 3 %}
