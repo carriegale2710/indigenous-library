@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, redirect, flash, abort, url_for, session, request
-from project.model import CollectionItem, Collection, AccessRequest, CulturalMetadata, ReviewDecision, CommunityComment
+from MySQLdb import IntegrityError
+from project.model import CollectionItem, Collection, AccessRequest
 from project.decorators import login_required, role_required
-from project.forms import AccessRequestForm, CollectionItemForm, CulturalMetadataForm
+from project.forms import AccessRequestForm, CollectionItemForm
 
 # Views blueprints are for route for displaying information to the user
 views_bp = Blueprint('views',__name__) 
@@ -115,10 +116,18 @@ def request_access(item_id):
         # and a download link surfaced on the assessment page for reviewers.
         supportingDocuments = form.supportingDocuments.data
 
-        AccessRequest.create(userID, item_id, requestReason, supportingDocuments)
-        CollectionItem.update_status(item_id, 4)  # Update item status to 'Pending' when a new access request is submitted
-        flash('Your access request has been submitted', 'success')
-        return redirect(url_for('views.request_access', item_id=item_id))
+        try:
+            AccessRequest.create(userID, item_id, requestReason, supportingDocuments)
+            CollectionItem.update_status(item_id, 4)  # Update item status to 'Pending' when a new access request is submitted
+            flash('Your access request has been submitted', 'success')
+        
+        except IntegrityError:
+            # Duplicate username/email broke a UNIQUE constraint, so undo the failed INSERT.
+            abort(IntegrityError)
+            flash("Database Integrity error.")
+        
+        finally:
+            return redirect(url_for('views.item_details', item_id=item_id))
 
     return render_template("request-form.html", item=item, form=form)
 
@@ -162,13 +171,17 @@ def collection_item_update(item_id):
     return render_template("collection-item-form.html", item=item, form=form)
 
 @views_bp.route('/items/<int:item_id>/delete', methods=['POST'])
-@role_required(1)         # Admin only
+@role_required(1)         # Admin only # FIXME - getting 403 error METHOD NOT ALLOWED
 def collection_item_delete(item_id):
+
+    
     item = CollectionItem.get_by_id(item_id)
     if item is None:
         abort(500)
+
     CollectionItem.delete(item_id)
     flash('Your collection item has been deleted', 'success')
+
     return redirect(url_for('views.home'))
 
 # CollectionItem.create — OUT OF SCOPE for MVP.
@@ -215,3 +228,17 @@ def internal_server_error(error):
         error_message="Something went wrong while processing your request.",
         error_description="Please try again later or contact library staff if the problem continues."
     ), 500
+
+
+@views_bp.app_errorhandler(IntegrityError)
+def handle_integrity_error(error):
+    try:
+        # If you have a shared connection/session, rollback it here.
+        from project import mysql
+        mysql.connection.rollback()
+        pass
+    except Exception:
+        pass
+
+    flash("That action could not be completed because it would create invalid or duplicate data.", "error")
+    return redirect(request.referrer or url_for("views.home"))

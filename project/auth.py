@@ -88,7 +88,6 @@ def register():
 
 
         # Save to mySQL database
-        # TODO - Add error handling for MySQLdb.IntegrityError for duplicate usernames/emails
 
         try:
             user = User.create(roleID,fullName,username, email, passwordHash)   
