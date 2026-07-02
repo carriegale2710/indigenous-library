@@ -77,7 +77,7 @@ class CommunityCommentForm(FlaskForm):
 # ------------------------------------------------------------
 class RequiredIfDecision: # for accessConditions validation logic
     def __call__(self, form, field):
-        if form.decisionType.data == "approve" and not field.data:
+        if  "approve" in form.decisionType.data.lower() and not field.data: 
             raise ValidationError("Access Conditions are required when approving.")
 
 class ReviewDecisionForm(FlaskForm):
