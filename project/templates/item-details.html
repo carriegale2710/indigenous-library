@@ -17,18 +17,6 @@
 <!-- Main Item Details Area -->
 <main class="item-details-area py-5">
   <div class="container px-4">
-    <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %} 
-      {% if messages %}
-      <div class="mb-4">
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }} mb-2" role="alert">
-          {{ message }}
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %} 
-    {% endwith %}
 
     <div class="row g-4">
       <!-- Left Column -->
@@ -58,7 +46,7 @@
         <!-- Request Access Display State -->
         <div class ="mb-4">
 
-            {% if item.statusName == 'Open' %}
+            {% if g.user and session.get('roleID') != 4 and item.statusName == 'Open' %}
               <div class="request-state-card role-public">
                 <div class="d-flex justify-content-between mb-2 ">
                   <strong>Public Item</strong>
@@ -72,7 +60,7 @@
                 </div>
               </div>
 
-            {% elif session.get('roleID') == 1 or session.get('roleID') == 2 or session.get('roleID') == 3 %}
+            {% elif g.user and session.get('roleID') != 4 and item.statusName != 'Open' %}
               <div class="request-state-card role-system">
                 <h3 class="h6 fw-bold">Review Item Access Requests</h3>
                 <p class="small">
@@ -83,7 +71,7 @@
                 >
               </div>
 
-            {% elif existing_request %}
+            {% elif session.get('roleID') == 4 and item.statusName != 'Open' and existing_request %}
               <div class="request-state-card role-system">
                 <h3 class="h6 fw-bold">Request Already Submitted</h3>
                 <p class="small">
@@ -92,20 +80,18 @@
                 </p>
               </div>
 
-            {% elif session.get('roleID') == 4 %}
+            {%  elif session.get('roleID') == 4 and item.statusName != 'Open' %}
               <div class="request-state-card role-ce-adm">
                 <strong>Restricted Item</strong>
-                {% if item.statusName != 'Open' %}
                   <p class="small text-muted">
                     Users must provide a reason for requesting access. Requests are reviewed by authorised library staff and may involve community consultation.
                   </p>
-                {% endif %}
                 <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-primary">
                     Request Access
                 </a>
               </div>
 
-            {% else %}
+            {% elif item.statusName != 'Open' %}
               <div class="request-state-card role-system">
                 <h3 class="h6 fw-bold">Login Required</h3>
                 <p class="small">
@@ -114,6 +100,15 @@
                 <a href="{{ url_for('auth.login') }}" class="btn btn-primary"
                   >Login to Request Access</a
                 >
+              </div>
+
+            {% else %}
+              <div class="request-state-card role-public">
+                <div class="d-flex justify-content-between mb-2 ">
+                  <strong>Public Item</strong>
+                  <div class="badge bg-success align-self-end">Open Access Available</div>
+                </div>
+                <p class="small">Open items do not require an access request.</p>
               </div>
 
             {% endif %}
