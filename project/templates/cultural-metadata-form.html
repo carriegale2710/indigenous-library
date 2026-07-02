@@ -1,0 +1,236 @@
+<!-- Controller branch | Rebecca | Cultural Metadata Form -->
+{% extends "base_template.html" %} {% block title %}Cultural Metadata | {{ item.title }}{% endblock %} {% block content %}
+
+<!-- Page Header -->
+<header class="item-page-header py-5">
+  <div class="container px-4">
+    <p class="section-label text-warning mb-2">Cultural Knowledge Management</p>
+    <h1 class="fw-bold mb-2">Cultural Metadata</h1>
+    <p class="mb-0 page-subtitle">
+      Record or update the cultural metadata for this collection item.
+      Cultural metadata describes the community, language, and cultural
+      context of an item, and informs how access is managed.
+    </p>
+  </div>
+</header>
+
+<!-- Main Metadata Area -->
+<main class="item-details-area py-5">
+  <div class="container px-4">
+    <div class="row g-4">
+
+      <!-- Left Column: Item Summary -->
+      <div class="col-lg-4">
+        <div class="card item-card mb-4">
+          {% if item.thumbnailPath %}
+          <img
+            src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
+            alt="{{ item.title }}"
+            class="item-thumbnail"
+          />
+          {% endif %}
+
+          <div class="card-body">
+            <h2 class="h4 fw-bold">Item Summary</h2>
+
+            <p class="section-label mb-1">Catalogue Item</p>
+            <h3 class="h5 fw-bold">{{ item.title }}</h3>
+
+            <p class="text-muted small mb-2">
+              {{ item.collectionName if item.collectionName else "Collection not recorded" }} |
+              {{ item.itemType if item.itemType else "Item type not recorded" }} |
+              {{ item.year if item.year else "Year unknown" }}
+            </p>
+
+            {% if item.summary %}
+            <p>{{ item.summary }}</p>
+            {% endif %}
+
+            <div class="mb-3">
+              <span class="badge
+                {% if item.statusName == 'Open' %}status-open
+                {% elif item.statusName == 'Restricted' %}status-restricted
+                {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive
+                {% elif item.statusName == 'Pending' %}status-pending
+                {% else %}bg-secondary{% endif %}">
+                {{ item.statusName }}
+              </span>
+            </div>
+
+            <a
+              href="{{ url_for('views.item_details', item_id=item.itemID) }}"
+              class="btn btn-outline-dark"
+            >
+              Back to Item Details
+            </a>
+          </div>
+        </div>
+
+        <div class="card item-card">
+          <div class="card-body">
+            <h2 class="h4 fw-bold">CARE Notice</h2>
+            <div class="status-panel mb-3">
+              <p class="mb-1">
+                <strong>Authority to Control:</strong> Cultural metadata may
+                only be added or edited by authorised Community Elders or
+                Administrators.
+              </p>
+            </div>
+            <p class="small text-muted mb-0">
+              Cultural metadata informs access decisions. It should reflect
+              community knowledge and protocol, not staff interpretation.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Metadata Form -->
+      <div class="col-lg-8">
+        <div class="alert cultural-alert mb-4" role="alert">
+          <strong>Cultural authority notice:</strong>
+          This form is restricted to authorised Community Elders and
+          Administrators. Metadata entered here directly informs how this
+          item is accessed and by whom.
+        </div>
+
+        <div class="card item-card">
+          <div class="card-body p-4 p-md-5">
+            <p class="section-label">Cultural Context</p>
+            <h2 class="h3 fw-bold mb-3">
+              {% if metadata %}Edit Cultural Metadata{% else %}Add Cultural Metadata{% endif %}
+            </h2>
+
+            <p class="text-muted">
+              {% if metadata %}
+                Update the cultural metadata for this item. Changes are saved immediately.
+              {% else %}
+                No cultural metadata has been recorded for this item yet.
+                Complete the form below to add it.
+              {% endif %}
+            </p>
+
+            <form
+              method="POST"
+              action="{{ url_for('assessment.cultural_metadata', item_id=item.itemID) }}"
+              novalidate
+            >
+              <!-- CSRF token / hidden field  -->
+              {{ form.hidden_tag() }}
+              
+              <!-- Community Group -->
+              <div class="mb-4">
+                {{ form.communityGroup.label(class="form-label fw-semibold") }}
+                {{ form.communityGroup(class="form-control", placeholder="e.g. Torres Strait Islander community") }}
+                {% if form.communityGroup.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.communityGroup.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% else %}
+                <div class="form-text">The community or communities this item belongs to or represents.</div>
+                {% endif %}
+              </div>
+
+              <!-- Language -->
+              <div class="mb-4">
+                {{ form.language.label(class="form-label fw-semibold") }}
+                {{ form.language(class="form-control", placeholder="e.g. Meriam Mir") }}
+                {% if form.language.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.language.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Location -->
+              <div class="mb-4">
+                {{ form.location.label(class="form-label fw-semibold") }}
+                {{ form.location(class="form-control", placeholder="e.g. Murray Island / Mer Island") }}
+                {% if form.location.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.location.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Subject Area -->
+              <div class="mb-4">
+                {{ form.subjectArea.label(class="form-label fw-semibold") }}
+                {{ form.subjectArea(class="form-select") }}
+                {% if form.subjectArea.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.subjectArea.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Cultural Sensitivity Notes -->
+              <div class="mb-4">
+                {{ form.culturalSensitivityNotes.label(class="form-label fw-semibold") }}
+                {{ form.culturalSensitivityNotes(class="form-control", rows="4",
+                   placeholder="Describe any cultural sensitivity considerations for this item.") }}
+                {% if form.culturalSensitivityNotes.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.culturalSensitivityNotes.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% else %}
+                <div class="form-text">
+                  Note any content that may be sensitive, restricted, or
+                  require special handling under cultural protocol.
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Cultural Protocol Notes -->
+              <div class="mb-4">
+                {{ form.culturalProtocolNotes.label(class="form-label fw-semibold") }}
+                {{ form.culturalProtocolNotes(class="form-control", rows="4",
+                   placeholder="Describe the cultural protocols that apply to access or use of this item.") }}
+                {% if form.culturalProtocolNotes.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.culturalProtocolNotes.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% else %}
+                <div class="form-text">
+                  Protocols may include viewing conditions, who may access
+                  the item, or restrictions on reproduction.
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- Access Recommendations -->
+              <div class="mb-4">
+                {{ form.accessRecommendations.label(class="form-label fw-semibold") }}
+                {{ form.accessRecommendations(class="form-control", rows="3",
+                   placeholder="e.g. Research use only; no reproduction without further permission.") }}
+                {% if form.accessRecommendations.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.accessRecommendations.errors %}<div>{{ error }}</div>{% endfor %}
+                </div>
+                {% else %}
+                <div class="form-text">
+                  Recommended access conditions informed by cultural protocol
+                  and community guidance.
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="d-flex flex-wrap gap-2">
+                {{ form.submit(class="btn btn-primary") }}
+                <a
+                  href="{{ url_for('views.item_details', item_id=item.itemID) }}"
+                  class="btn btn-outline-dark"
+                >
+                  Cancel
+                </a>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+{% endblock %}

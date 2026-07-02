@@ -1,0 +1,502 @@
+<!-- Submitted by LU - Item Assessment Page -->
+{% extends "base_template.html" %}
+
+<!-- Adjust this to what the name of the page is, the other part of this in the base_template is ' | Indigenous Academic Library' -->
+{% block title %}Item Assessment{% endblock %}
+
+{% block content %}
+    <!-- Page Header -->
+    <header class="assessment-page-header py-5">
+        <div class="container px-4">
+            <p class="section-label text-warning mb-2">Authorised Review Area</p>
+            <h1 class="fw-bold mb-2">Item Assessment Panel</h1>
+            <p class="mb-0 page-subtitle">
+                Review collection metadata, consultation comments, cultural access conditions and access request
+                decisions for restricted collection items.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Assessment Area -->
+    <main class="assessment-area py-5">
+        
+        <div class="container px-4">
+            <!-- Flash messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %}
+            <div class="mb-4">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} mb-2" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            </div>
+            {% endif %} {% endwith %}
+
+            <!-- Notices -->
+            <div class="alert assessment-alert mb-4" role="alert">
+                <strong>Authorised access only:</strong>
+                This area is available to approved library staff, administrators and community reviewers involved in
+                cultural access assessment.
+            </div>
+            {% if pending_requests %}
+            <div class="alert alert-warning mb-4" role="alert">
+                <strong>Pending Access Request:</strong>
+                This item has a pending access request. Please review the request and provide consultation comments before approving or rejecting the request.
+            </div>
+            {% endif %}
+
+
+            <div class="row g-4">
+
+                <!-- Left Column -->
+                <div class="col-lg-4">
+
+                    <!-- Item Summary -->
+                    <div class="card assessment-card mb-4">
+                        <!-- Item Preview -->
+                        <div class="card-body text-center">
+                            <img src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}" alt="{{ item.title }}"
+                            class="item-thumbnail item-thumbnail-contained" />
+                        </div>
+
+                        <div class="card-body">
+                            <h2 class="h4 fw-bold">Item Summary</h2>
+
+                            <p><strong>Item ID:</strong> {{ item.itemID }}</p>
+                            <p><strong>Collection ID:</strong> {{ item.collectionID }}</p>
+                            <p><strong>Status ID:</strong> {{ item.statusID }}</p>
+                            <p><strong>Item Title:</strong> {{ item.title }}</p>
+                            <p><strong>Author/Creator:</strong> {{ item.authorCreator }}</p>
+                            <p><strong>Year:</strong> {{ item.year }}</p>
+                            <p><strong>Item Type:</strong> {{ item.itemType }}</p>
+                            <p><strong>Summary:</strong> {{ item.summary }}</p>
+
+                            <p><strong>Access Level:</strong>
+                                {% if item.statusID == 1 %}
+                                    <span class="badge bg-success text-dark">{{ item.statusName }}</span>
+                                {% elif item.statusID == 2 %}
+                                    <span class="badge bg-danger text-dark">{{ item.statusName }}</span>
+                                {% elif item.statusID == 3 %}
+                                    <span class="badge bg-warning text-dark">{{ item.statusName }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary text-dark">{{ item.statusName }}</span>
+                                {% endif %}
+                            </p>
+                            <p class="small" >{{ item.statusDescription }}</p>
+
+                            <a href="{{ url_for('views.item_details', item_id=item.itemID) }}" class="btn btn-primary mt-2">
+                                Open Full Item Record
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column -->
+                <div class="col-lg-8">
+
+                    <!-- Metadata Review:
+                        CONSIDER:
+                            - does this form belong on the access request review page?
+                            - maybe this belongs to item_details page, but only for admin/library staff for updating metadata
+                            - this would not require any changes to db / additional workflows, consider moving from this page
+                    -->
+                    <div class="card assessment-card mb-4">
+                        <div class="card-body">
+                            <h2 class="h4 fw-bold">Cultural Metadata Review</h2>
+  
+                            <table class="table table-bordered metadata-table mt-3">
+                            <tbody>
+                                <tr>
+                                    <th scope="row">Item ID</th>
+                                    <td>CI-{{ "%03d"|format(item.itemID) }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Title</th>
+                                    <td>{{ item.title }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Item Type</th>
+                                    <td>{{ item.itemType|title }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Collection</th>
+                                    <td>{{ item.collectionName }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Creator / Contributor</th>
+                                    <td>
+                                        {{ item.authorCreator 
+                                            if item.authorCreator 
+                                            else "Unknown"}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Community / Cultural Group</th>
+                                    <td>
+                                        {{ metadata.communityGroup 
+                                            if metadata 
+                                            and metadata.communityGroup 
+                                            else "-" }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Language</th>
+                                    <td>
+                                        {{ metadata.language 
+                                            if metadata 
+                                            and metadata.language 
+                                            else "-" }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Location</th>
+                                    <td>
+                                        {{ metadata.location 
+                                            if metadata 
+                                            and metadata.location 
+                                            else "-" }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Subject Area</th>
+                                    <td>
+                                        {{ metadata.subjectArea 
+                                            if metadata 
+                                            and metadata.subjectArea
+                                            else "-" }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Format</th>
+                                    <td>{{ item.itemType|title }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Access Level</th>
+                                    <td>{{ item.statusName }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Sensitivity Level</th>
+                                    <td>
+                                        {% if item.statusName == 'Culturally Sensitive' %} High 
+                                        {%elif item.statusName == 'Restricted' %} Medium 
+                                        {% else %} Low 
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Cultural Sensitivity Notes</th>
+                                    <td>
+                                        {{ metadata.culturalSensitivityNotes 
+                                            if metadata 
+                                            and metadata.culturalSensitivityNotes 
+                                            else "-" }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Cultural Protocol Notes</th>
+                                    <td>
+                                        {{ metadata.culturalProtocolNotes 
+                                            if metadata 
+                                            and metadata.culturalProtocolNotes 
+                                            else "-" }}
+                                    </td>
+                                </tr>                               
+                                <tr>
+                                    <th scope="row">Access Recommendation</th>
+                                    <td>
+                                        {{ metadata.accessRecommendations 
+                                            if metadata and metadata.accessRecommendations 
+                                            else "No recommendation recorded" }}
+                                        </td>
+                                    </tr>
+                                <tr>
+                                    <th scope="row">Review Status</th>
+                                    <td>
+                                        {% if item.nextReviewDate %} Review scheduled 
+                                        {% elif item.statusName == 'Open' %} No review required 
+                                        {% else %} Community review required 
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Next Review Date</th>
+                                    <td>
+                                        {{ item.nextReviewDate 
+                                        if item.nextReviewDate 
+                                        else "Not scheduled" }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            {% if session['roleID'] in [1, 3] %}
+                            <div  >
+                                <a
+                                class="btn btn-primary mt-2"
+                                href="{{ url_for('views.collection_item_update', item_id=item.itemID) }}"
+                                >Edit Item Details</a
+                                >  
+                                {% endif %}
+                                <a
+                                class="btn btn-primary mt-2"
+                                href="{{ url_for('assessment.cultural_metadata', item_id=item.itemID) }}"
+                                >Edit Cultural Metadata</a
+                                > 
+                                {% if session['roleID'] == 1 %}
+                                <div class="mt-4">
+                                    <p class="text-danger"><strong>DANGER ZONE</strong></p>
+                                    <form method="POST" action="{{ url_for('views.collection_item_delete', item_id=item.itemID) }}" class="m-2">
+                                        <button type="submit" class="btn btn-danger rounded align-self-end">
+                                            Permanently Delete Item
+                                        </button>
+                                    </form>
+                                </div>
+                                {% endif %}
+                        </div>
+                    </div>
+                
+                </div>
+
+                <!-- Pending Request Section -->
+                <section class="card assessment-card mb-4">
+
+                    <div class="card-body">
+                        <h2 class="h4 fw-bold">Pending Requests</h2>
+                        <p class="small text-muted">
+                            Pending access requests will show up here. You can review the request, add consultation comments and approve or reject the request.
+                        </p>
+
+                        
+                        {% if pending_requests  %}
+                        {% for request in pending_requests %}
+
+                        <!--  Request Card-->
+                        <div class="status-panel mt-4">
+                            <h2 class="h4 fw-bold mb-3">Access Request #{{ request.requestID }} - {{ request.requestDate }}</h2>
+                            <div class="card-body ">
+
+                                <div class="d-flex flex-wrap justify-content-end mb-3">
+                                    <div class="card-body mb-3">
+                                        <p><strong>Requested by:</strong> {{ request.fullName }} ({{ request.username }}) {{ request.email }}</p> 
+                                        <p><strong>Supporting Documents:</strong> 
+                                            {% if request.supportingDocuments %}
+                                            <a href="{{ url_for('static', filename=request.supportingDocuments) }}" target="_blank">{{ request.supportingDocuments }}</a>
+                                            {% else %}
+                                            No supporting documents provided.
+                                            {% endif %}
+                                        </p>
+                                        <p class="blockquote" ><strong>Request reason:</strong><br>'{{ request.requestReason }}'</p>
+                
+                                    </div>
+
+                                    <div class=" flex-direction-column flex-end ">
+                                        <a
+                                        class="btn btn-primary ms-2"
+                                        href="{{ url_for('assessment.item_assessment', item_id=request.itemID) }}#add-comment"
+                                        >Add Comment</a
+                                        >    
+                                        {% if session['roleID'] in [1, 2] %}                            
+                                        <a
+                                        class="btn btn-primary ms-2"
+                                        href="{{ url_for('assessment.save_review_decision', request_id=request.requestID) }}"
+                                        >Approve/Reject Request</a
+                                        >  
+                                        {% endif %}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Consultation Comments -->
+                            <div class="card-footer">
+                                <div class="mt-4">
+                                    <h1 class="h5 fw-bold mb-3">Comments</h1>
+                                    <p class="small text-muted">
+                                        If you are a Indigenous community member, please share your thoughts on how this item should be accessed. 
+                                    </p>
+                                    {% if request.comments %}
+                                        {% for comment in request.comments %}
+                                            <div class="comment-card role-ce-adm 
+                                                {% if comment.roleID == 1 %}
+                                                    role-adm
+                                                {% elif comment.roleID == 2 %}
+                                                    role-ce
+                                                {% elif comment.roleID == 3 %}
+                                                    role-staff
+                                                {% endif %}">
+                                                <p class="mb-1">
+                                                    <strong>{{ comment.fullName }}</strong>
+                                                    {% if comment.roleID == 1 %}
+                                                    <span class="badge bg-primary text-light ms-2">Admin</span>
+                                                    {% elif comment.roleID == 2 %}
+                                                    <span class="badge bg-success text-light ms-2">Community Reviewer</span>
+                                                    {% elif comment.roleID == 3 %}
+                                                    <span class="badge bg-warning text-dark ms-2">Library Staff</span>
+                                                    {% endif %}
+                                                    <p>{{ comment.commentText }}</p>
+                                                    <p class="small text-muted mb-0 align-end">{{ comment.createdDate }}</p>
+                                                </p>
+                                            </div>
+                                        {% endfor %}  
+                                    {% else %}
+                                        <p class="text-muted">No consultation comments have been recorded yet.</p>
+                                    {% endif %}                                  
+                                </div>
+
+                                <!-- Add Comment Form -->
+                                <form id="add-comment" method="POST" action="{{ url_for('assessment.add_comment', request_id=request.requestID) }}" novalidate>
+                                    
+                                    <!-- CSRF token / hidden field  -->
+                                    {{ form.hidden_tag() }}
+
+                                    <div class="form-group">
+                                        
+                                        <div class="mb-4">
+                                            {{ form.commentText.label(class="form-label fw-semibold") }}
+                                            {{ form.commentText( class="form-control", rows="5",
+                                            placeholder="Enter your consultation comment here..." ) }} 
+                                            
+                                            {% if form.commentText.errors %}
+                                            <div class="text-danger small mt-2">
+                                                {% for error in form.commentText.errors %}
+                                                <div>{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                            {% endif %}
+                                        </div>
+
+                                        <div class="form-group ">
+                                            {{ form.submit(class="btn btn-primary") }} 
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+
+                        
+                        </div>  
+
+                        {% endfor %}
+                        {% else %}
+                        <p class="text-muted">No pending access requests.</p>
+                        {% endif %} 
+                        
+                 
+                    </div>
+                </section>
+
+                <!-- Request History Timeline Section-->
+                <section class="card assessment-card mb-4">
+                    <div class="card-body">
+                        <h2 class="h4 fw-bold">Closed Requests</h2>
+                        <p class="small text-muted">
+                            This section records request history, status changes and optionally any consultation comments connected
+                            to the assessment workflow.
+                        </p>
+                        {% if closed_requests %}
+
+                            <div class="timeline mt-4">
+                                {% for request in closed_requests %}
+                                
+                                    <div class="timeline-item mb-4 p-3 border rounded bg-light">
+                                        <div class="timeline-entry-header">
+                                            <h3 class="h6 fw-bold mb-1">
+                                                {{ request.requestDate }} — Request #{{request.requestID}} ({{ request.requestStatus }})
+                                            </h3>
+                                            <p class="mb-1">Reason: {{ request.requestReason }}</p>
+                                            <p class="mb-1">Supporting Documents: 
+                                                {% if request.supportingDocuments %}
+                                                    <a href="{{ url_for('static', filename=request.supportingDocuments) }}" target="_blank">{{ request.supportingDocuments }}</a>
+                                                {% else %}
+                                                    No supporting documents provided.
+                                                {% endif %}
+                                            </p>
+                                            <p class="small text-muted mb-0">
+                                                Requested by: {{ request.fullName }} ({{ request.username }}) | {{ request.email }} <br>
+                                                {% if request['decision'] %}
+                                                {% for d in request['decision'] %}
+                                                Reviewed by: {{ d.fullName }} ({{ d.username }}) {{ d.roleName }} | Contact: {{ d.email }}
+                                                {% endfor %}
+                                                {% else %}
+                                                No review decision recorded.
+                                                {% endif %}
+                                            </p>
+                                        </div>
+
+                                        <div class="timeline-comments mt-3">
+                                            {% for comment in request.comments %}
+                                                <div class="comment-card role-ce-adm">
+                                                    <p class="mb-1 small  bg-light text-dark">
+                                                        <strong>{{ comment.fullName }}:</strong>
+                                                    </p>
+                                                    <p class="small mb-1 ">{{ comment.commentText }}</p>
+                                                    <p class="small text-muted mb-0">{{ comment.createdDate }}</p>
+                                                </div>
+                                            {% else %}
+                                                <p class="text-muted">No consultation comments have been recorded for this request.</p>
+                                            {% endfor %}
+                                        </div>
+
+                                    </div>
+
+                                {% endfor %}
+                            </div>
+
+                            {% else %}
+                            <p class="text-muted">No requests closed yet.</p>
+
+                        {% endif %}
+
+                      
+
+                    </div>
+                </section>
+
+                <!-- Decision History -->
+                <section class="card assessment-card mb-4">
+                    <div class="card-body">
+                        <h2 class="h4 fw-bold">Decision History</h2>
+                        <p class="small text-muted">
+                            This section records the history of decisions made for access requests, including the decision type, notes, and any access conditions.
+                        </p>
+                        {% if closed_requests%}
+                            {% for request in closed_requests %}
+                    
+                                {% if request['decision'] %}
+                                    <div class="timeline mt-4">
+                                        {% for d in request['decision'] %}
+                                            <div class="timeline-entry ">
+                                                <div class="timeline-entry-header">
+                                                    <h3 class="h6 fw-bold mb-1">
+                                                       {{ d.decisionDate }} -{{ d.decisionType }} for Request #{{request.requestID}} 
+                                                       
+                                                    </div>
+                                                
+                                                       {% if d.decisionNotes %}<p class="mb-1">Notes: {{ d.decisionNotes }}</p>{% endif %}  
+                                                       {% if d.accessConditions %}<p class="mb-1">Access Conditions: {{ d.accessConditions }}</p>{% endif %}    
+                                                    <p class="small text-muted mb-0">
+                                                         Requested by: {{ request.fullName }} ({{ request.username }}) | {{ request.email }} <br>
+                                                        Reviewed by: {{ d.fullName }} ({{ d.username }}) {{ d.roleName }} | Contact: {{ d.email }}
+                                                    </p>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                {% else %}
+                                    <p class="text-muted">No decisions have been recorded yet.</p>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                        <p class="text-muted">No decisions have been made yet.</p>
+
+                        {% endif %}
+
+                </section>
+
+            </div>
+
+        </div>
+    </div>
+</main>
+{% endblock %}

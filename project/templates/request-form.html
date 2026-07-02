@@ -1,0 +1,190 @@
+<!-- Submitted by LU - Request Access Form Page - Jinja version -->
+{% extends "base_template.html" %} {% block title %}Request Access | {{
+item.title }}{% endblock %} {% block content %}
+
+<!-- Page Header -->
+<header class="item-page-header py-5">
+  <div class="container px-4">
+    <p class="section-label text-warning mb-2">Cultural Access Request</p>
+    <h1 class="fw-bold mb-2">Request Access</h1>
+    <p class="mb-0 page-subtitle">
+      Submit a request to view this collection item. Restricted or culturally
+      sensitive materials may require staff review, community consultation, or
+      additional access conditions before viewing is approved.
+    </p>
+  </div>
+</header>
+
+<!-- Main Request Area -->
+<main class="item-details-area py-5">
+  <div class="container px-4">
+    
+    <div class="row g-4">
+      <!-- Left Column: Item Summary -->
+      <div class="col-lg-4">
+        <div class="card item-card mb-4">
+          {% if item.thumbnailPath %}
+          <img
+            src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
+            alt="{{ item.title }}"
+            class="item-thumbnail"
+          />
+          {% endif %}
+
+          <div class="card-body">
+            <h2 class="h4 fw-bold">Item Summary</h2>
+
+            <p class="section-label mb-1">Catalogue Item</p>
+            <h3 class="h5 fw-bold">{{ item.title }}</h3>
+
+            <p class="text-muted small mb-2">
+              {{ item.collectionName if item.collectionName else "Collection not
+              recorded" }} | {{ item.itemType if item.itemType else "Item type
+              not recorded" }} | {{ item.year if item.year else "Year unknown"
+              }}
+            </p>
+
+            {% if item.summary %}
+            <p>{{ item.summary }}</p>
+            {% endif %}
+
+            <div class="mb-3">
+              <span
+                class="badge {% if item.statusName == 'Open' %}status-open {% elif item.statusName == 'Restricted' %}status-restricted {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive {% elif item.statusName == 'Pending' %}status-pending {% else %}bg-secondary {% endif %}"
+              >
+                {{ item.statusName }}
+              </span>
+            </div>
+
+            <a
+              href="{{ url_for('views.item_details', item_id=item.itemID) }}"
+              class="btn btn-outline-dark"
+            >
+              Back to Item Details
+            </a>
+          </div>
+        </div>
+
+        <div class="card item-card">
+          <div class="card-body">
+            <h2 class="h4 fw-bold">Access Reminder</h2>
+
+            <div class="status-panel mb-3">
+              <p class="mb-1">
+                <strong>Current Access Level:</strong>
+                {{ item.statusName }}
+              </p>
+              <p class="mb-1">
+                <strong>Review Required:</strong>
+                {{ "No" if item.statusName == "Open" else "Yes" }}
+              </p>
+              <p class="mb-0">
+                <strong>Viewing Location:</strong>
+                Special Collections Reading Room
+              </p>
+            </div>
+
+            <p class="small text-muted mb-0">
+              Approval to view restricted material does not automatically permit
+              copying, photography, publication, redistribution, or public
+              display.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Request Form -->
+      <div class="col-lg-8">
+        <div class="alert cultural-alert mb-4" role="alert">
+          <strong>Cultural access notice:</strong>
+          Please provide a clear reason for your request. Some items may require
+          review by authorised library staff, cultural advisors, or community
+          representatives before access is granted.
+        </div>
+
+        <div class="card item-card">
+          <div class="card-body p-4 p-md-5">
+            <p class="section-label">Request Details</p>
+            <h2 class="h3 fw-bold mb-3">Request to View Item</h2>
+
+            <p class="text-muted">
+              Complete the form below. Your request will be recorded and
+              reviewed according to the item's access status and cultural
+              protocol requirements.
+            </p>
+
+            <!-- Identity fields (name, email) are displayed read-only from session,
+            not collected as form inputs. This prevents users from submitting
+            a request under a false identity and keeps userID/identity data
+            tied to the authenticated session rather than user-editable input. -->
+
+            <p class="text-muted mb-4">
+            Submitting as: <strong>{{ session.get('fullName', '') }}</strong> ({{ session.get('email', '') }})
+            </p>
+
+            <form
+              method="POST"
+              action="{{ url_for('views.request_access', item_id=item.itemID) }}"
+              enctype="multipart/form-data"
+              novalidate
+            >
+              {{ form.hidden_tag() }}
+
+              <div class="mb-4">
+                {{ form.requestReason.label(class="form-label fw-semibold") }}
+                {{ form.requestReason( class="form-control", rows="5",
+                placeholder="Explain why you would like to view this item, including your research, teaching, learning, community, or library-related purpose." ) }} {% if form.requestReason.errors
+                %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.requestReason.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+                {% else %}
+                <div class="form-text">
+                  Include enough detail for staff or reviewers to understand the
+                  purpose of your request.
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="mb-4">
+                {{ form.supportingDocuments.label(class="form-label fw-semibold") }} 
+                {{ form.supportingDocuments(class="form-control", accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" )}} 
+                {% if form.supportingDocuments.errors %}
+                <div class="text-danger small mt-2">
+                  {% for error in form.supportingDocuments.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+                {% else %}
+                <div class="form-text">
+                  Optional: Upload supporting documents such as a research proposal, approval letter, community permission, or teaching-related document.
+                </div>
+                {% endif %}
+              </div>
+
+              <div class="permission-note mb-4">
+                <strong>Responsible use declaration:</strong>
+                By submitting this request, you acknowledge that access may be subject to conditions, and that approved access does not automatically allow reproduction, redistribution, publication, or sharing of restricted materials.
+              </div>
+
+              <div class="d-flex flex-wrap gap-2">
+                {{ form.submit(class="btn btn-primary") }}
+
+                <a
+                  href="{{ url_for('views.item_details', item_id=item.itemID) }}"
+                  class="btn btn-outline-dark"
+                >
+                  Cancel
+                </a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

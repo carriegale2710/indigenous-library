@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+env/
+
+# Local secrets
+config.py
+.env
+
+# OS junk
+.DS_Store
+
+# Notes
+.idea/

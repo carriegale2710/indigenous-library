@@ -1,0 +1,303 @@
+<!-- Item Details Page - submitted by LU -- Jinja version -->
+{% extends "base_template.html" %} {% block title %}
+{{ item.title if item else "Item Details" }}{% endblock %} 
+
+{% block content %}
+<!-- Page Header -->
+<header class="item-page-header py-5">
+  <div class="container px-4">
+    <p class="span-label text-warning mb-2">Catalogue Record</p>
+    <h1 class="fw-bold mb-2">Item Details</h1>
+    <p class="mb-0 page-subtitle">
+      View detailed metadata, cultural access conditions, and request information for this {{ item.statusName|lower }} {{item.itemType|lower }} collection item.
+    </p>
+  </div>
+</header>
+
+<!-- Main Item Details Area -->
+<main class="item-details-area py-5">
+  <div class="container px-4">
+
+    <div class="row g-4">
+      <!-- Left Column -->
+      <section class="col-lg-4">
+        <!-- Item Preview -->
+        <div class="card item-card mb-4">
+          <img
+            src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
+            alt="{{ item.title }}"
+            class="item-thumbnail"
+          />
+        </div>
+
+        <!-- Cultural Notes -->
+        <div class="alert item-cultural-alert mb-4" role="alert">
+          <strong>Cultural Notes</strong>
+          <p class="small">
+            {% if metadata and metadata.culturalSensitivityNotes %}
+            Sensitivity: {{ metadata.culturalSensitivityNotes }}
+            {% endif %}
+            <br>
+            {% if metadata and metadata.culturalProtocolNotes %}
+            Protocol: {{ metadata.culturalProtocolNotes }}
+            {% endif %}
+          </p>
+        </div>
+        <!-- Request Access Display State -->
+        <div class ="mb-4">
+
+            {% if g.user and session.get('roleID') != 4 and item.statusName == 'Open' %}
+              <div class="request-state-card role-public mt-2">
+                <div class="d-flex justify-content-between mb-2 ">
+                  <strong>Public Item</strong>
+                  <div class="badge bg-success align-self-end">Open Access Available</div>
+                </div>
+                <p class="small">Open items do not require an access request.</p>
+                <div class="mt-4">
+                  <a href="{{ url_for('assessment.item_assessment', item_id=item.itemID) }}" class="btn btn-primary"
+                  >Edit Item Data</a
+                  >
+                </div>
+              </div>
+
+            {% elif g.user and session.get('roleID') != 4 and item.statusName != 'Open' %}
+              <div class="request-state-card role-ce-adm mt-2">
+                <strong>Restricted Item</strong>
+                <p class="small text-muted">
+                  Authorised library staff may update item details.
+                  Community Members may update item metadata.
+                  Admin can do both.
+                </p>
+                <div class="mt-4">
+                  <a href="{{ url_for('assessment.item_assessment', item_id=item.itemID) }}" class="btn btn-primary"
+                  >Edit Item Data</a
+                  >
+                </div>
+              </div>
+              <div class="request-state-card role-system mt-2">
+                <h3 class="h6 fw-bold">Review Item Access Requests</h3>
+                <p class="small">
+                  Review public user access requests for this item. Requests are reviewed by authorised library staff and may involve community consultation.
+                </p>
+                <a href="{{ url_for('assessment.item_assessment', item_id=item.itemID) }}" class="btn btn-primary"
+                  >Review requests</a
+                >
+              </div>
+
+            {% elif session.get('roleID') == 4 and item.statusName != 'Open' and existing_request %}
+              <div class="request-state-card role-system mt-2">
+                <h3 class="h6 fw-bold">Request Already Submitted</h3>
+                <p class="small">
+                  Your current request status is {{ existing_request.requestStatus
+                  }}.
+                </p>
+              </div>
+
+            {%  elif session.get('roleID') == 4 and item.statusName != 'Open' %}
+              <div class="request-state-card role-ce-adm mt-2">
+                <strong>Restricted Item</strong>
+                  <p class="small text-muted">
+                    Users must provide a reason for requesting access. Requests are reviewed by authorised library staff and may involve community consultation.
+                  </p>
+                <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-primary">
+                    Request Access
+                </a>
+              </div>
+
+            {% elif item.statusName != 'Open' %}
+              <div class="request-state-card role-system mt-2">
+                <h3 class="h6 fw-bold">Login Required</h3>
+                <p class="small">
+                  Please log in before submitting an access request for this item.
+                </p>
+                <a href="{{ url_for('views.request_access', item_id=item.itemID) }}" class="btn btn-primary"
+                >Login to Request Access</a
+                >
+              </div>
+
+            {% else %}
+              <div class="request-state-card role-public mt-2">
+                <div class="d-flex justify-content-between mb-2 ">
+                  <strong>Public Item</strong>
+                  <div class="badge bg-success align-self-end">Open Access Available</div>
+                </div>
+                <p class="small">Open items do not require an access request.</p>
+              </div>
+
+            {% endif %}
+
+        </div>
+        <!-- Back to Catalogue -->
+        
+          <div class="card-body">
+            <a
+              href="{{ url_for('views.catalogue') }}"
+              class="btn btn-outline-dark"
+              >Back to Catalogue</a
+            >
+          </div>
+        
+      </section>
+
+      <!-- Right Column -->
+      <section class="col-lg-8">
+        <!-- Item Overview -->
+        <div class="card item-card mb-4">
+          <div class="card-body">
+            <h2 class="fw-bold portal-heading">{{ item.title }}</h2>
+
+            <p>{{ item.summary }}</p>
+
+          </div>
+        </div>
+
+
+        <!-- Metadata Table -->
+        <div class="card item-card mb-4">
+          <div class="card-body">
+            <h2 class="h4 fw-bold">Detailed Item Metadata</h2>
+
+            <table class="table table-bordered metadata-table mt-3">
+              <tbody>
+                <tr>
+                  <th scope="row">Collection</th>
+                  <td>{{ item.collectionName }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Creator / Contributor</th>
+                  <td>
+                    {{ item.authorCreator if item.authorCreator else "Unknown"
+                    }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Community / Cultural Group</th>
+                  <td>
+                    {{ metadata.communityGroup if metadata and
+                    metadata.communityGroup else "Not recorded" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Language</th>
+                  <td>
+                    {{ metadata.language if metadata and metadata.language else
+                    "Not recorded" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Location</th>
+                  <td>
+                    {{ metadata.location if metadata and metadata.location else
+                    "Not recorded" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Subject Area</th>
+                  <td>
+                    {{ metadata.subjectArea if metadata and metadata.subjectArea
+                    else "Not recorded" }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Format</th>
+                  <td>{{ item.itemType|title }}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Review Status</th>
+                  <td>
+                    {% if item.nextReviewDate %} Review scheduled 
+                    {% elif item.statusName == 'Open' %} No review required 
+                    {% else %} Community review required 
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Next Review Date</th>
+                  <td>
+                    {{ item.nextReviewDate 
+                      if item.nextReviewDate 
+                      else "Not scheduled" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Access Conditions -->
+        <div class="card item-card mb-4">
+          <div class="card-body">
+            <h2 class="h4 fw-bold">Access Conditions</h2>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="status-panel h-100">
+                  <p class="metadata-label mb-1">Who can request access?</p>
+                  <p class="mb-0">
+                    {% if item.statusName == 'Open' %} This item is open access and does not require a request. 
+                    {% else %} Logged-in users, researchers and authorised community representatives may submit an access request for review. 
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="status-panel h-100">
+                  <p class="metadata-label mb-1">How is access approved?</p>
+                  <p class="mb-0">
+                    {% if item.statusName == 'Open' %} Access is available without additional approval. 
+                    {% else %} Requests are assessed by authorised staff and may require cultural advisor or community consultation before viewing is approved. 
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Related Items -->
+        {% if related_items %}
+        <div class="card item-card mb-4">
+          <div class="card-body">
+            <h2 class="h4 fw-bold">Related Collection Records</h2>
+
+            <div class="row g-3 mt-1">
+              {% for related_item in related_items %}
+              <div class="col-md-6 col-lg-4">
+                <div class="card h-100 catalogue-card">
+                  <img src="{{ url_for('static', filename='assets/' ~ related_item.thumbnailPath) }}"
+                    class="card-img-top catalogue-image" alt="{{ related_item.title }}" />
+
+                  <div class="card-body">
+                    <span
+                      class="badge {% if related_item.statusName == 'Open' %}status-open {% elif related_item.statusName == 'Restricted' %}status-restricted {% else %}status-sensitive {% endif %} mb-2">
+                      {{ related_item.statusName }}
+                    </span>
+
+                    <h3 class="h6 fw-bold">{{ related_item.title }}</h3>
+
+                    <div class="mt-2">
+                      <a href="{{ url_for('views.item_details', item_id=related_item.itemID) }}"
+                        class="btn btn-primary btn-sm mt-2">
+                        View Item
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+
+            <div class="mt-4">
+              <a href="{{ url_for('views.catalogue') }}" class="btn btn-primary"
+                >Browse More Items</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

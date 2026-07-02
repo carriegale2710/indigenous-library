@@ -1,0 +1,158 @@
+<!-- Submitted by LU - Login Page - Jinja version -->
+{% extends "base_template.html" %} 
+{% block title %}Login{% endblock %} 
+{% block content %}
+
+<!-- Login Header -->
+<header class="login-page-header py-5">
+  <div class="container px-4">
+    <p class="section-label text-warning mb-2">User Authentication</p>
+    <h1 class="fw-bold mb-2">Login</h1>
+    <p class="mb-0 page-subtitle">
+      Sign in to submit access requests, track request outcomes, or review
+      restricted collection items if you are an authorised staff member or
+      community reviewer.
+    </p>
+  </div>
+</header>
+
+<!-- Login Main Content -->
+<main class="login-area py-5">
+  <div class="container px-4">
+    <div class="row g-4 align-items-stretch">
+
+      <!-- Login Form -->
+      <div class="col-lg-6">
+        <div class="card login-card h-100">
+          <div class="card-body p-4 p-md-5">
+            <p class="section-label">Secure Access</p>
+            <h2 class="h3 fw-bold mb-3">Sign in to your account</h2>
+
+            <p class="text-muted">
+              Sign in to manage access requests, review request history, and use
+              services available to your account role.
+            </p>
+
+            <form action="{{ url_for('auth.login') }}" method="POST" novalidate>
+              <!-- CSRF token / hidden field  -->
+              {{ form.hidden_tag() }}
+              <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+
+              <div class="mb-3">
+                {{ form.email.label(class="form-label fw-semibold") }} 
+                {{ form.email(class="form-control", placeholder="Enter your email address") }} 
+                <div class="form-text">
+                  Use the email address linked to your library account.
+                </div>
+                {% for error in form.email.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <div class="mb-3">
+                {{ form.password.label(class="form-label fw-semibold")}} 
+                {{form.password(class="form-control", placeholder="Enter your password") }} 
+                {% for error in form.password.errors %}
+                <div class="text-danger">{{ error }}</div>
+                {% endfor %}
+              </div>
+
+              <!-- Remember / forgot password features out of scope for now -->
+              <!-- <div
+                class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-4"
+              >
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="remember" id="remember"
+                        name="remember" {% if request.form.get('remember') %}checked{% endif %}>
+                    <label class="form-check-label" for="remember">
+                        Remember me
+                    </label>
+                </div>
+
+                <a href="#" class="small text-decoration-none"
+                  >Forgot password?</a
+                >
+              </div> -->
+
+              <button type="submit" class="btn btn-primary w-100">Login</button>
+
+              <p class="text-muted small mt-3 mb-0">
+                Access to request history, reviewer tools and assessment actions
+                depends on the user role assigned to the account.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Information Panel -->
+      <div class="col-lg-6">
+        <div class="card login-info-card h-100">
+          <div class="card-body p-4 p-md-5">
+            <p class="section-label">Account Roles</p>
+            <h2 class="h3 fw-bold mb-3">Who can sign in?</h2>
+
+            <p>
+              The Collections Access Service supports different user roles so
+              that collection access, cultural review and administrative actions
+              can be managed safely.
+            </p>
+
+            <div class="role-info-box role-public mb-3">
+              <h3 class="h6 fw-bold">Public User</h3>
+              <p class="mb-0">
+                Can browse catalogue records, view open items, submit access
+                requests and track request outcomes.
+              </p>
+            </div>
+
+            <div class="role-info-box role-lib-adm mb-3">
+              <h3 class="h6 fw-bold">Library Staff</h3>
+              <p class="mb-0">
+                Can support catalogue management, access request administration
+                and supervised viewing arrangements at the library.
+              </p>
+            </div>
+
+            <div class="role-info-box role-ce-adm mb-3">
+              <h3 class="h6 fw-bold">Community Reviewer / Elder</h3>
+              <p class="mb-0">
+                Can review culturally sensitive items, add consultation comments
+                and support access decisions.
+              </p>
+            </div>
+
+            <div class="role-info-box role-adm">
+              <h3 class="h6 fw-bold">Admin</h3>
+              <p class="mb-0">
+                Can manage users, item records, metadata, access decisions and
+                protected review areas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Prompt -->
+    <section class="mt-5">
+      <div class="content-card text-center">
+        <p class="section-label">Need an Account?</p>
+        <h2 class="h4 fw-bold">Register for access</h2>
+        <p class="text-muted mb-4">
+          Public users can register to submit and track access requests. Staff
+          and reviewer accounts are assigned according to authorised roles.
+        </p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary"
+          >Create an Account</a
+        >
+        <a
+          href="{{ url_for('views.catalogue') }}"
+          class="btn btn-outline-dark ms-md-2"
+          >Browse Catalogue</a
+        >
+      </div>
+    </section>
+  </div>
+</main>
+{% endblock %}
