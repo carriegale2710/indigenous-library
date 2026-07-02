@@ -47,7 +47,7 @@
         <div class ="mb-4">
 
             {% if g.user and session.get('roleID') != 4 and item.statusName == 'Open' %}
-              <div class="request-state-card role-public">
+              <div class="request-state-card role-public mt-2">
                 <div class="d-flex justify-content-between mb-2 ">
                   <strong>Public Item</strong>
                   <div class="badge bg-success align-self-end">Open Access Available</div>
@@ -61,10 +61,23 @@
               </div>
 
             {% elif g.user and session.get('roleID') != 4 and item.statusName != 'Open' %}
-              <div class="request-state-card role-system">
+              <div class="request-state-card role-ce-adm mt-2">
+                <strong>Restricted Item</strong>
+                <p class="small text-muted">
+                  Authorised library staff may update item details.
+                  Community Members may update item metadata.
+                  Admin can do both.
+                </p>
+                <div class="mt-4">
+                  <a href="{{ url_for('assessment.item_assessment', item_id=item.itemID) }}" class="btn btn-primary"
+                  >Edit Item Data</a
+                  >
+                </div>
+              </div>
+              <div class="request-state-card role-system mt-2">
                 <h3 class="h6 fw-bold">Review Item Access Requests</h3>
                 <p class="small">
-                  Review access requests for this item. 
+                  Review public user access requests for this item. Requests are reviewed by authorised library staff and may involve community consultation.
                 </p>
                 <a href="{{ url_for('assessment.item_assessment', item_id=item.itemID) }}" class="btn btn-primary"
                   >Review requests</a
@@ -72,7 +85,7 @@
               </div>
 
             {% elif session.get('roleID') == 4 and item.statusName != 'Open' and existing_request %}
-              <div class="request-state-card role-system">
+              <div class="request-state-card role-system mt-2">
                 <h3 class="h6 fw-bold">Request Already Submitted</h3>
                 <p class="small">
                   Your current request status is {{ existing_request.requestStatus
@@ -81,7 +94,7 @@
               </div>
 
             {%  elif session.get('roleID') == 4 and item.statusName != 'Open' %}
-              <div class="request-state-card role-ce-adm">
+              <div class="request-state-card role-ce-adm mt-2">
                 <strong>Restricted Item</strong>
                   <p class="small text-muted">
                     Users must provide a reason for requesting access. Requests are reviewed by authorised library staff and may involve community consultation.
@@ -92,7 +105,7 @@
               </div>
 
             {% elif item.statusName != 'Open' %}
-              <div class="request-state-card role-system">
+              <div class="request-state-card role-system mt-2">
                 <h3 class="h6 fw-bold">Login Required</h3>
                 <p class="small">
                   Please log in before submitting an access request for this item.
@@ -103,7 +116,7 @@
               </div>
 
             {% else %}
-              <div class="request-state-card role-public">
+              <div class="request-state-card role-public mt-2">
                 <div class="d-flex justify-content-between mb-2 ">
                   <strong>Public Item</strong>
                   <div class="badge bg-success align-self-end">Open Access Available</div>
