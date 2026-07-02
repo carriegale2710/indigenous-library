@@ -65,7 +65,7 @@
                 <div class="badge bg-success">Open Access Available</div>
               </div>
 
-            {% elif session.get('roleID') == 1 or session.get('roleID') == 2 %}
+            {% elif session.get('roleID') == 1 or session.get('roleID') == 2 or session.get('roleID') == 3 %}
               <div class="request-state-card role-system">
                 <h3 class="h6 fw-bold">Review Item Access Requests</h3>
                 <p class="small">
@@ -85,7 +85,7 @@
                 </p>
               </div>
 
-            {% elif session.get('roleID') == 4 or session.get('roleID') == 3 %}
+            {% elif session.get('roleID') == 4 %}
               <div class="request-state-card role-ce-adm">
                 <strong>Restricted Item</strong>
                 {% if item.statusName != 'Open' %}
