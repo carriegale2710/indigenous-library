@@ -56,7 +56,7 @@ CREATE TABLE `User` (
 CREATE TABLE CollectionItem (
     itemID         INT          NOT NULL AUTO_INCREMENT,
     collectionID   INT          NOT NULL,
-    statusID       INT          NOT NULL DEFAULT 4,   -- 4 = Pending: new items await community review (remove DEFAULT to set status in Flask instead)
+    statusID       INT          NOT NULL DEFAULT 3,
     title          VARCHAR(200) NOT NULL,
     authorCreator  VARCHAR(150) NULL,
     `year`         SMALLINT     NULL,
@@ -159,8 +159,7 @@ INSERT INTO Collection (collectionID, collectionName, collectionDescription, col
 INSERT INTO AccessStatus (statusID, statusName, statusDescription) VALUES
 (1, 'Open', 'Viewable by anyone; no access request needed'),
 (2, 'Restricted', 'Requires an approved access request before viewing'),
-(3, 'Culturally Sensitive', 'Requires an approved access request plus specific usage conditions (e.g. research use only, in-person viewing)'),
-(4, 'Pending', 'Default status on item creation. Catalogued but not yet reviewed by a Community Elder, so no final access status is set. Title only is shown in the catalogue, with no Request Access option, until a CE or Admin records a recommendation.');
+(3, 'Culturally Sensitive', 'Requires an approved access request plus specific usage conditions (e.g. research use only, in-person viewing)');
 
 -- Users 1 to 6 are active. Users 7 and 8 are inactive accounts kept for
 -- login testing (an inactive admin and an inactive staff member).
@@ -194,8 +193,7 @@ INSERT INTO CollectionItem (itemID, collectionID, statusID, title, authorCreator
 (17, 4, 3, 'Healing Practices Recordings', 'Recorded with senior knowledge holders', 1996, 'recording', 'Recordings of healing practices and plant preparation methods shared under specific cultural conditions.', 'healing-practices-recordings.svg', '2026-09-01'),
 (18, 5, 1, 'Caring for Sea Country Photo Series', 'Coastal Rangers Program', 2022, 'image', 'Photographs documenting sea country management, ranger programs and community-led conservation work.', 'caring-for-sea-country-photo-series.svg', NULL),
 (19, 5, 2, 'Land Management Oral Histories', 'Community History Project', 2009, 'recording', 'Interviews with Elders describing traditional land management and fire practices, access restricted pending family consent.', 'land-management-oral-histories.svg', '2026-10-15'),
-(20, 2, 4, 'Recently Donated Community Recordings', 'Donated by community member', 2023, 'recording', 'Newly catalogued recordings awaiting cultural review before an access status is set.', 'recently-donated-community-recordings.svg', NULL),
-(21, 3, 4, 'Uncatalogued Photograph Series', 'Unknown photographer', NULL, 'image', 'A set of photographs recently added to the catalogue and awaiting Elder review.', 'uncatalogued-item.svg', NULL);
+(20, 2, 2, 'Recently Donated Community Recordings', 'Donated by community member', 2023, 'recording', 'Newly catalogued recordings awaiting cultural review before an access status is set.', 'recently-donated-community-recordings.svg', NULL);
 
 INSERT INTO CulturalMetadata (metadataID, itemID, communityGroup, language, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations) VALUES
 (1, 1, 'Torres Strait Islander', 'Kalaw Lagaw Ya', 'Western Torres Strait', 'Language', 'None', 'Freely shareable for education', 'Open access'),
