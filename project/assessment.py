@@ -116,11 +116,13 @@ def save_review_decision(request_id):
     """
     request = AccessRequest.get_by_id(request_id)
     if request is None:
-        abort(500)
+        flash('This request does not exist.', 'error')
+        abort(404)
 
     item_id=request['itemID']
     item = CollectionItem.get_by_id(item_id)
     if item is None:
+        flash('This item does not exist.', 'error')
         abort(500)
 
     form = ReviewDecisionForm()
@@ -132,16 +134,24 @@ def save_review_decision(request_id):
         accessConditions = form.accessConditions.data
         ReviewDecision.create(request_id, reviewerID, decisionType, decisionNotes, accessConditions)
 
-        if decisionType == 'Approve':
-            AccessRequest.update_status(request_id, 'Approved')  
-            CollectionItem.update_status(item_id, 1)  # Update item status to 'Open' only if approved
+        if 'approve' in decisionType:
+            if accessConditions:
+                AccessRequest.update_status(request_id, 'Approved')  
+                CollectionItem.update_status(item_id, 1)  # NOTE - Update item status to 'Open' only if approved
+                return redirect(url_for('assessment.item_assessment', item_id=item_id))
+            else:
+                flash('You must enter access conditions when approving access requests.', 'error') 
+                return render_template("review-decision-form.html", item=item, request=request, form=form) 
+        elif 'reject' in decisionType:
+            AccessRequest.update_status(request_id, 'Rejected') # Update status 
+            return redirect(url_for('assessment.item_assessment', item_id=item_id))
         else:
-            AccessRequest.update_status(request_id, 'Rejected')
+            flash('Your review decision could not be submitted. Please try again', 'error')
+            abort(500)
 
         flash('Your review decision has been submitted', 'success')
         return redirect(url_for('assessment.item_assessment', item_id=item_id))
-
-    flash('Your review decision could not be submitted. Please try again', 'danger') #FIXME - shows on first page load
+    
     return render_template("review-decision-form.html", item=item, request=request, form=form) 
 
 
