@@ -24,6 +24,7 @@
           {% if item.thumbnailPath %}
           <img
             src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
+            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
             alt="{{ item.title }}"
             class="item-thumbnail"
           />
@@ -177,7 +178,8 @@
               </div>
 
               <!-- Thumbnail -->
-              <div class="mb-4">
+               <!-- Commented out because this will remove the thumbnail already if user leave this blank -->
+              <!-- <div class="mb-4">
                 {{ form.thumbnailPath.label(class="form-label fw-semibold") }}
                 {{ form.thumbnailPath(class="form-control") }}
                 {% if form.thumbnailPath.errors %}
@@ -187,7 +189,7 @@
                 {% else %}
                 <div class="form-text">Accepted formats: JPG, PNG, SVG.</div>
                 {% endif %}
-              </div>
+              </div> -->
 
               <!-- Next Review Date -->
               <div class="mb-4">

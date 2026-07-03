@@ -58,7 +58,7 @@ def item_details(item_id):
     """
     item = CollectionItem.get_by_id(item_id)
     if item is None:
-        abort(500)
+        abort(404)
 
 
     metadata = item
@@ -127,15 +127,10 @@ def request_access(item_id):
 
         try:
             AccessRequest.create(userID, item_id, requestReason, supportingDocuments)
-            CollectionItem.update_status(item_id, 4)  # Update item status to 'Pending' when a new access request is submitted
             flash('Your access request has been submitted', 'success')
         
-        except IntegrityError:
-            # Duplicate username/email broke a UNIQUE constraint, so undo the failed INSERT.
-            from project import mysql
-            mysql.connection.rollback()
-            flash("Database Integrity error.")
-
+        except IntegrityError as e:
+            handle_integrity_error(e)
         
         finally:
             return redirect(url_for('views.item_details', item_id=item_id))
@@ -147,7 +142,7 @@ def request_access(item_id):
 def collection_item_update(item_id):
     item = CollectionItem.get_by_id(item_id)
     if item is None:
-        abort(500)
+        abort(404)
 
     collections = Collection.get_all()
     collection_choices = [(str(c['collectionID']), c['collectionName']) for c in collections]
@@ -182,7 +177,7 @@ def collection_item_update(item_id):
     return render_template("collection-item-form.html", item=item, form=form)
 
 @views_bp.route('/items/<int:item_id>/delete', methods=['POST'])
-@role_required(1)         # Admin only # FIXME - getting 403 error METHOD NOT ALLOWED
+@role_required(1)         # Admin only 
 def collection_item_delete(item_id):
 
     
