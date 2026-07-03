@@ -127,13 +127,10 @@ def request_access(item_id):
 
         try:
             AccessRequest.create(userID, item_id, requestReason, supportingDocuments)
-            CollectionItem.update_status(item_id, 4)  # Update item status to 'Pending' when a new access request is submitted
             flash('Your access request has been submitted', 'success')
         
-        except IntegrityError:
-            from project import mysql
-            mysql.connection.rollback()
-            flash("Database Integrity error.")
+        except IntegrityError as e:
+            handle_integrity_error(e)
         
         finally:
             return redirect(url_for('views.item_details', item_id=item_id))
