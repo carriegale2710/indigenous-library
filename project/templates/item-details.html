@@ -25,6 +25,7 @@
         <div class="card item-card mb-4">
           <img
             src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
+            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
             alt="{{ item.title }}"
             class="item-thumbnail"
           />
@@ -266,6 +267,7 @@
               <div class="col-md-6 col-lg-4">
                 <div class="card h-100 catalogue-card">
                   <img src="{{ url_for('static', filename='assets/' ~ related_item.thumbnailPath) }}"
+                    onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
                     class="card-img-top catalogue-image" alt="{{ related_item.title }}" />
 
                   <div class="card-body">

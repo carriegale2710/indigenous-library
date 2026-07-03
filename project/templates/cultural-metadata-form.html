@@ -25,6 +25,7 @@
           {% if item.thumbnailPath %}
           <img
             src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
+            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
             alt="{{ item.title }}"
             class="item-thumbnail"
           />

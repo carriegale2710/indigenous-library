@@ -104,6 +104,7 @@
         <div class="library-image-card shadow-sm">
           <img
             src="static/assets/library.svg"
+            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
             alt="Academic Library"
             class="img-fluid library-image"
           />
@@ -165,6 +166,7 @@
         <div class="card h-100 catalogue-card">
           <img
             src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
+            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
             class="card-img-top catalogue-image" alt="{{ item.title }}"
           />
 
@@ -291,6 +293,7 @@
         <div class="library-image-card shadow-sm">
           <img
             src="static/assets/gallery.svg"
+            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
             alt="Gallery event space"
             class="img-fluid library-image"
           />

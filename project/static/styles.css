@@ -329,6 +329,9 @@ h3,
     height: 190px;
     object-fit: cover;
     background-color: var(--cream);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0,0,0,.05) 35px, rgba(0,0,0,.05) 70px);
+    background-size: 100% 100%, auto;
 }
 
 #access-process {
@@ -448,6 +451,9 @@ h3,
     height: 220px;
     object-fit: cover;
     background-color: var(--cream);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0,0,0,.05) 35px, rgba(0,0,0,.05) 70px);
+    background-size: 100% 100%, auto;
 }
 
 .status-open {
@@ -511,6 +517,9 @@ h3,
     height: auto;
     display: block;
     background-color: var(--cream);
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(0,0,0,.05) 35px, rgba(0,0,0,.05) 70px);
+    background-size: 100% 100%, auto;
 }
 
 .item-cultural-alert {
