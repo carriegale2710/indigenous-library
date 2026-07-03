@@ -1006,3 +1006,37 @@ h3,
 .request-form-actions {
     gap: 0.75rem;
 }
+
+.navbar-toggler i {
+  font-size: 1.5rem;
+}
+
+@media (max-width: 991.98px) {
+  .navbar .navbar-brand {
+    display: none !important;
+  }
+
+  .offcanvas {
+    width: 300px;
+  }
+
+  .offcanvas .dropdown-item {
+    padding-left: 0.5rem;
+  }
+
+  .accordion-button {
+    font-weight: 600;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .accordion-button:not(.collapsed) {
+    color: inherit;
+    background: transparent;
+  }
+
+  .accordion-body {
+    padding-top: 0.25rem;
+    padding-bottom: 0.5rem;
+  }
+}
