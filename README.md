@@ -32,8 +32,9 @@ tests/              Test suite
 
 ```
 
-## Project Overview
+---
 
+## Project Overview
 
 ### Main Pages
 
@@ -92,7 +93,7 @@ Restricted to authorized reviewers (Admin, Community Reviewer). View full item h
 
 ### CRUD Endpoints
 
-**Home & Browsing**
+#### **Home & Browsing**
 
 | Endpoint | Description | Access Level |
 |----------|-------------|--------------|
@@ -103,7 +104,7 @@ Restricted to authorized reviewers (Admin, Community Reviewer). View full item h
 | `/auth/login` | User login | Public |
 | `/auth/logout` | User logout | Logged-in |
 
-**Item Management**
+#### **Item Management**
 
 | Endpoint | Description | Access Level |
 |----------|-------------|--------------|
@@ -112,7 +113,7 @@ Restricted to authorized reviewers (Admin, Community Reviewer). View full item h
 | `/items/<id>/delete` | Delete item | Admin |
 | `/items/<id>/metadata` | Update cultural metadata | Reviewers, Admin |
 
-**Access Requests & Assessment**
+#### **Access Requests & Assessment**
 
 | Endpoint | Description | Access Level |
 |----------|-------------|--------------|
@@ -123,7 +124,8 @@ Restricted to authorized reviewers (Admin, Community Reviewer). View full item h
 
 ### Database Schema
 
-> See `database.sql`
+> See `database.sql` and [EER diagram](database/EER_diagram.pdf)
+> To run model tests, see [tests folder](tests/README.md)
 
 | Table | Primary Key | Foreign Keys | Purpose |
 |-------|-------------|--------------|---------|
@@ -137,12 +139,13 @@ Restricted to authorized reviewers (Admin, Community Reviewer). View full item h
 | **ReviewDecision** | decisionID | requestID → AccessRequest, reviewerID → User | Records reviewer decisions (Approved/Rejected) with reasoning and access conditions |
 | **CommunityComment** | commentID | requestID → AccessRequest, reviewerID → User | Stores discussion comments from reviewers during the assessment workflow |
 
-
 ---
 
 ## Local Setup
 
 ### 1. Install prerequisites
+
+> See [requirements](requirements.txt)
 
 Install these once before you set anything up:
 
@@ -155,7 +158,6 @@ Install these once before you set anything up:
 Clone the repository (GitHub Desktop: File, then Clone Repository, then choose Team01D), and check out the **main** branch. That branch holds the integrated, runnable app.
 
 > See 'How to clone this repo' under 'Other useful resources'
-
 
 ### 2. Create the database
 
@@ -174,7 +176,7 @@ From the repository root.
 
 **Windows (PowerShell):**
 
-```
+```bash
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
@@ -182,7 +184,7 @@ pip install -r requirements.txt
 
 **Mac or Linux:**
 
-```
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -195,35 +197,31 @@ pip install -r requirements.txt
 
 ### 5. Run the app
 
-```
+```bash
 python run.py
+
 ```
 
 Open the address it prints, usually `http://127.0.0.1:5000`.
 
 To stop the server, press `Ctrl + C` in the terminal.
 
-
-
 ### 6. Running the model test
 
 A quick check that the database connection and `User.create` work:
 
-```
+```bash
 python test_create_only.py
 ```
 
 or
 
-```
+```bash
 source .venv/bin/activate
 python test_create_only.py
 ```
 
 ---
-
----
-
 
 ## Other resources
 
@@ -235,7 +233,6 @@ You have two options:
 
 1. [Clone repo through your Visual Studio IDE (easier)](https://code.visualstudio.com/docs/sourcecontrol/repos-remotes)
 2. [Clone the repo via git on your terminal](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-
 
 ### Git/Github Basics
 
