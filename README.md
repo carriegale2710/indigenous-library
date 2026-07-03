@@ -223,7 +223,7 @@ python test_create_only.py
 
 ### 7. Access Admin/Community Reviewer/Library Staff accounts
 
-The registration feature defaults to makiing a public user account only. 
+The registration feature defaults to making a public user account only. 
 To access features with different role permissions, you can unhash passwords from user accounts in your local `database.sql` in MySQL Workbench.
 
 In MySQL Workbench:
@@ -235,7 +235,8 @@ In MySQL Workbench:
 
 ```sql
 UPDATE User 
-SET passwordHash = 'scrypt:32768:8:1$IHBREYqzuKD0jk4z$6d39174c27e44379d0991d57503aa991f0871fac6e7213feb9d913e723c9bdfd9bd81bbbcce46a583addc70d786d6230a00d08f7c6884ec7dd8f79e1b7e7e448' -- Hash for 'Pass1234'
+-- Hash for 'Pass1234'
+SET passwordHash = 'scrypt:32768:8:1$IHBREYqzuKD0jk4z$6d39174c27e44379d0991d57503aa991f0871fac6e7213feb9d913e723c9bdfd9bd81bbbcce46a583addc70d786d6230a00d08f7c6884ec7dd8f79e1b7e7e448' 
 WHERE userID > 0; -- all accounts in db, change to `WHERE userID = <int>` for specific user
 ```
 
