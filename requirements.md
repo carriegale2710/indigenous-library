@@ -14,20 +14,20 @@ You must include a home page, items details page, and item assessment page (rest
 
 Your home page must:
 
-- [ ] dynamically display collection items from the database
-- [ ] support search and filtering (e.g. by category, cultural group, access level, keyword)
-- [ ] handle empty result scenarios gracefully (e.g. 'No items found')
-- [ ] include a functional navigation bar and footer on all pages
+- [X] dynamically display collection items from the database
+- [X] support search and filtering (e.g. by category, cultural group, access level, keyword)
+- [X] handle empty result scenarios gracefully (e.g. 'No items found')
+- [X] include a functional navigation bar and footer on all pages
 - [ ] be fully responsive across desktop, tablet, and mobile devices.
 
 Collection items may include (but are not limited to):
 
-- [ ] Historical photographs
-- [ ] Audio recordings of oral histories
-- [ ] Archival manuscripts or documents
-- [ ] Artwork created by Indigenous artists
-- [ ] Cultural artefact records
-- [ ] Language preservation materials
+- [X] Historical photographs
+- [X] Audio recordings of oral histories
+- [X] Archival manuscripts or documents
+- [X] Artwork created by Indigenous artists
+- [X] Cultural artefact records
+- [X] Language preservation materials
 
 Each item must include appropriate cultural metadata such as cultural group, sensitivity notes, review status, and access level.
 
@@ -35,34 +35,34 @@ Each item must include appropriate cultural metadata such as cultural group, sen
 
 The item details page must display:
 
-- [ ] Title
-- [ ] Image (if applicable)
-- [ ] Description, including cultural metadata and access notes
-- [ ] Current access status (Public / Restricted / Under Review)
+- [X] Title
+- [X] Image (if applicable)
+- [X] Description, including cultural metadata and access notes
+- [X] Current access status (Public / Restricted / Culturally Sensitive)
 
 The page must:
 
-- [ ] allow Public Users to submit an access request for restricted items
-- [ ] validate all form inputs and provide clear feedback for invalid submissions
-- [ ] prevent unauthorised actions based on user role.
+- [x] allow Public Users to submit an access request for restricted items
+- [x] validate all form inputs and provide clear feedback for invalid submissions
+- [x] prevent unauthorised actions based on user role.
 
 Users must not be able to access restricted data by manipulating URLs.
 
 ### Item Assessment Page (Restricted aCcess)
 
-- [ ] Items must not change access status without a recorded review decision.
-- [ ] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
+- [x] Items must not change access status without a recorded review decision.
+- [x] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
 
 This page must:
 
-- [ ] be accessible only to authorised roles (e.g. Admin, Community Reviewer/Elder)
-- [ ] display full item metadata, including cultural notes and access history
+- [x] be accessible only to authorised roles (e.g. Admin, Community Reviewer/Elder)
+- [x] display full item metadata, including cultural notes and access history
 - [ ] allow authorised reviewers to add:
-- [ ] discussion comments
-- [ ] update cultural metadata
-- [ ] approve or reject access.
-- [ ] dynamically update the item’s access status in the database
-- [ ] record review decisions, reviewer identity, and timestamp for audit purposes.
+  - [x] discussion comments
+  - [x] update cultural metadata
+  - [ ] approve or reject access.
+  - [ ] dynamically update the item’s access status in the database
+  - [ ] record review decisions, reviewer identity, and timestamp for audit purposes.
 
 The system must implement the following workflow:
 

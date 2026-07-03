@@ -134,23 +134,22 @@ def save_review_decision(request_id):
         accessConditions = form.accessConditions.data
         ReviewDecision.create(request_id, reviewerID, decisionType, decisionNotes, accessConditions)
 
-        if 'approve' in decisionType:
+        if 'approve' in decisionType.lower():
             if accessConditions:
                 AccessRequest.update_status(request_id, 'Approved')  
                 CollectionItem.update_status(item_id, 1)  # NOTE - Update item status to 'Open' only if approved
+                flash('You have approved this request.', 'success')
                 return redirect(url_for('assessment.item_assessment', item_id=item_id))
             else:
                 flash('You must enter access conditions when approving access requests.', 'error') 
                 return render_template("review-decision-form.html", item=item, request=request, form=form) 
-        elif 'reject' in decisionType:
+        elif 'reject' in decisionType.lower():
             AccessRequest.update_status(request_id, 'Rejected') # Update status 
+            flash('You have rejected this request.', 'success')
             return redirect(url_for('assessment.item_assessment', item_id=item_id))
         else:
             flash('Your review decision could not be submitted. Please try again', 'error')
             abort(500)
-
-        flash('Your review decision has been submitted', 'success')
-        return redirect(url_for('assessment.item_assessment', item_id=item_id))
     
     return render_template("review-decision-form.html", item=item, request=request, form=form) 
 
