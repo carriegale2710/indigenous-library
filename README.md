@@ -1,4 +1,4 @@
-# Indigenous Cultural Collection Library 
+# Indigenous Cultural Collection Library
 
 ![Catalogue Page Mockup](mockups/catalogue-mockup.png)
 
@@ -34,113 +34,6 @@ tests/              Test suite
 
 ---
 
-## Project Overview
-
-### Main Pages
-
-#### Home/Catalogue Page
-
-Browse collection items with dynamic search and filtering by category, cultural group, and access level. Displays item titles, images, descriptions, and access status (Public/Restricted/Under Review).
-
-![Home to Catalogue Navigation and Search Filters](demo/home-catalogue-demo.gif)
-
-#### Item Details Page
-
-View full item metadata including cultural notes, description, and access status. Public users can submit access requests for restricted items. All forms include validation and error handling.
-
-![Item Details Page Demo](demo/item-details-demo.gif)
-
-#### Item Assessment Page
-
-Restricted to authorized reviewers (Admin, Community Reviewer). View full item history, add discussion comments, update cultural metadata, and approve/reject access requests. All decisions are recorded with reviewer identity and timestamp.
-
-![Item Assessment Page Demo](demo/item-assessment-demo.gif)
-
-
-### Main Features
-
-| Feature | Description |
-|---------|-------------|
-| **Browse & Search** | Dynamically display collection items with filtering by category, cultural group, and access level |
-| **Role-Based Access** | Admin, Community Reviewer, Library Staff, and Public User roles with enforced permissions |
-| **Access Requests** | Public users submit requests for restricted items; reviewers assess and approve/reject |
-| **Cultural Assessment Workflow** | Reviewers add comments, update metadata, and record decisions with audit trail |
-| **Item Management** | Full CRUD operations for collection items and metadata |
-| **Authentication** | Registration, login/logout with hashed passwords and session management |
-| **Responsive UI** | Bootstrap 5.3 with custom CSS across desktop, tablet, and mobile |
-| **Error Handling** | Custom error pages (404, 500) via error.html template |
-| **Database** | Pre-populated MySQL database with 15+ items, 6+ users, and review decisions |
-
-> See [requirements.md](requirements.md) for the complete assignment specification.
-
-### Access Request Workflow
-
-1. **Public User submits request** → Views restricted item and clicks "Request Access"
-2. **Item transitions** → Access status changes to "Under Review"
-3. **Reviewer assesses** → Community Reviewer/Admin reviews item and comments on cultural appropriateness
-4. **Decision recorded** → Reviewer approves or rejects with documented reasoning
-5. **Status updated** → Item access level changes to Public (approved) or remains Restricted (rejected)
-6. **Audit trail maintained** → All decisions stored in database with timestamp and reviewer details
-
-### Role Permissions
-
-| Role | Permissions |
-|------|-------------|
-| **Admin** | Full system access • Create/edit/delete items • Assign user roles • View & manage all requests • Approve/reject access • Modify metadata |
-| **Community Reviewer** | View items under review • Add discussion comments • Approve/reject access requests • Update cultural metadata • Cannot delete items or manage users |
-| **Library Staff** | Create & edit collection items • Upload images and metadata • View access requests • Cannot finalize decisions unless assigned reviewer role |
-| **Public User** | Browse public items • View item details • Submit access requests for restricted items • Cannot edit items or access assessment pages |
-
-### CRUD Endpoints
-
-#### **Home & Browsing**
-
-| Endpoint | Description | Access Level |
-|----------|-------------|--------------|
-| `/` | Home page with featured items | Public |
-| `/catalogue` | Browse all items with search and filtering by category, type, and status | Public |
-| `/access-privacy` | Access and privacy notice | Public |
-| `/auth/register` | User registration | Public |
-| `/auth/login` | User login | Public |
-| `/auth/logout` | User logout | Logged-in |
-
-#### **Item Management**
-
-| Endpoint | Description | Access Level |
-|----------|-------------|--------------|
-| `/item-details/<id>` | View item details and metadata | Public |
-| `/items/<id>/edit` | Edit item details | Admin, Library Staff |
-| `/items/<id>/delete` | Delete item | Admin |
-| `/items/<id>/metadata` | Update cultural metadata | Reviewers, Admin |
-
-#### **Access Requests & Assessment**
-
-| Endpoint | Description | Access Level |
-|----------|-------------|--------------|
-| `/items/<id>/request` | Submit access request for restricted items | Logged-in |
-| `/items/assessment/<id>` | View and assess item with pending requests | Reviewers, Admin, Library Staff |
-| `/items/assessment/<request_id>/comment` | Add discussion comment to request | Reviewers, Admin |
-| `/items/assessment/<request_id>/decision` | Record approval/rejection decision | Reviewers, Admin |
-
-### Database Schema
-
-> See `database.sql` and [EER diagram](database/EER_diagram.pdf)
-> To run model tests, see [tests folder](tests/README.md)
-
-| Table | Primary Key | Foreign Keys | Purpose |
-|-------|-------------|--------------|---------|
-| **Role** | roleID | — | Stores user roles (Admin, Community Reviewer, Library Staff, Public User) |
-| **User** | userID | roleID → Role | Stores user accounts with credentials, roles, and account status |
-| **Collection** | collectionID | — | Organizes collection items into themed groups (Languages, Oral History, Art, etc.) |
-| **CollectionItem** | itemID | collectionID → Collection, statusID → AccessStatus | Stores the main collection items with metadata like title, author, year, item type |
-| **AccessStatus** | statusID | — | Defines access levels (Open, Restricted, Culturally Sensitive) |
-| **CulturalMetadata** | metadataID | itemID → CollectionItem (1:1) | Stores cultural information for items (community group, language, sensitivity notes, protocols) |
-| **AccessRequest** | requestID | userID → User, itemID → CollectionItem | Records user requests for restricted item access with reason and supporting documents |
-| **ReviewDecision** | decisionID | requestID → AccessRequest, reviewerID → User | Records reviewer decisions (Approved/Rejected) with reasoning and access conditions |
-| **CommunityComment** | commentID | requestID → AccessRequest, reviewerID → User | Stores discussion comments from reviewers during the assessment workflow |
-
----
-
 ## Local Setup
 
 ### 1. Install prerequisites
@@ -156,8 +49,6 @@ Install these once before you set anything up:
 ### 2. Get the code
 
 Clone the repository (GitHub Desktop: File, then Clone Repository, then choose Team01D), and check out the **main** branch. That branch holds the integrated, runnable app.
-
-> See 'How to clone this repo' under 'Other useful resources'
 
 ### 2. Create the database
 
@@ -178,7 +69,7 @@ From the repository root.
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate
+.venv\Scripts\activate # or source .venv/Scripts/activate
 pip install -r requirements.txt
 ```
 
@@ -223,7 +114,7 @@ python test_create_only.py
 
 ### 7. Access Admin/Community Reviewer/Library Staff accounts
 
-The registration feature defaults to making a public user account only. 
+The registration feature defaults to making a public user account only.
 To access features with different role permissions, you can unhash passwords from user accounts in your local `database.sql` in MySQL Workbench.
 
 In MySQL Workbench:
@@ -234,9 +125,9 @@ In MySQL Workbench:
 4. Paste this UPDATE statement in (or run `unhash.sql`).
 
 ```sql
-UPDATE User 
+UPDATE User
 -- Hash for 'Pass1234'
-SET passwordHash = 'scrypt:32768:8:1$IHBREYqzuKD0jk4z$6d39174c27e44379d0991d57503aa991f0871fac6e7213feb9d913e723c9bdfd9bd81bbbcce46a583addc70d786d6230a00d08f7c6884ec7dd8f79e1b7e7e448' 
+SET passwordHash = 'scrypt:32768:8:1$IHBREYqzuKD0jk4z$6d39174c27e44379d0991d57503aa991f0871fac6e7213feb9d913e723c9bdfd9bd81bbbcce46a583addc70d786d6230a00d08f7c6884ec7dd8f79e1b7e7e448'
 WHERE userID > 0; -- all accounts in db, change to `WHERE userID = <int>` for specific user
 ```
 
@@ -246,32 +137,115 @@ WHERE userID > 0; -- all accounts in db, change to `WHERE userID = <int>` for sp
 
 ---
 
-## Other resources
+## Project Overview
 
-### How to clone this repo 
+### Main Pages
 
-> Note: You need to install/download git before this.
+#### Home/Catalogue Page
 
-You have two options:
+Browse collection items with dynamic search and filtering by category, cultural group, and access level. Displays item titles, images, descriptions, and access status (Public/Restricted/Under Review).
 
-1. [Clone repo through your Visual Studio IDE (easier)](https://code.visualstudio.com/docs/sourcecontrol/repos-remotes)
-2. [Clone the repo via git on your terminal](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
+![Home to Catalogue Navigation and Search Filters](demo/home-catalogue-demo.gif)
 
-### Git/Github Basics
+#### Item Details Page
 
-Useful online guides for getting started with Git and Github for version control.
+View full item metadata including cultural notes, description, and access status. Public users can submit access requests for restricted items. All forms include validation and error handling.
 
-[What is Github?](https://www.w3schools.com/whatis/whatis_github.asp)
-[Github beginner tutorial](https://docs.github.com/en/get-started/start-your-journey/hello-world)
-[Getting started with git](https://docs.github.com/en/get-started/learning-to-code/getting-started-with-git)
-[Set up Git](https://docs.github.com/en/get-started/git-basics/set-up-git)
-[Git cheat sheet](https://training.github.com/downloads/github-git-cheat-sheet/)
+![Item Details Page Demo](demo/item-details-demo.gif)
+
+#### Item Assessment Page
+
+Restricted to authorized reviewers (Admin, Community Reviewer). View full item history, add discussion comments, update cultural metadata, and approve/reject access requests. All decisions are recorded with reviewer identity and timestamp.
+
+![Item Assessment Page Demo](demo/item-assessment-demo.gif)
+
+### Main Features
+
+| Feature                          | Description                                                                                       |
+| -------------------------------- | ------------------------------------------------------------------------------------------------- |
+| **Browse & Search**              | Dynamically display collection items with filtering by category, cultural group, and access level |
+| **Role-Based Access**            | Admin, Community Reviewer, Library Staff, and Public User roles with enforced permissions         |
+| **Access Requests**              | Public users submit requests for restricted items; reviewers assess and approve/reject            |
+| **Cultural Assessment Workflow** | Reviewers add comments, update metadata, and record decisions with audit trail                    |
+| **Item Management**              | Full CRUD operations for collection items and metadata                                            |
+| **Authentication**               | Registration, login/logout with hashed passwords and session management                           |
+| **Responsive UI**                | Bootstrap 5.3 with custom CSS across desktop, tablet, and mobile                                  |
+| **Error Handling**               | Custom error pages (404, 500) via error.html template                                             |
+| **Database**                     | Pre-populated MySQL database with 15+ items, 6+ users, and review decisions                       |
+
+> See [requirements.md](requirements.md) for the complete assignment specification.
+
+### Access Request Workflow
+
+1. **Public User submits request** → Views restricted item and clicks "Request Access"
+2. **Item transitions** → Access status changes to "Under Review"
+3. **Reviewer assesses** → Community Reviewer/Admin reviews item and comments on cultural appropriateness
+4. **Decision recorded** → Reviewer approves or rejects with documented reasoning
+5. **Status updated** → Item access level changes to Public (approved) or remains Restricted (rejected)
+6. **Audit trail maintained** → All decisions stored in database with timestamp and reviewer details
+
+### Role Permissions
+
+| Role                   | Permissions                                                                                                                                         |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Admin**              | Full system access • Create/edit/delete items • Assign user roles • View & manage all requests • Approve/reject access • Modify metadata            |
+| **Community Reviewer** | View items under review • Add discussion comments • Approve/reject access requests • Update cultural metadata • Cannot delete items or manage users |
+| **Library Staff**      | Create & edit collection items • Upload images and metadata • View access requests • Cannot finalize decisions unless assigned reviewer role        |
+| **Public User**        | Browse public items • View item details • Submit access requests for restricted items • Cannot edit items or access assessment pages                |
+
+### CRUD Endpoints
+
+#### **Home & Browsing**
+
+| Endpoint          | Description                                                              | Access Level |
+| ----------------- | ------------------------------------------------------------------------ | ------------ |
+| `/`               | Home page with featured items                                            | Public       |
+| `/catalogue`      | Browse all items with search and filtering by category, type, and status | Public       |
+| `/access-privacy` | Access and privacy notice                                                | Public       |
+| `/auth/register`  | User registration                                                        | Public       |
+| `/auth/login`     | User login                                                               | Public       |
+| `/auth/logout`    | User logout                                                              | Logged-in    |
+
+#### **Item Management**
+
+| Endpoint               | Description                    | Access Level         |
+| ---------------------- | ------------------------------ | -------------------- |
+| `/item-details/<id>`   | View item details and metadata | Public               |
+| `/items/<id>/edit`     | Edit item details              | Admin, Library Staff |
+| `/items/<id>/delete`   | Delete item                    | Admin                |
+| `/items/<id>/metadata` | Update cultural metadata       | Reviewers, Admin     |
+
+#### **Access Requests & Assessment**
+
+| Endpoint                                  | Description                                | Access Level                    |
+| ----------------------------------------- | ------------------------------------------ | ------------------------------- |
+| `/items/<id>/request`                     | Submit access request for restricted items | Logged-in                       |
+| `/items/assessment/<id>`                  | View and assess item with pending requests | Reviewers, Admin, Library Staff |
+| `/items/assessment/<request_id>/comment`  | Add discussion comment to request          | Reviewers, Admin                |
+| `/items/assessment/<request_id>/decision` | Record approval/rejection decision         | Reviewers, Admin                |
+
+### Database Schema
+
+> See `database.sql` and [EER diagram](database/EER_diagram.pdf)
+> To run model tests, see [tests folder](tests/README.md)
+
+| Table                | Primary Key  | Foreign Keys                                       | Purpose                                                                                         |
+| -------------------- | ------------ | -------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Role**             | roleID       | —                                                  | Stores user roles (Admin, Community Reviewer, Library Staff, Public User)                       |
+| **User**             | userID       | roleID → Role                                      | Stores user accounts with credentials, roles, and account status                                |
+| **Collection**       | collectionID | —                                                  | Organizes collection items into themed groups (Languages, Oral History, Art, etc.)              |
+| **CollectionItem**   | itemID       | collectionID → Collection, statusID → AccessStatus | Stores the main collection items with metadata like title, author, year, item type              |
+| **AccessStatus**     | statusID     | —                                                  | Defines access levels (Open, Restricted, Culturally Sensitive)                                  |
+| **CulturalMetadata** | metadataID   | itemID → CollectionItem (1:1)                      | Stores cultural information for items (community group, language, sensitivity notes, protocols) |
+| **AccessRequest**    | requestID    | userID → User, itemID → CollectionItem             | Records user requests for restricted item access with reason and supporting documents           |
+| **ReviewDecision**   | decisionID   | requestID → AccessRequest, reviewerID → User       | Records reviewer decisions (Approved/Rejected) with reasoning and access conditions             |
+| **CommunityComment** | commentID    | requestID → AccessRequest, reviewerID → User       | Stores discussion comments from reviewers during the assessment workflow                        |
 
 ## Team Contribution
 
 Thanks to the team:
 
-Model layer - Daniel Green, Brad Jackson 
+Model layer - Daniel Green, Brad Jackson
 View layer - Lona Ulsame, Carrie Gale
 Controller layer - Carrie Gale, Rebecca Llewelyn
 
