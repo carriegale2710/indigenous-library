@@ -2,7 +2,7 @@
 
 ![Catalogue Page Mockup](mockups/catalogue-mockup.png)
 
-> Submitted for IFQ582 Assignment 2 (Team01D) on 3rd July 2026.
+[View Live Demo](https://indigenous-library-ov0s.onrender.com/)
 
 A Flask web application for an Indigenous Academic Library. Users can browse a catalogue of collection items, view cultural metadata, submit access requests for restricted items, and review those requests through a cultural assessment workflow. Built with Flask (MVC structure), MySQL, session-based authentication, WTForms and Bootstrap 5. Backed by a MySQL database (database `ifq582_a2`).
 
