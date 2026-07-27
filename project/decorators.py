@@ -6,9 +6,8 @@ IFQ582 Decorators - Role-based Permissions for the Indigenous Collections System
 or Flask-Login session-based role checks
 - Unauthorised access attempts must be handled gracefully (e.g., redirect to login or show an
 appropriate error page)
-- Do not use Flask-Admin. 
+- Does not use Flask-Admin. 
 """
-
 
 from functools import wraps
 from flask import abort, redirect, url_for, g, flash, request

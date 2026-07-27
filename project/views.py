@@ -190,14 +190,11 @@ def collection_item_delete(item_id):
 
     return redirect(url_for('views.home'))
 
-# CollectionItem.create — OUT OF SCOPE for MVP.
-# Assumption: all catalogue items pre-exist in the database for MVP demo purposes
-# Phase 2: Admin and Library Staff would use CollectionItemForm to add new items directly
-# from the routes layer. The model method (CollectionItem.create) already exists
-# and defaults new items to statusID 4 (Pending) — this aligns with CARE's
-# Authority to Control, ensuring no item is publicly visible/classified until
-# a Community Elder has reviewed and set its access status.
-
+# NOTE - CollectionItem.create — OUT OF SCOPE for MVP.
+    # Assumption: all catalogue items pre-exist in the database for MVP demo purposes  
+    # Phase 2: Admin and Library Staff would use CollectionItemForm to add new items directly from the routes layer. 
+    # The model method (CollectionItem.create) already exists and defaults new items to statusID 4 (Pending) — this aligns with CARE's Authority to Control, 
+    # ensuring no item is publicly visible/classified until a Community Elder has reviewed and set its access status.
 
 # ---------------------------------------------------------
 # Error Handlers

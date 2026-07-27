@@ -1,7 +1,6 @@
 <!-- Submitted by LU - Login Page - Jinja version -->
-{% extends "base_template.html" %} 
-{% block title %}Login{% endblock %} 
-{% block content %}
+{% extends "base_template.html" %} {% block title %}Login{% endblock %} {% block
+content %}
 
 <!-- Login Header -->
 <header class="login-page-header py-5">
@@ -20,7 +19,6 @@
 <main class="login-area py-5">
   <div class="container px-4">
     <div class="row g-4 align-items-stretch">
-
       <!-- Login Form -->
       <div class="col-lg-6">
         <div class="card login-card h-100">
@@ -36,11 +34,16 @@
             <form action="{{ url_for('auth.login') }}" method="POST" novalidate>
               <!-- CSRF token / hidden field  -->
               {{ form.hidden_tag() }}
-              <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+              <input
+                type="hidden"
+                name="next"
+                value="{{ request.args.get('next', '') }}"
+              />
 
               <div class="mb-3">
-                {{ form.email.label(class="form-label fw-semibold") }} 
-                {{ form.email(class="form-control", placeholder="Enter your email address") }} 
+                {{ form.email.label(class="form-label fw-semibold") }} {{
+                form.email(class="form-control", placeholder="Enter your email
+                address") }}
                 <div class="form-text">
                   Use the email address linked to your library account.
                 </div>
@@ -50,9 +53,9 @@
               </div>
 
               <div class="mb-3">
-                {{ form.password.label(class="form-label fw-semibold")}} 
-                {{form.password(class="form-control", placeholder="Enter your password") }} 
-                {% for error in form.password.errors %}
+                {{ form.password.label(class="form-label fw-semibold")}}
+                {{form.password(class="form-control", placeholder="Enter your
+                password") }} {% for error in form.password.errors %}
                 <div class="text-danger">{{ error }}</div>
                 {% endfor %}
               </div>
@@ -81,6 +84,23 @@
                 depends on the user role assigned to the account.
               </p>
             </form>
+          </div>
+          <hr class="my-4" />
+          <div class="card-body p-4 p-md-5">
+            <p class="section-label">Just browsing?</p>
+            <p class="text-muted small mb-2">
+              Explore the full admin experience without creating an account.
+            </p>
+            <a
+              href="{{ url_for('auth.demo_login') }}"
+              class="btn btn-outline-primary w-100"
+            >
+              Try Demo as Admin
+            </a>
+            <p class="text-muted small mt-2 mb-0">
+              Note: This is a shared demo account. Changes reset automatically
+              every few minutes.
+            </p>
           </div>
         </div>
       </div>
