@@ -47,7 +47,7 @@ with app.app_context():
     check.execute("SELECT title FROM CollectionItem WHERE itemID = %s", (1,))
     restored_title = check.fetchone()["title"]
     check.close()
-    assert restored_title == "Recordings of Meriam Mir Speakers", "title should be back to seed value"
+    assert restored_title == "Kalaw Lagaw Ya Dictionary", "title should be back to seed value"
     print("3. CollectionItem 1 title restored -", restored_title)
 
     # 4. The junk user should be gone ------------------------------------------
