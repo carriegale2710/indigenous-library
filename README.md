@@ -205,6 +205,13 @@ Restricted to authorized reviewers (Admin, Community Reviewer). View full item h
 | `/items/assessment/<request_id>/comment`  | Add discussion comment to request          | Reviewers, Admin                |
 | `/items/assessment/<request_id>/decision` | Record approval/rejection decision         | Reviewers, Admin                |
 
+#### **Demo-Only Endpoints**
+
+| Endpoint            | Description                                                            | Access Level                      |
+| ------------------- | ---------------------------------------------------------------------- | --------------------------------- |
+| `/auth/demo-login`  | One-click login as the shared demo admin account, no password required | Public                            |
+| `/admin/reset-demo` | Truncates and reseeds demo-writable tables back to the original state  | Secret key (`X-Reset-Key` header) |
+
 ### Database Schema
 
 > See `database.sql` and [EER diagram](database/EER_diagram.pdf)
@@ -243,8 +250,8 @@ project/            Main application package
   forms.py          WTForms form classes
   assessment.py     Cultural assessment workflow logic
   decorators.py     Custom decorators for authentication and authorization
-  reset.py          Truncates and reseeds demo-writable tables (for demo only)
-  maintenance.py    Secret-protected /admin/reset-demo endpoint (for demo only)
+  reset.py          Truncates and reseeds demo-writable tables (demo only)
+  maintenance.py    Secret-protected /admin/reset-demo endpoint (demo only)
   templates/        Jinja templates
   static/           CSS and images
     styles.css
@@ -258,9 +265,10 @@ tests/              Test suite
 
 Thanks to the team:
 
-Model layer - Daniel Green, Brad Jackson
-View layer - Lona Ulsame, Carrie Gale
-Controller layer - Carrie Gale, Rebecca Llewelyn
+- Model layer - Daniel Green, Brad Jackson
+- View layer - Lona Ulsame, Carrie Gale
+- Controller layer - Carrie Gale, Rebecca Llewelyn
+- Demo Deployment - Carrie Gale
 
 ## License
 
