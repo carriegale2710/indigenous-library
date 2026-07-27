@@ -9,7 +9,7 @@ This follows the app-factory pattern shown in the unit's Milton Tours example.
 """
 from dotenv import load_dotenv
 import os
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_mysqldb import MySQL
 
 load_dotenv()         # for env variables
@@ -26,10 +26,18 @@ def create_app():
     app.config["MYSQL_DB"] = _db()
     app.config["MYSQL_CURSORCLASS"] = "DictCursor"   # rows come back as dicts, e.g. row["title"]
     app.config["MYSQL_SSL_CA"] = "../../ca.pem"
+    app.config["SECRET_KEY"] = "dev-secret-key"
 
     mysql.init_app(app)
 
-    app.config["SECRET_KEY"] = "dev-secret-key"
+    # load favicon from assets - Some browsers/crawlers request /favicon.ico directly instead of using the <link> tag.
+    @app.route('/favicon.ico') 
+    def favicon():
+        return send_from_directory(
+            os.path.join(app.root_path, 'static', 'favicon'),
+            'favicon.ico',
+            mimetype='image/vnd.microsoft.icon'
+        )
 
     from project.views import views_bp
     app.register_blueprint(views_bp)

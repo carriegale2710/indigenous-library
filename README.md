@@ -1,3 +1,5 @@
+<img src="project/static/assets/logo.svg" alt="logo" width="250"/>
+
 # Indigenous Cultural Collection Library
 
 A Flask web application for managing culturally-sensitive Indigenous artefacts within an Academic Library Collection. Built with Flask (MVC structure), MySQL, session-based authentication, WTForms and Bootstrap 5. Demo deployed with Render (front-end) and Avien (back-end).
