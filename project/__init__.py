@@ -26,7 +26,7 @@ def create_app():
     app.config["MYSQL_DB"] = _db()
     app.config["MYSQL_CURSORCLASS"] = "DictCursor"   # rows come back as dicts, e.g. row["title"]
     app.config["MYSQL_SSL_CA"] = "../../ca.pem"
-    app.config["SECRET_KEY"] = "dev-secret-key"
+    app.config["SECRET_KEY"] = os.environ["SECRET_KEY"]
 
     mysql.init_app(app)
 
