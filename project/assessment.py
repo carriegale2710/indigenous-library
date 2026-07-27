@@ -1,30 +1,8 @@
 """
 ITEM ASSESSSMENT PAGE
 
-Displays full item metadata and features for item assessment, community comments, access requests and review decisions between authorised users. Restricted Access.
-
-This page must:
-
-- [X] be accessible only to authorised roles (e.g. Admin, Community Reviewer/Elder)
-- [X] display full item metadata, including cultural notes and access history
-- [X] allow authorised reviewers to add:
-    - [X] discussion comments
-    - [X] update cultural metadata
-    - [X] approve or reject access.
-    - [X] dynamically update the item’s access status in the database
-- [X] record review decisions, reviewer identity, and timestamp for audit purposes.
-
-The system must implement the following workflow:
-
-1. [X] A Public User submits an access request.
-2. [X] The item may transition to 'Under Review'.
-3. [X] A Community Reviewer or Admin records a decision (Approved/Rejected).
-4. [X] The item’s access status is updated accordingly.
-5. [X] All decisions are stored in the database.
-
-Check:
-- [X] Items must not change access status without a recorded review decision.
-- [X] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
+Displays full item metadata and features for item assessment, community comments, access requests and review decisions between authorised users. 
+Restricted Access.
 
 """
 from flask import Blueprint, render_template, redirect, flash, url_for, abort, session, g
