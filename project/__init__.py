@@ -40,6 +40,9 @@ def create_app():
     from project.assessment import assessment_bp
     app.register_blueprint(assessment_bp)
 
+    from project.maintenance import maintenance_bp
+    app.register_blueprint(maintenance_bp)
+
     return app
 
 

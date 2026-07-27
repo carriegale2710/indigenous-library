@@ -1,38 +1,19 @@
 # Indigenous Cultural Collection Library
 
-![Catalogue Page Mockup](mockups/catalogue-mockup.png)
+A Flask web application for managing culturally-sensitive Indigenous artefacts within an Academic Library Collection. Built with Flask (MVC structure), MySQL, session-based authentication, WTForms and Bootstrap 5. Demo deployed with Render (front-end) and Avien (back-end).
 
-[View Live Demo](https://indigenous-library-ov0s.onrender.com/)
+**_Main Features:_** Public users can browse a catalogue of collection items and submit access requests for restricted items. Only authorised users can review those requests through a cultural assessment workflow or view/edit cultural metadata for all items.
 
-A Flask web application for an Indigenous Academic Library. Users can browse a catalogue of collection items, view cultural metadata, submit access requests for restricted items, and review those requests through a cultural assessment workflow. Built with Flask (MVC structure), MySQL, session-based authentication, WTForms and Bootstrap 5. Backed by a MySQL database (database `ifq582_a2`).
+## Demo Mode
 
-## Project layout
+> [**View Live Demo** ↗️](https://indigenous-library-ov0s.onrender.com/)
 
-```
-run.py              App entry point
-requirements.txt    Python packages the app needs
-database.sql        MySQL build script (run this in Workbench)
-config.example.py   Template for your local MySQL password
-config.py           Your real password (gitignored, never pushed)
+- **Try it**: click **"Try Demo as Admin"** on the [login page](https://indigenous-library-ov0s.onrender.com/auth/login) — no password required.
+- **What you get**: full Admin access (roleID 1) — create/edit/delete collection items, manage access requests, everything a real Admin can do.
+- **Data resets automatically**: since this is a shared account, all data resets to its original seed state every 10 minutes via a scheduled GitHub Action. Don't be surprised if your changes disappear shortly after — that's expected, not a bug.
+- **Why**: this is a live public deployment, not a sandboxed per-visitor environment, so resets keep the demo clean for the next person and prevent the database from accumulating spam/junk input over time.
 
-project/            Main application package
-  __init__.py       create_app() and the shared mysql object
-  model.py          Data model: classes and data-access methods
-  views.py          Page routes (home, catalogue, item details, and so on)
-  auth.py           Register, login, logout
-  forms.py          WTForms form classes
-  assessment.py     Cultural assessment workflow logic
-  decorators.py     Custom decorators for authentication and authorization
-  templates/        Jinja templates
-  static/           CSS and images
-    styles.css
-    assets/
-
-tests/              Test suite
-
-```
-
----
+Implementation: [`project/reset.py`](project/reset.py) truncates and reseeds demo-writable tables, exposed via a secret-protected endpoint in [`project/maintenance.py`](project/maintenance.py), triggered on a schedule by [`.github/workflows/reset-demo.yml`](.github/workflows/reset-demo.yml).
 
 ## Local Setup
 
@@ -240,6 +221,38 @@ Restricted to authorized reviewers (Admin, Community Reviewer). View full item h
 | **AccessRequest**    | requestID    | userID → User, itemID → CollectionItem             | Records user requests for restricted item access with reason and supporting documents           |
 | **ReviewDecision**   | decisionID   | requestID → AccessRequest, reviewerID → User       | Records reviewer decisions (Approved/Rejected) with reasoning and access conditions             |
 | **CommunityComment** | commentID    | requestID → AccessRequest, reviewerID → User       | Stores discussion comments from reviewers during the assessment workflow                        |
+
+## Project layout
+
+```
+run.py              App entry point
+requirements.txt    Python packages the app needs
+database.sql        MySQL build script (run this in Workbench)
+config.example.py   Template for your local MySQL password
+config.py           Your real password (gitignored, never pushed)
+
+.github/
+  workflows/
+    reset-demo.yml  Scheduled job that triggers the demo data reset
+
+project/            Main application package
+  __init__.py       create_app() and the shared mysql object
+  model.py          Data model: classes and data-access methods
+  views.py          Page routes (home, catalogue, item details, and so on)
+  auth.py           Register, login, logout, demo admin login
+  forms.py          WTForms form classes
+  assessment.py     Cultural assessment workflow logic
+  decorators.py     Custom decorators for authentication and authorization
+  reset.py          Truncates and reseeds demo-writable tables (for demo only)
+  maintenance.py    Secret-protected /admin/reset-demo endpoint (for demo only)
+  templates/        Jinja templates
+  static/           CSS and images
+    styles.css
+    assets/
+
+tests/              Test suite
+
+```
 
 ## Team Contribution
 

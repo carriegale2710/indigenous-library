@@ -46,22 +46,27 @@ For a single broad check, `python -m tests.test_model_final` runs the nine metho
 
 ## What each test covers
 
-| Test file | Method(s) it checks | Touches data? |
-|-----------|--------------------|----------------|
-| `test_get_all.py` | `CollectionItem.get_all` | Reads only |
-| `test_get_by_id.py` | `CollectionItem.get_by_id` | Reads only |
-| `test_get_by_item.py` | `CulturalMetadata.get_by_item` | Reads only |
-| `test_comment_by_request.py` | `CommunityComment.get_by_request` | Reads only |
-| `test_list_pending.py` | `AccessRequest.list_pending` | Reads only |
-| `test_update_status.py` | `AccessRequest.update_status` | Writes, then restores |
-| `test_item_update_status.py` | `CollectionItem.update_status` | Writes, then restores |
-| `test_metadata_create.py` | `CulturalMetadata.create`, `get_by_item` | Writes, then cleans up |
-| `test_metadata_update.py` | `CulturalMetadata.create`, `update`, `get_by_item` | Writes, then cleans up |
-| `test_add_comment.py` | `CommunityComment.add_comment` | Writes, then deletes the row |
-| `test_review_decision_create.py` | `ReviewDecision.create` | Writes, then deletes the row |
-| `test_access_request.py` | `AccessRequest.create` | Writes and **leaves the row** |
-| `test_create_only.py` | `User.create`, `User.get_by_username` | Writes and **leaves the row** |
-| `test_model_final.py` | The nine final methods: `AccessRequest` (`list_pending`, `update_status`, `get_by_id`, `get_by_user`), `CollectionItem` (`update_status`, `create`, `update`, `delete`), `ReviewDecision.get_by_request` | Writes, then restores and deletes its own throwaway item |
+| Test file                        | Method(s) it checks                                                                                                                                                                                      | Touches data?                                               |
+| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `test_get_all.py`                | `CollectionItem.get_all`                                                                                                                                                                                 | Reads only                                                  |
+| `test_get_by_id.py`              | `CollectionItem.get_by_id`                                                                                                                                                                               | Reads only                                                  |
+| `test_get_by_item.py`            | `CulturalMetadata.get_by_item`                                                                                                                                                                           | Reads only                                                  |
+| `test_comment_by_request.py`     | `CommunityComment.get_by_request`                                                                                                                                                                        | Reads only                                                  |
+| `test_list_pending.py`           | `AccessRequest.list_pending`                                                                                                                                                                             | Reads only                                                  |
+| `test_update_status.py`          | `AccessRequest.update_status`                                                                                                                                                                            | Writes, then restores                                       |
+| `test_item_update_status.py`     | `CollectionItem.update_status`                                                                                                                                                                           | Writes, then restores                                       |
+| `test_metadata_create.py`        | `CulturalMetadata.create`, `get_by_item`                                                                                                                                                                 | Writes, then cleans up                                      |
+| `test_metadata_update.py`        | `CulturalMetadata.create`, `update`, `get_by_item`                                                                                                                                                       | Writes, then cleans up                                      |
+| `test_add_comment.py`            | `CommunityComment.add_comment`                                                                                                                                                                           | Writes, then deletes the row                                |
+| `test_review_decision_create.py` | `ReviewDecision.create`                                                                                                                                                                                  | Writes, then deletes the row                                |
+| `test_access_request.py`         | `AccessRequest.create`                                                                                                                                                                                   | Writes and **leaves the row**                               |
+| `test_create_only.py`            | `User.create`, `User.get_by_username`                                                                                                                                                                    | Writes and **leaves the row**                               |
+| `test_model_final.py`            | The nine final methods: `AccessRequest` (`list_pending`, `update_status`, `get_by_id`, `get_by_user`), `CollectionItem` (`update_status`, `create`, `update`, `delete`), `ReviewDecision.get_by_request` | Writes, then restores and deletes its own throwaway item    |
+| `test_reset_demo.py`             | `reset_demo_data` (`project/reset.py`), `/admin/reset-demo` route (`project/maintenance.py`)                                                                                                             | Deliberately breaks data, then the reset itself restores it |
+
+## A note on `test_reset_demo.py`
+
+This one sets its own `RESET_SECRET` environment variable at the top of the script, so you don't need to add anything to `config.py` or `.env` to run it locally. It's the only test that hits a route (`/admin/reset-demo`) via `app.test_client()` rather than calling a model method directly. Everything else about how you run it is the same as the rest of the suite.
 
 ## A note on the seed data
 

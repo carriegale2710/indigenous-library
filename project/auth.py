@@ -109,6 +109,47 @@ def login():
 
     return render_template('auth/login.html', form=form) 
 
+# Add this route to project/auth.py, anywhere inside the auth_bp blueprint
+# (e.g. directly below the existing login() route).
+#
+# It logs the visitor in as the seeded demo admin account ('smitchell',
+# userID 1, roleID 1) with no password required. This account's data is
+# restored on a short cycle by the scheduled reset (see
+# .github/workflows/reset-demo.yml), so nothing a visitor does here sticks
+# around for long.
+
+@auth_bp.route('/demo-login')
+def demo_login():
+    """
+    One-click login as the shared demo admin account, for portfolio visitors.
+
+    Deliberately requires no password: it's meant to be a visible, obvious
+    "try the full admin experience" button, not a real account. Session
+    behaves identically to a normal login (same keys, same g.user wiring
+    via load_logged_in_user), so every @role_required(1) route just works.
+    """
+    user = User.get_by_username('smitchell')
+
+    if user is None or user['accountStatus'] != 'active':
+        flash("Demo login is temporarily unavailable.", "danger")
+        return redirect(url_for('auth.login'))
+
+    session.clear()
+    session['userID'] = user['userID']
+    session['roleID'] = user['roleID']
+    session['fullName'] = user['fullName']
+    session['full_name'] = user['fullName']
+    session['username'] = user['username']
+    session['email'] = user['email']
+    session['is_demo'] = True  # lets templates show a "you're in demo mode" banner
+
+    flash(
+        "You're browsing as the demo admin account. Changes reset automatically "
+        "every few minutes, so feel free to explore freely.",
+        "info"
+    )
+    return redirect(url_for('views.catalogue'))
+
 @auth_bp.before_app_request 
 def load_logged_in_user():
     """
