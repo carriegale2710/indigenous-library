@@ -23,11 +23,11 @@ jobs:
 
       - name: Ping Aiven MySQL
         env:
-          MYSQL_HOST: ${{ secrets.AIVEN_MYSQL_HOST }}
-          MYSQL_PORT: ${{ secrets.AIVEN_MYSQL_PORT }}
-          MYSQL_USER: ${{ secrets.AIVEN_MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.AIVEN_MYSQL_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.AIVEN_MYSQL_DATABASE }}
+          MYSQL_HOST: ${{ secrets.MYSQL_HOST }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DB }}
+          MYSQL_PORT: ${{ secrets.MYSQL_PORT }}
         run: |
           mysql --host="$MYSQL_HOST" \
                 --port="$MYSQL_PORT" \
