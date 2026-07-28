@@ -2,7 +2,7 @@
 -- IFQ582 Assignment 2  |  "League of Legends" group (Group 1D)
 -- Indigenous Cultural Collection database
 -- Build script for MySQL Workbench (MySQL 8.x)
---- =====================================================================
+-- =====================================================================
 
 DROP DATABASE IF EXISTS ifq582_a2;
 CREATE DATABASE ifq582_a2
