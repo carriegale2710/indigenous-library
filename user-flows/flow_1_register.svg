@@ -1,0 +1,80 @@
+<svg width="310" height="660" viewBox="0 0 310 660" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <!-- Title -->
+  <text x="155" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#4A3060">Register an account</text>
+
+  <!-- Legend -->
+  <rect x="10" y="36" width="290" height="26" rx="5" fill="#F5F3F9" stroke="#C4B8DC" stroke-width="0.5"/>
+  <rect x="18" y="43" width="10" height="10" rx="2" fill="#888780"/>
+  <text x="32" y="52" font-size="10" fill="#444441">ALL / public</text>
+  <rect x="100" y="43" width="10" height="10" rx="2" fill="#EF9F27"/>
+  <text x="114" y="52" font-size="10" fill="#444441">System</text>
+  <rect x="168" y="43" width="10" height="10" rx="2" fill="#185FA5"/>
+  <text x="182" y="52" font-size="10" fill="#444441">ADM</text>
+
+  <!-- START -->
+  <rect x="55" y="76" width="200" height="34" rx="17" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="155" y="97" text-anchor="middle" font-size="12" font-weight="600" fill="#2C2C2A">User visits /register</text>
+
+  <line x1="155" y1="110" x2="155" y2="132" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Form -->
+  <rect x="52" y="132" width="206" height="48" rx="8" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="155" y="151" text-anchor="middle" font-size="12" font-weight="600" fill="#2C2C2A">Complete form</text>
+  <text x="155" y="169" text-anchor="middle" font-size="11" fill="#5F5E5A">Name, email, password</text>
+
+  <line x1="155" y1="180" x2="155" y2="202" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Validation -->
+  <rect x="52" y="202" width="206" height="48" rx="8" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="155" y="221" text-anchor="middle" font-size="12" font-weight="600" fill="#633806">System validates</text>
+  <text x="155" y="239" text-anchor="middle" font-size="11" fill="#854F0B">Format, unique email</text>
+
+  <line x1="155" y1="250" x2="155" y2="272" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Diamond -->
+  <polygon points="155,272 205,300 155,328 105,300" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="155" y="304" text-anchor="middle" font-size="11" fill="#2C2C2A">Valid?</text>
+
+  <!-- No branch -->
+  <line x1="205" y1="300" x2="248" y2="300" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+  <rect x="248" y="278" width="52" height="44" rx="6" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="274" y="296" text-anchor="middle" font-size="10" font-weight="600" fill="#2C2C2A">Show</text>
+  <text x="274" y="310" text-anchor="middle" font-size="10" fill="#5F5E5A">error</text>
+  <path d="M274 278 L274 258 L218 258" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="3 2" marker-end="url(#arr)"/>
+  <text x="228" y="268" font-size="9" fill="#5F5E5A">No</text>
+
+  <!-- Yes -->
+  <text x="130" y="340" text-anchor="middle" font-size="10" fill="#5F5E5A">Yes</text>
+  <line x1="155" y1="328" x2="155" y2="350" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Password hashed -->
+  <rect x="52" y="350" width="206" height="48" rx="8" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="155" y="369" text-anchor="middle" font-size="12" font-weight="600" fill="#633806">Password hashed</text>
+  <text x="155" y="387" text-anchor="middle" font-size="11" fill="#854F0B">Stored in User table</text>
+
+  <line x1="155" y1="398" x2="155" y2="420" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Role assigned -->
+  <rect x="52" y="420" width="206" height="48" rx="8" fill="#B5D4F4" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="155" y="439" text-anchor="middle" font-size="12" font-weight="600" fill="#0C447C">Role assigned</text>
+  <text x="155" y="457" text-anchor="middle" font-size="11" fill="#185FA5">Default: Public User</text>
+
+  <line x1="155" y1="468" x2="155" y2="490" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Session -->
+  <rect x="52" y="490" width="206" height="36" rx="8" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="155" y="512" text-anchor="middle" font-size="12" font-weight="600" fill="#633806">Session created</text>
+
+  <line x1="155" y1="526" x2="155" y2="548" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- END -->
+  <rect x="55" y="548" width="200" height="34" rx="17" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="155" y="569" text-anchor="middle" font-size="12" font-weight="600" fill="#2C2C2A">Redirected to home</text>
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+</svg>

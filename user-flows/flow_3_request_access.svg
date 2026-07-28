@@ -1,0 +1,121 @@
+<svg width="520" height="820" viewBox="0 0 520 820" xmlns="http://www.w3.org/2000/svg" font-family="Arial, sans-serif">
+
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="#888780" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="260" y="24" text-anchor="middle" font-size="14" font-weight="600" fill="#4A3060">Request access to a restricted item</text>
+
+  <!-- Legend -->
+  <rect x="10" y="36" width="500" height="26" rx="5" fill="#F5F3F9" stroke="#C4B8DC" stroke-width="0.5"/>
+  <rect x="18" y="43" width="10" height="10" rx="2" fill="#888780"/>
+  <text x="32" y="52" font-size="10" fill="#444441">ALL / public</text>
+  <rect x="110" y="43" width="10" height="10" rx="2" fill="#7B5EA7"/>
+  <text x="124" y="52" font-size="10" fill="#444441">CE / ADM</text>
+  <rect x="200" y="43" width="10" height="10" rx="2" fill="#EF9F27"/>
+  <text x="214" y="52" font-size="10" fill="#444441">System</text>
+  <rect x="278" y="43" width="10" height="10" rx="2" fill="#1D9E75"/>
+  <text x="292" y="52" font-size="10" fill="#444441">Approved outcome</text>
+
+  <!-- START -->
+  <rect x="160" y="76" width="200" height="34" rx="17" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="260" y="97" text-anchor="middle" font-size="12" font-weight="600" fill="#2C2C2A">User views item details</text>
+
+  <line x1="260" y1="110" x2="260" y2="132" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Decision: logged in? -->
+  <polygon points="260,132 316,164 260,196 204,164" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="260" y="168" text-anchor="middle" font-size="11" fill="#2C2C2A">Logged in?</text>
+
+  <!-- No: redirect -->
+  <line x1="316" y1="164" x2="380" y2="164" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+  <text x="344" y="156" text-anchor="middle" font-size="9" fill="#5F5E5A">No</text>
+  <rect x="380" y="142" width="120" height="44" rx="8" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="440" y="161" text-anchor="middle" font-size="11" font-weight="600" fill="#633806">Redirect to login</text>
+  <text x="440" y="177" text-anchor="middle" font-size="10" fill="#854F0B">Return after login</text>
+  <!-- Return arrow -->
+  <path d="M440 142 L440 110 L372 110" fill="none" stroke="#888780" stroke-width="0.8" stroke-dasharray="3 2" marker-end="url(#arr2)"/>
+
+  <!-- Yes -->
+  <text x="238" y="208" text-anchor="middle" font-size="10" fill="#5F5E5A">Yes</text>
+  <line x1="260" y1="196" x2="260" y2="218" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Submit request -->
+  <rect x="157" y="218" width="206" height="48" rx="8" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="260" y="237" text-anchor="middle" font-size="12" font-weight="600" fill="#2C2C2A">Submit access request</text>
+  <text x="260" y="255" text-anchor="middle" font-size="11" fill="#5F5E5A">Reason, intended use</text>
+
+  <line x1="260" y1="266" x2="260" y2="288" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- System records -->
+  <rect x="157" y="288" width="206" height="48" rx="8" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="260" y="307" text-anchor="middle" font-size="12" font-weight="600" fill="#633806">AccessRequest recorded</text>
+  <text x="260" y="325" text-anchor="middle" font-size="11" fill="#854F0B">userID, itemID, date auto-set</text>
+
+  <line x1="260" y1="336" x2="260" y2="358" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- CE views assessment -->
+  <rect x="157" y="358" width="206" height="48" rx="8" fill="#CECBF6" stroke="#534AB7" stroke-width="0.5"/>
+  <text x="260" y="377" text-anchor="middle" font-size="12" font-weight="600" fill="#3C3489">CE views assessment page</text>
+  <text x="260" y="395" text-anchor="middle" font-size="11" fill="#534AB7">Full metadata + request</text>
+
+  <line x1="260" y1="406" x2="260" y2="428" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Elders add comments -->
+  <rect x="157" y="428" width="206" height="48" rx="8" fill="#CECBF6" stroke="#534AB7" stroke-width="0.5"/>
+  <text x="260" y="447" text-anchor="middle" font-size="12" font-weight="600" fill="#3C3489">Elders add comments</text>
+  <text x="260" y="465" text-anchor="middle" font-size="11" fill="#534AB7">ConsultationComment table</text>
+
+  <line x1="260" y1="476" x2="260" y2="498" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Record decision -->
+  <rect x="157" y="498" width="206" height="48" rx="8" fill="#CECBF6" stroke="#534AB7" stroke-width="0.5"/>
+  <text x="260" y="517" text-anchor="middle" font-size="12" font-weight="600" fill="#3C3489">Record ReviewDecision</text>
+  <text x="260" y="535" text-anchor="middle" font-size="11" fill="#534AB7">Approve or Reject</text>
+
+  <line x1="260" y1="546" x2="260" y2="568" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Decision diamond -->
+  <polygon points="260,568 320,600 260,632 200,600" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="260" y="604" text-anchor="middle" font-size="11" fill="#2C2C2A">Decision?</text>
+
+  <!-- APPROVED -->
+  <text x="176" y="618" text-anchor="middle" font-size="10" fill="#5F5E5A">Approve</text>
+  <line x1="200" y1="600" x2="110" y2="600" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+  <rect x="16" y="578" width="94" height="44" rx="8" fill="#9FE1CB" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="63" y="597" text-anchor="middle" font-size="11" font-weight="600" fill="#085041">Access granted</text>
+  <text x="63" y="613" text-anchor="middle" font-size="10" fill="#0F6E56">Conditions noted</text>
+
+  <line x1="63" y1="622" x2="63" y2="658" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+  <rect x="10" y="658" width="106" height="44" rx="8" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="63" y="677" text-anchor="middle" font-size="11" font-weight="600" fill="#633806">Status retained</text>
+  <text x="63" y="693" text-anchor="middle" font-size="10" fill="#854F0B">Restricted / CS</text>
+
+  <!-- REJECTED -->
+  <text x="346" y="618" text-anchor="middle" font-size="10" fill="#5F5E5A">Reject</text>
+  <line x1="320" y1="600" x2="400" y2="600" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+  <rect x="400" y="578" width="100" height="44" rx="8" fill="#D3D1C7" stroke="#5F5E5A" stroke-width="0.5"/>
+  <text x="450" y="597" text-anchor="middle" font-size="11" font-weight="600" fill="#2C2C2A">Access denied</text>
+  <text x="450" y="613" text-anchor="middle" font-size="10" fill="#5F5E5A">Request closed</text>
+
+  <!-- Converge lines -->
+  <line x1="63" y1="702" x2="63" y2="732" stroke="#888780" stroke-width="0.8"/>
+  <line x1="450" y1="622" x2="450" y2="732" stroke="#888780" stroke-width="0.8"/>
+  <line x1="63" y1="732" x2="450" y2="732" stroke="#888780" stroke-width="0.8"/>
+  <line x1="260" y1="732" x2="260" y2="752" stroke="#888780" stroke-width="1" marker-end="url(#arr)"/>
+
+  <!-- Stored -->
+  <rect x="130" y="752" width="260" height="36" rx="8" fill="#FAC775" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="260" y="774" text-anchor="middle" font-size="12" font-weight="600" fill="#633806">Decision stored in database</text>
+
+  <!-- CARE note -->
+  <rect x="10" y="800" width="500" height="16" rx="4" fill="#EDE8F5" stroke="#7B5EA7" stroke-width="0.5"/>
+  <text x="20" y="812" font-size="9" fill="#4A3060">Brief requirement: items must not change status without a recorded ReviewDecision</text>
+
+</svg>
