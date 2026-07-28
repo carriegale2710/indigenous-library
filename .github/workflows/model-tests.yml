@@ -1,0 +1,91 @@
+name: Model Tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root_test_password
+          MYSQL_DATABASE: ifq582_a2
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -u root -proot_test_password"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      # project/__init__.py falls back to these when config.py doesn't
+      # exist, so we don't need to create config.py at all in CI.
+      MYSQL_HOST: 127.0.0.1
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root_test_password
+      MYSQL_PORT: 3306
+      MYSQL_DB: ifq582_a2
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install system packages needed to build mysqlclient
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y default-mysql-client default-libmysqlclient-dev build-essential pkg-config
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if mysqladmin ping -h 127.0.0.1 -P 3306 -u root -proot_test_password --silent; then
+              echo "MySQL is up"
+              break
+            fi
+            echo "Waiting for MySQL..."
+            sleep 2
+          done
+
+      - name: Load schema and seed data
+        run: |
+          mysql -h 127.0.0.1 -P 3306 -u root -proot_test_password ifq582_a2 < database.sql
+
+      - name: Run all model tests
+        run: |
+          failures=0
+          for t in tests/test_*.py; do
+            name="tests.$(basename "$t" .py)"
+            echo "=== $name ==="
+            if output=$(python -m "$name" 2>&1); then
+              echo "$output"
+              if ! echo "$output" | grep -q "PASS"; then
+                echo "::error::$name ran without error but did not print PASS"
+                failures=$((failures + 1))
+              fi
+            else
+              echo "$output"
+              echo "::error::$name exited with a non-zero status"
+              failures=$((failures + 1))
+            fi
+          done
+          if [ "$failures" -gt 0 ]; then
+            echo "$failures test module(s) failed"
+            exit 1
+          fi
