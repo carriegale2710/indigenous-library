@@ -1,16 +1,45 @@
-# Part A - Web application code requirements
+# Product Requirement Document
 
-This document sets out the required pages and features, together with the detailed functional, technical, and submission requirements for Part A: Web application code.
+## Project Overview
+
+Design a web application for an academic library. The goal of this task is to demonstrate your ability to design a basic web application, including the front-end components and the back-end components. Tests ability to address user needs, identify the logical components of a software and database, and develop professional front-end interfaces with proper structure, responsiveness, and usability.
+
+Team: 5 developers
+
+Timeline: 3-4 weeks
+
+Task: Build on a prototype web application design with conceptual database design.
+
+Goal: Implement a fully functional web application for the an academic library’s Indigenous collections system.
+
+Requirements:
+The app will be a working Flask-based web application with:
+
+- front-end and back-end integration
+- database integration aligned with your data model
+- authentication and access control
+- validation and error handling
+- responsive and professional user interface.
+
+## Scenario
+
+A prominent academic library in Australia has begun digitising its Indigenous collections. To make these collections publicly available, its current website will be updated to include a new section dedicated to Indigenous knowledges and history. This will require the creation of a new database and a web application through which this collection can be curated, managed and accessed.
+
+Given the nature of the collections, the library is also aware that this web application must handle the collections in an ethical way and with appropriate respect. Thus, the web application and the associated database must also include options for recording the appropriate metadata to indicate the nature of the collection and whether its access should be limited in any way. The library also plans to engage with community elders in order to assess the collections and receive community input on how the data is to be managed. The web application must, therefore, limit access to collections until appropriate parties have determined that a particular item in the collection can be publicly released or kept private.
+
+## Web application code requirements
+
+This outlines the required pages and features, together with the detailed functional, technical requirements for the app.
 
 > Note to team: Use this as a source of truth on what requirements have been met by the code so far. Each time before you commit any code, go here and check off what you did. This makes it a living document and keeps us on track with assignment criteria.
 
 Your team must complete the following:
 
-## 1. Core Functional Pages
+### 1. Core Functional Pages
 
 You must include a home page, items details page, and item assessment page (restricted access). See the following details of what to include in each.
 
-### Home Page
+#### Home Page
 
 Your home page must:
 
@@ -31,7 +60,7 @@ Collection items may include (but are not limited to):
 
 Each item must include appropriate cultural metadata such as cultural group, sensitivity notes, review status, and access level.
 
-### Item Details Page
+#### Item Details Page
 
 The item details page must display:
 
@@ -48,7 +77,7 @@ The page must:
 
 Users must not be able to access restricted data by manipulating URLs.
 
-### Item Assessment Page (Restricted aCcess)
+#### Item Assessment Page (Restricted aCcess)
 
 - [x] Items must not change access status without a recorded review decision.
 - [x] Users without appropriate permissions must not be able to access this page, including via direct URL manipulation.
@@ -72,7 +101,7 @@ The system must implement the following workflow:
 4. [x] The item’s access status is updated accordingly.
 5. [x] All decisions are stored in the database.
 
-## 2. Authentication and Access Controls
+### 2. Authentication and Access Controls
 
 Your application must implement a complete user authentication system, including:
 
@@ -122,7 +151,7 @@ You must include the following roles and enforced permissions:
 - [x] Submit access requests.
 - [x] Cannot edit items or access assessment pages.
 
-## 3. CRUD Functionality
+### 3. CRUD Functionality
 
 The system must support:
 
@@ -134,7 +163,7 @@ The system must support:
 
 All CRUD operations must interact dynamically with the database and respect role permissions.
 
-## 4. Database Integration
+### 4. Database Integration
 
 The application must be built on your Assignment 1 data model (with refinements if necessary). The database schema must logically reflect the entities and relationships identified in Assignment 1.
 
@@ -147,7 +176,7 @@ Minimum dataset requirements:
 
 The submitted database.sql file must be pre-populated and runnable.
 
-## 5. Error Handling
+### 5. Error Handling
 
 - [x] Use an error.html template.
 - [x] Flask @app.errorhandler should manage redirection and display.
@@ -156,7 +185,7 @@ The submitted database.sql file must be pre-populated and runnable.
   - [x] 404 Not Found page.
   - [x] 500 Internal Server Error page.
 
-## 6. Professional User Interface
+### 6. Professional User Interface
 
 Your application must:
 
@@ -168,7 +197,7 @@ Your application must:
 - [x] use custom CSS refinements beyond default Bootstrap
 - [x] ensure all forms include validation and clear feedback messages.
 
-## 7. Technical Structure and Permitted Tools
+### 7. Technical Structure and Permitted Tools
 
 Your project must follow the structure below.
 
@@ -190,7 +219,7 @@ Submit one ZIP file containing: 
     └── database.sql
 ```
 
-### Additional Requirements
+#### Additional Requirements
 
 Additional requirements are:
 
@@ -202,11 +231,11 @@ Additional requirements are:
 - There is no word limit.
 - There is no minimum or maximum line-of-code requirement; however, the application must fully meet all functional requirements. 
 
-### Tools and Requirements
+#### Tools and Requirements
 
 The following tools and resources are permitted:
 
-#### Frameworks
+##### Frameworks
 
 > IMPORTANT: Use of high-level frameworks, automation tools, or alternative libraries, including **Flask-Admin, Django**, or similar, is **strictly prohibited**.
 
@@ -223,6 +252,6 @@ The following tools and resources are permitted:
 
 The complete list of permitted packages is provided in **‘requirements.txt’**.
 
-#### Front-End
+##### Front-End
 
 - [x] Use only HTML and CSS, including Bootstrap 5.3.

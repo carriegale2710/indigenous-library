@@ -2,20 +2,52 @@
 
 # Indigenous Cultural Collection Library
 
-A Flask web application for managing culturally-sensitive Indigenous artefacts within an Academic Library Collection. Built with Flask (MVC structure), MySQL, session-based authentication, WTForms and Bootstrap 5. Demo deployed with Render (front-end) and Avien (back-end).
+<!-- {add test badges here, all projects you build from here on out will have tests, therefore you should have github workflow badges at the top of your repositories: [Github Workflow Badges](https://docs.github.com/en/actions/monitoring-and-troubleshooting-workflows/adding-a-workflow-status-badge)} -->
 
-**_Main Features:_** Public users can browse a catalogue of collection items and submit access requests for restricted items. Only authorised users can review those requests through a cultural assessment workflow or view/edit cultural metadata for all items.
+A Flask web application for managing culturally-sensitive Indigenous artefacts within an Academic Library Collection. The build demonstrates core skills in front-end/back-end integration, authentication, validation, and a responsive, professional UI.
 
-## Demo Mode
+**_Techstack:_** Built with Flask (MVC structure), MySQL, session-based authentication, WTForms and Bootstrap 5. See [requirements](requirements.txt)
+
+**_Main Purpose:_** Give an academic library a Flask-based web application for digitising, managing, and publishing its Indigenous collections online, with a database aligned their library records management model. It's designed to handle cultural material ethically via CARE principles by capturing metadata on sensitivity and access restrictions, and by gating public release of items until community elders and appropriate parties have reviewed and approved them. See [prd.md](prd.md) for the complete project specification.
+
+---
+
+## Demo & Snippets
 
 > [**View Live Demo** ↗️](https://indigenous-library-ov0s.onrender.com/)
+
+The demo of this project is deployed with Render (front-end) and Avien (back-end). This is to keep deployment simple however in the future AWS S3 + EC2 with a load balancer can be used instead for future scaling.
+
+### Preview Restricted Feature with Admin role
+
+![admin-demo](demo/admin-demo.png)
 
 - **Try it**: click **"Try Demo as Admin"** on the [login page](https://indigenous-library-ov0s.onrender.com/auth/login) — no password required.
 - **What you get**: full Admin access (roleID 1) — create/edit/delete collection items, manage access requests, everything a real Admin can do.
 - **Data resets automatically**: since this is a shared account, all data resets to its original seed state every 10 minutes via a scheduled GitHub Action. Don't be surprised if your changes disappear shortly after — that's expected, not a bug.
 - **Why**: this is a live public deployment, not a sandboxed per-visitor environment, so resets keep the demo clean for the next person and prevent the database from accumulating spam/junk input over time.
 
-Implementation: [`project/reset.py`](project/reset.py) truncates and reseeds demo-writable tables, exposed via a secret-protected endpoint in [`project/maintenance.py`](project/maintenance.py), triggered on a schedule by [`.github/workflows/reset-demo.yml`](.github/workflows/reset-demo.yml).
+The client app has 3-4 main pages:
+
+### Home/Catalogue Page
+
+Browse collection items with dynamic search and filtering by category, cultural group, and access level. Displays item titles, images, descriptions, and access status (Public/Restricted/Under Review).
+
+![Home to Catalogue Navigation and Search Filters](demo/home-catalogue-demo.gif)
+
+### Item Details Page
+
+View full item metadata including cultural notes, description, and access status. Public users can submit access requests for restricted items. All forms include validation and error handling.
+
+![Item Details Page Demo](demo/item-details-demo.gif)
+
+### Item Assessment Page
+
+Restricted to authorized reviewers (Admin, Community Reviewer). View full item history, add discussion comments, update cultural metadata, and approve/reject access requests. All decisions are recorded with reviewer identity and timestamp.
+
+![Item Assessment Page Demo](demo/item-assessment-demo.gif)
+
+---
 
 ## Local Setup
 
@@ -120,45 +152,25 @@ WHERE userID > 0; -- all accounts in db, change to `WHERE userID = <int>` for sp
 
 ---
 
-## Project Overview
+## Main Features
 
-### Main Pages
-
-#### Home/Catalogue Page
-
-Browse collection items with dynamic search and filtering by category, cultural group, and access level. Displays item titles, images, descriptions, and access status (Public/Restricted/Under Review).
-
-![Home to Catalogue Navigation and Search Filters](demo/home-catalogue-demo.gif)
-
-#### Item Details Page
-
-View full item metadata including cultural notes, description, and access status. Public users can submit access requests for restricted items. All forms include validation and error handling.
-
-![Item Details Page Demo](demo/item-details-demo.gif)
-
-#### Item Assessment Page
-
-Restricted to authorized reviewers (Admin, Community Reviewer). View full item history, add discussion comments, update cultural metadata, and approve/reject access requests. All decisions are recorded with reviewer identity and timestamp.
-
-![Item Assessment Page Demo](demo/item-assessment-demo.gif)
-
-### Main Features
+Public users can browse a catalogue of collection items and submit access requests for restricted items. Only authorised users can review those requests through a cultural assessment workflow. Indigenous elders and community members can view/edit cultural metadata for all items and provide input on access requests via comments on the Item Assessment Page. Library Staff can add, delete and edit item data to keep the whole catalogue up to date.
 
 | Feature                          | Description                                                                                       |
 | -------------------------------- | ------------------------------------------------------------------------------------------------- |
-| **Browse & Search**              | Dynamically display collection items with filtering by category, cultural group, and access level |
 | **Role-Based Access**            | Admin, Community Reviewer, Library Staff, and Public User roles with enforced permissions         |
+| **Authentication**               | Registration, login/logout with hashed passwords and session management                           |
+| **Browse & Search**              | Dynamically display collection items with filtering by category, cultural group, and access level |
+| **Item Management**              | Full CRUD operations for collection items and metadata                                            |
 | **Access Requests**              | Public users submit requests for restricted items; reviewers assess and approve/reject            |
 | **Cultural Assessment Workflow** | Reviewers add comments, update metadata, and record decisions with audit trail                    |
-| **Item Management**              | Full CRUD operations for collection items and metadata                                            |
-| **Authentication**               | Registration, login/logout with hashed passwords and session management                           |
-| **Responsive UI**                | Bootstrap 5.3 with custom CSS across desktop, tablet, and mobile                                  |
-| **Error Handling**               | Custom error pages (404, 500) via error.html template                                             |
-| **Database**                     | Pre-populated MySQL database with 15+ items, 6+ users, and review decisions                       |
 
-> See [requirements.md](requirements.md) for the complete assignment specification.
+> See [prd.md](prd.md) for the complete assignment specification.
+> See full list of CRUD endpoints / Flask routes and role permissions [here](project/README.md).
 
-### Access Request Workflow
+## Request Access Feature
+
+_Purpose:_ The library also plans to engage with community elders in order to assess the collections and receive community input on how the data is to be managed. The web application must, therefore, limit access to collections until appropriate parties have determined that a particular item in the collection can be publicly released or kept private. This is the most critical feature to meet client requirements.
 
 1. **Public User submits request** → Views restricted item and clicks "Request Access"
 2. **Item transitions** → Access status changes to "Under Review"
@@ -167,71 +179,66 @@ Restricted to authorized reviewers (Admin, Community Reviewer). View full item h
 5. **Status updated** → Item access level changes to Public (approved) or remains Restricted (rejected)
 6. **Audit trail maintained** → All decisions stored in database with timestamp and reviewer details
 
-### Role Permissions
+![diagram of request access user flow](user-flows/flow_3_request_access.svg)
 
-| Role                   | Permissions                                                                                                                                         |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Admin**              | Full system access • Create/edit/delete items • Assign user roles • View & manage all requests • Approve/reject access • Modify metadata            |
-| **Community Reviewer** | View items under review • Add discussion comments • Approve/reject access requests • Update cultural metadata • Cannot delete items or manage users |
-| **Library Staff**      | Create & edit collection items • Upload images and metadata • View access requests • Cannot finalize decisions unless assigned reviewer role        |
-| **Public User**        | Browse public items • View item details • Submit access requests for restricted items • Cannot edit items or access assessment pages                |
+> See all user flows [here](user-flows/README.md).
 
-### CRUD Endpoints
+---
 
-#### **Home & Browsing**
+<!-- ## Design Decisions & Challenges -->
 
-| Endpoint          | Description                                                              | Access Level |
-| ----------------- | ------------------------------------------------------------------------ | ------------ |
-| `/`               | Home page with featured items                                            | Public       |
-| `/catalogue`      | Browse all items with search and filtering by category, type, and status | Public       |
-| `/access-privacy` | Access and privacy notice                                                | Public       |
-| `/auth/register`  | User registration                                                        | Public       |
-| `/auth/login`     | User login                                                               | Public       |
-| `/auth/logout`    | User logout                                                              | Logged-in    |
+## My Contributions
 
-#### **Item Management**
+As part of a 5-person team, here are the following contributions I made:
 
-| Endpoint               | Description                    | Access Level         |
-| ---------------------- | ------------------------------ | -------------------- |
-| `/item-details/<id>`   | View item details and metadata | Public               |
-| `/items/<id>/edit`     | Edit item details              | Admin, Library Staff |
-| `/items/<id>/delete`   | Delete item                    | Admin                |
-| `/items/<id>/metadata` | Update cultural metadata       | Reviewers, Admin     |
+- **Controller layer & authentication**:
+  - Built the core authentication system (login, registration, logout, session management)
+  - Implemented role-based access control with custom decorators to protect key routes
 
-#### **Access Requests & Assessment**
+- **Item Details & Item Assessment pages**:
+  - Developed dynamic, role-aware rendering of actions (request access, assessment, reviews)
+  - duplicate-request prevention
+  - comment/review decision handling
+  - audit tracking (status, reviewer, timestamps, history)
 
-| Endpoint                                  | Description                                | Access Level                    |
-| ----------------------------------------- | ------------------------------------------ | ------------------------------- |
-| `/items/<id>/request`                     | Submit access request for restricted items | Logged-in                       |
-| `/items/assessment/<id>`                  | View and assess item with pending requests | Reviewers, Admin, Library Staff |
-| `/items/assessment/<request_id>/comment`  | Add discussion comment to request          | Reviewers, Admin                |
-| `/items/assessment/<request_id>/decision` | Record approval/rejection decision         | Reviewers, Admin                |
+- **CRUD & workflow logic**:
+  - Implemented database-driven status transitions (e.g., Pending → Public/Restricted)
+  - Ensured all actions respected role permissions and workflow rules
 
-#### **Demo-Only Endpoints**
+- **Error handling & validation**:
+  - Added custom validation and flash messaging across registration, login, reviews, and comments
+  - handling for SQL integrity errors and empty-result states
 
-| Endpoint            | Description                                                            | Access Level                      |
-| ------------------- | ---------------------------------------------------------------------- | --------------------------------- |
-| `/auth/demo-login`  | One-click login as the shared demo admin account, no password required | Public                            |
-| `/admin/reset-demo` | Truncates and reseeds demo-writable tables back to the original state  | Secret key (`X-Reset-Key` header) |
+- **Collaboration**:
+  - Cross-supported teammates on the View layer (SVG renaming, blueprint conversion) and Controller layer (access request submission)
+  - Maintaining weekly/daily check-ins to keep implementation aligned with the project brief
 
-### Database Schema
+---
 
-> See `database.sql` and [EER diagram](database/EER_diagram.pdf)
-> To run model tests, see [tests folder](tests/README.md)
+## Known issues
 
-| Table                | Primary Key  | Foreign Keys                                       | Purpose                                                                                         |
-| -------------------- | ------------ | -------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| **Role**             | roleID       | —                                                  | Stores user roles (Admin, Community Reviewer, Library Staff, Public User)                       |
-| **User**             | userID       | roleID → Role                                      | Stores user accounts with credentials, roles, and account status                                |
-| **Collection**       | collectionID | —                                                  | Organizes collection items into themed groups (Languages, Oral History, Art, etc.)              |
-| **CollectionItem**   | itemID       | collectionID → Collection, statusID → AccessStatus | Stores the main collection items with metadata like title, author, year, item type              |
-| **AccessStatus**     | statusID     | —                                                  | Defines access levels (Open, Restricted, Culturally Sensitive)                                  |
-| **CulturalMetadata** | metadataID   | itemID → CollectionItem (1:1)                      | Stores cultural information for items (community group, language, sensitivity notes, protocols) |
-| **AccessRequest**    | requestID    | userID → User, itemID → CollectionItem             | Records user requests for restricted item access with reason and supporting documents           |
-| **ReviewDecision**   | decisionID   | requestID → AccessRequest, reviewerID → User       | Records reviewer decisions (Approved/Rejected) with reasoning and access conditions             |
-| **CommunityComment** | commentID    | requestID → AccessRequest, reviewerID → User       | Stores discussion comments from reviewers during the assessment workflow                        |
+<!-- - Features that are buggy / flimsy -->
 
-## Project layout
+- Some responsiveness and UX/UI issues may exist from the html jinja templates used.
+
+<!-- - Remaining bugs, things that have been left unfixed -->
+
+- Although deployed with Render and Avien for simplicity, these servers/instances automatically shutdown after a period of inactivity. A Github Actions workflow has been implemented as a temporary fix. See [keep-alive.yml](.github/workflows/keep-alive.yml).
+
+---
+
+## Future Goals
+
+<!-- - What are the immediate features you'd add given more time -->
+
+- Allow Admin to assign role permissions to users.
+- Implement a 'Forgot Password' feature for Login Page.
+- User profile page and 'My Access Requests' page for Public users.
+- Migrate live demo server to AWS EC2/S3 for stability.
+
+---
+
+## Project Directory
 
 ```
 run.py              App entry point
@@ -243,6 +250,7 @@ config.py           Your real password (gitignored, never pushed)
 .github/
   workflows/
     reset-demo.yml  Scheduled job that triggers the demo data reset
+    keep-alive.yml  Scheduled job to keep Avien mySQLdb server running
 
 project/            Main application package
   __init__.py       create_app() and the shared mysql object
@@ -263,14 +271,26 @@ tests/              Test suite
 
 ```
 
+---
+
+### More Documentation Links
+
+- [Database Schema](database/README.md)
+- [Product Requirement Document](prd.md)
+- [Flask Routes and Role Permissions](project/README.md)
+
+---
+
 ## Team Contribution
 
-Thanks to the team:
+Big thanks to the development team:
 
 - Model layer - Daniel Green, Brad Jackson
 - View layer - Lona Ulsame, Carrie Gale
 - Controller layer - Carrie Gale, Rebecca Llewelyn
 - Demo Deployment - Carrie Gale
+
+---
 
 ## License
 
