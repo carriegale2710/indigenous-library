@@ -71,3 +71,11 @@ This one sets its own `RESET_SECRET` environment variable at the top of the scri
 ## A note on the seed data
 
 Most tests put the database back the way they found it, either by restoring the original value or deleting the row they added. Two of the early ones, `test_access_request.py` and `test_create_only.py`, leave their inserted row behind on purpose. That's harmless, but it's why you might see an extra pending request or an extra user after running them. If you ever want a clean slate, re-run `database.sql` to rebuild and reseed the database.
+
+## Failing Tests
+
+tests.test_reset_demo exited with a non-zero status
+tests.test_model_final exited with a non-zero status
+tests.test_get_by_id exited with a non-zero status
+tests.test_get_all ran without error but did not print PASS
+tests.test_comment_by_request exited with a non-zero status

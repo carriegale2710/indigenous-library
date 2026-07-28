@@ -197,9 +197,9 @@ As part of a 5-person team, here are the following contributions I made:
 
 - **Item Details & Item Assessment pages**:
   - Developed dynamic, role-aware rendering of actions (request access, assessment, reviews)
-  - duplicate-request prevention
-  - comment/review decision handling
-  - audit tracking (status, reviewer, timestamps, history)
+  - Duplicate-request prevention
+  - Comment/review decision handling
+  - Audit tracking (status, reviewer, timestamps, history)
 
 - **CRUD & workflow logic**:
   - Implemented database-driven status transitions (e.g., Pending → Public/Restricted)
@@ -207,11 +207,15 @@ As part of a 5-person team, here are the following contributions I made:
 
 - **Error handling & validation**:
   - Added custom validation and flash messaging across registration, login, reviews, and comments
-  - handling for SQL integrity errors and empty-result states
+  - Handling for SQL integrity errors and empty-result states
 
 - **Collaboration**:
   - Cross-supported teammates on the View layer (SVG renaming, blueprint conversion) and Controller layer (access request submission)
   - Maintaining weekly/daily check-ins to keep implementation aligned with the project brief
+
+- **Deployment and CI/CD Pipeline**:
+  - Full deployment of the live demo via Render and Avien for mySQLdb hosting, with 'Login as Admin' feature in Demo Login page.
+  - Implemented github action jobs to keep Avien server alive on free tier and automated model test suite.
 
 ---
 
