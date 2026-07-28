@@ -1,8 +1,13 @@
+# Purpose:
+# The deployed live demo site has a 'Login as Admin' button so they preview restricted features such as Access Requests and Community Comment section under the Item Assessment panel.
+# However, this is a shared account from the User Table in backend. Users might add weird entries or delete items in the db while inspecting the demo.
+# To solve this, Github Actions will reset the mySQL db periodally so data stays fresh for other users too.
+
 name: Reset Demo Data
 
 on:
   schedule:
-    - cron: "*/10 * * * *" # every 10 min — the shared demo admin account needs a short leash
+    - cron: "*/10 * * * *" # the shared demo admin account needs a short leash
   workflow_dispatch: {} # lets you trigger it manually from the Actions tab
 
 jobs:

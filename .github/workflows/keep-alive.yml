@@ -1,0 +1,38 @@
+# Purpose:
+# This pings Avien every 12 hrs as a workaround hack to keep the mySQLdb host server alive even on free tier. Prevents automatic shutdowns.
+
+# Notes:
+# The cron runs every 12 hours. Aiven doesn't publish an exact inactivity threshold, so if you still see it power off, tighten this to every 6 hours (0 */6 * * *).
+# workflow_dispatch lets you fire it manually from the Actions tab for testing secrets.
+# GitHub disables scheduled workflows automatically if a repo goes 60 days with no commits.
+
+name: Keep Aiven MySQL Alive
+
+on:
+  schedule:
+    # Runs every 12 hours. Adjust if you find your instance still powers off.
+    - cron: "0 */12 * * *"
+  workflow_dispatch: {} # lets you trigger it manually from the Actions tab
+
+jobs:
+  ping-mysql:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install MySQL client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+
+      - name: Ping Aiven MySQL
+        env:
+          MYSQL_HOST: ${{ secrets.AIVEN_MYSQL_HOST }}
+          MYSQL_PORT: ${{ secrets.AIVEN_MYSQL_PORT }}
+          MYSQL_USER: ${{ secrets.AIVEN_MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.AIVEN_MYSQL_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.AIVEN_MYSQL_DATABASE }}
+        run: |
+          mysql --host="$MYSQL_HOST" \
+                --port="$MYSQL_PORT" \
+                --user="$MYSQL_USER" \
+                --password="$MYSQL_PASSWORD" \
+                --ssl-mode=REQUIRED \
+                "$MYSQL_DATABASE" \
+                -e "SELECT 1;"
