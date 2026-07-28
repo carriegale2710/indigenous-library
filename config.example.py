@@ -8,11 +8,12 @@ The app reads MYSQL_PASSWORD from config.py at startup. If config.py is
 missing, it falls back to a MYSQL_PASSWORD environment variable, then blank.
 
 """
-MYSQL_PASSWORD = "your_mysql_password_here"
+# Local host mySQL credentials
 
-# Aiven mysql host - for production only
-MYSQL_HOST="mysql-example-project.b.aivencloud.com" # → Aiven host
-MYSQL_USER="user" # → Aiven user (likely avnadmin)
-MYSQL_PASSWORD="password" # → Aiven password
-MYSQL_DB="db-name" # → whatever database you ran your schema against (defaultdb or your renamed one)
-MYSQL_PORT=00000
+MYSQL_HOST="localhost" 
+MYSQL_USER="root" 
+MYSQL_PASSWORD="your-password" 
+MYSQL_DB="ifq582_a2" # → whatever database you ran your schema against (defaultdb or your renamed one)
+MYSQL_PORT=3306
+
+RESET_SECRET="test123"
