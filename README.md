@@ -8,7 +8,7 @@ A Flask web application for managing culturally-sensitive Indigenous artefacts w
 
 **_Techstack:_** Built with Flask (MVC structure), MySQL, session-based authentication, WTForms and Bootstrap 5. See [requirements](requirements.txt)
 
-**_Main Purpose:_** Give an academic library a Flask-based web application for digitising, managing, and publishing its Indigenous collections online, with a database aligned their library records management model. It's designed to handle cultural material ethically via CARE principles by capturing metadata on sensitivity and access restrictions, and by gating public release of items until community elders and appropriate parties have reviewed and approved them. See [prd.md](prd.md) for the complete project specification.
+**_Main Purpose:_** Give an academic library a Flask-based web application for digitising, managing, and publishing its Indigenous collections online, with a database aligned their library records management model. It's designed to handle cultural material ethically via CARE principles by capturing metadata on sensitivity and access restrictions, and by gating public release of items until community elders and appropriate parties have reviewed and approved them. See [prd.md](docs/prd.md) for the complete project specification.
 
 ---
 
@@ -117,7 +117,7 @@ Public users can browse a catalogue of collection items and submit access reques
 | **Access Requests**              | Public users submit requests for restricted items; reviewers assess and approve/reject            |
 | **Cultural Assessment Workflow** | Reviewers add comments, update metadata, and record decisions with audit trail                    |
 
-> See [prd.md](prd.md) for the complete assignment specification.
+> See [prd.md](docs/prd.md) for the complete assignment specification.
 > See all user flows [here](docs/user-flows/README.md).
 > See full list of CRUD endpoints / Flask routes and role permissions [here](project/README.md).
 
@@ -246,31 +246,26 @@ Refer to [here](db/README.md) for details.
 ```
 run.py              App entry point
 requirements.txt    Python packages the app needs
-database.sql        MySQL build script (run this in Workbench)
 config.example.py   Template for your local MySQL password
 config.py           Your real password (gitignored, never pushed)
 
-.github/
-  workflows/
-    reset-demo.yml  Scheduled job that triggers the demo data reset
-    keep-alive.yml  Scheduled job to keep Aiven mySQLdb server running
+project/                Main application package
+  db/
+    database.sql          MySQL build script (run this in Workbench)
+    unhash.sql            Unhashes seeded passwords for testing other roles
+  static/                 CSS and images
+  templates/              Jinja templates
+  __init__.py             create_app() and the shared mysql object
+  assessment.py           Cultural assessment workflow logic
+  auth.py                 Register, login, logout, demo admin login
+  decorators.py           Custom decorators for authentication and authorization
+  forms.py                WTForms form classes
+  maintenance.py          Secret-protected /admin/reset-demo endpoint (demo only)
+  model.py                Data model: classes and data-access methods
+  reset.py                Truncates and reseeds demo-writable tables (demo only)
+  views.py                Page routes (home, catalogue, item details, and so on)
 
-project/            Main application package
-  __init__.py       create_app() and the shared mysql object
-  model.py          Data model: classes and data-access methods
-  views.py          Page routes (home, catalogue, item details, and so on)
-  auth.py           Register, login, logout, demo admin login
-  forms.py          WTForms form classes
-  assessment.py     Cultural assessment workflow logic
-  decorators.py     Custom decorators for authentication and authorization
-  reset.py          Truncates and reseeds demo-writable tables (demo only)
-  maintenance.py    Secret-protected /admin/reset-demo endpoint (demo only)
-  templates/        Jinja templates
-  static/           CSS and images
-    styles.css
-    assets/
-
-tests/              Test suite
+tests/                   Test suite
 
 ```
 
@@ -279,7 +274,7 @@ tests/              Test suite
 ## Other Documentation Links
 
 - [Database Schema](database/README.md)
-- [Product Requirement Document](prd.md)
+- [Product Requirement Document](docs/prd.md)
 - [Flask Routes and Role Permissions](project/README.md)
 
 ---

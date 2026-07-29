@@ -65,7 +65,7 @@ jobs:
 
       - name: Load schema and seed data
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u root -proot_test_password ifq582_a2 < database.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -proot_test_password ifq582_a2 < project/db/database.sql
 
       - name: Run all model tests
         run: |

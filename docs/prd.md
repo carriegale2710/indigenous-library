@@ -203,27 +203,7 @@ Your application must:
 - [x] use custom CSS refinements beyond default Bootstrap
 - [x] ensure all forms include validation and clear feedback messages.
 
-### 7. Technical Structure and Permitted Tools
-
-Your project must follow the structure below.: 
-
-```
-project
-├── run.py
-├── README.txt
-└── project/
-    ├── static/
-    │   ├── css/
-    │   └── img/
-    ├── templates/
-    ├── forms.py
-    ├── models.py
-    ├── views.py
-    ├── __init__.py
-    └── database.sql
-```
-
-#### Additional Requirements
+### Additional Requirements
 
 Additional requirements are:
 
@@ -233,11 +213,11 @@ Additional requirements are:
 - [x] You must include a README.txt with instructions for running the project locally.
 - [x] Exclude any virtual environments and external dependencies from submission.
 
-#### Tools and Requirements
+### Tools and Requirements
 
 The following tools and resources are permitted:
 
-##### Frameworks
+#### Frameworks
 
 > IMPORTANT: Use of high-level frameworks, automation tools, or alternative libraries, including **Flask-Admin, Django**, or similar, is **strictly prohibited**.
 
@@ -254,6 +234,6 @@ The following tools and resources are permitted:
 
 The complete list of permitted packages used in [requirements.txt](requirements.txt).
 
-##### Front-End
+#### Front-End
 
 - [x] Use only HTML and CSS, including Bootstrap 5.3.
