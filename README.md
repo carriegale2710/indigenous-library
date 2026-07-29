@@ -14,9 +14,9 @@ A Flask web application for managing culturally-sensitive Indigenous artefacts w
 
 ## Live Demo
 
-> [**View Live Demo** ↗️](https://indigenous-library-ov0s.onrender.com/)
+> [**View Live Demo** ↗️](https://indigenouslibrary.site/)
 
-The demo of this project is deployed with Render (front-end) and Aiven (back-end). This is to keep deployment simple however in the future AWS S3 + EC2 with a load balancer can be used instead for future scaling.
+This project is deployed on AWS using a production-style stack: an Ubuntu EC2 instance with a stable Elastic IP, Nginx reverse proxying to a Gunicorn-served Flask app that uses the app-factory pattern and a local MySQL database, all managed by systemd services for automatic restart and boot-time startup. A custom domain is pointed at the EC2 instance, and HTTPS is configured via Certbot + Let’s Encrypt so authenticated traffic is served securely over TLS end-to-end.
 
 ### Preview Restricted Feature with Admin role
 
@@ -76,8 +76,9 @@ As part of a 5-person team, here are the following contributions I personally ma
   - Handling for SQL integrity errors and empty-result states
 
 - **Deployment and CI/CD Pipeline**:
-  - Full deployment of the live demo via Render and Aiven for mySQLdb hosting, with 'Login as Admin' feature in Demo Login page.
-  - Implemented github action jobs to keep Aiven server alive on free tier and automated model test suite.
+  - Full deployment of the live demo on a single EC2 instance and secure HTTPS custom domain.
+  - Implemented github action jobs for refreshing database periodically automated model test suite.
+  - Added button for Admin test account login.
 
 - **Collaboration**:
   - Cross-supported teammates on the View layer (SVG renaming) and Controller layer (access request submission)
@@ -98,9 +99,6 @@ As part of a 5-person team, here are the following contributions I personally ma
 
 - **Ethical constraints shaped the data model, not just the UI.**
   Access control here isn't just "logged in or not". Items move through a cultural review workflow before release, which pushed access status into a real state machine (Pending → Open / Restricted / Culturally Sensitive) rather than a boolean flag.
-
-- **Free-tier hosting meant trading polish for pragmatism.**
-  Aiven was a good call to keep DB hosting simple, but free-tier cold starts and shutdowns needed a workaround - a scheduled GitHub Actions job to keep it alive, a deliberately "good enough for now" fix flagged in the roadmap.
 
 ---
 
@@ -141,7 +139,6 @@ What's next, and what's still rough. Grouped by priority.
 - Item card images take 10-30 seconds to render on the catalogue page.
 - Item Assessment page is hard to reach from Item Details alone - needs a direct link.
 - Minor responsiveness/UX polish outstanding (item card layout, redundant text).
-- Demo deployment (Render + Aiven free tier) cold-starts after inactivity (~30-50s); a [keep-alive workflow](.github/workflows/keep-alive.yml) mitigates this but is still being tuned.
 
 ### Planned Next
 
@@ -152,7 +149,8 @@ What's next, and what's still rough. Grouped by priority.
 
 ### Longer Term
 
-- Migrate the live demo to AWS (EC2 + S3) for more stable hosting than the free-tier Render/Aiven setup.
+~~- Migrate the live demo to AWS (EC2 + S3) for more stable hosting than the free-tier Render/Aiven setup.~~
+
 - Add nav links from catalogue item cards straight to the Item Assessment page.
 
 ---
@@ -276,6 +274,7 @@ tests/                   Test suite
 - [Database Schema](database/README.md)
 - [Product Requirement Document](docs/prd.md)
 - [Flask Routes and Role Permissions](project/README.md)
+- [Demo Deployment Details](docs/deploy.md)
 
 ---
 
