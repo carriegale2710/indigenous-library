@@ -8,7 +8,9 @@
 
 ![diagram of request access Item into Collection flow](flow_2_item_into_collection.svg)
 
-## Request Access
+## Request Access Workflow
+
+_Purpose:_ The library also plans to engage with community elders in order to assess the collections and receive community input on how the data is to be managed. The web application must, therefore, limit access to collections until appropriate parties have determined that a particular item in the collection can be publicly released or kept private. This is the most critical feature to meet client requirements.
 
 1. **Public User submits request** → Views restricted item and clicks "Request Access"
 2. **Item transitions** → Access status changes to "Under Review"

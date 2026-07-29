@@ -2,15 +2,12 @@
 
 ## Project Overview
 
-Design a web application for an academic library. The goal of this task is to demonstrate your ability to design a basic web application, including the front-end components and the back-end components. Tests ability to address user needs, identify the logical components of a software and database, and develop professional front-end interfaces with proper structure, responsiveness, and usability.
-
 Team: 5 developers
-
 Timeline: 3-4 weeks
 
-Task: Build on a prototype web application design with conceptual database design.
+Task/Challenge: Design a web application for an academic library. Implement a fully functional web application for a library collections system. Build on a prototype web application design with existing conceptual database design.
 
-Goal: Implement a fully functional web application for the an academic library’s Indigenous collections system.
+Goal/Purpose: The goal of this task is to demonstrate your ability to design a basic web application, including the front-end components and the back-end components. Tests ability to address user needs, identify the logical components of a software and database, and develop professional front-end interfaces with proper structure, responsiveness, and usability.
 
 Requirements:
 The app will be a working Flask-based web application with:
@@ -21,7 +18,7 @@ The app will be a working Flask-based web application with:
 - validation and error handling
 - responsive and professional user interface.
 
-## Scenario
+## Client Scenario
 
 A prominent academic library in Australia has begun digitising its Indigenous collections. To make these collections publicly available, its current website will be updated to include a new section dedicated to Indigenous knowledges and history. This will require the creation of a new database and a web application through which this collection can be curated, managed and accessed.
 
@@ -58,7 +55,12 @@ Collection items may include (but are not limited to):
 - [x] Cultural artefact records
 - [x] Language preservation materials
 
-Each item must include appropriate cultural metadata such as cultural group, sensitivity notes, review status, and access level.
+Each item must include appropriate cultural metadata such as:
+
+- [x] cultural group
+- [x] sensitivity notes
+- [x] review status
+- [x] access level.
 
 #### Item Details Page
 
@@ -73,9 +75,7 @@ The page must:
 
 - [x] allow Public Users to submit an access request for restricted items
 - [x] validate all form inputs and provide clear feedback for invalid submissions
-- [x] prevent unauthorised actions based on user role.
-
-Users must not be able to access restricted data by manipulating URLs.
+- [x] prevent unauthorised actions based on user role. Users must not be able to access restricted data by manipulating URLs.
 
 #### Item Assessment Page (Restricted aCcess)
 
@@ -86,7 +86,7 @@ This page must:
 
 - [x] be accessible only to authorised roles (e.g. Admin, Community Reviewer/Elder)
 - [x] display full item metadata, including cultural notes and access history
-- [ ] allow authorised reviewers to add:
+- [x] allow authorised reviewers to add:
   - [x] discussion comments
   - [x] update cultural metadata
   - [x] approve or reject access.
@@ -124,7 +124,7 @@ You must include the following roles and enforced permissions:
 
 - [x] Full system access.
 - [x] Create, edit, and delete collection items.
-      ~~- [ ] Assign roles to users.~~
+- [ ] Assign roles to users.
 - [x] View and manage all access requests.
 - [x] Participate in review decisions.
 - [x] Modify metadata and access status.
@@ -139,8 +139,10 @@ You must include the following roles and enforced permissions:
 
 3. Library Staff
 
-- [x] ~~Create~~ and edit collection items.
-- [x] Upload ~~images~~ and metadata.
+- [ ] Create collection items.
+- [x] Edit collection items.
+- [x] Upload metadata.
+- [ ] Upload images.
 - [x] View access requests.
 - [x] Cannot finalise review decisions ~~unless assigned reviewer role~~.
 
@@ -153,28 +155,32 @@ You must include the following roles and enforced permissions:
 
 ### 3. CRUD Functionality
 
-The system must support:
+All CRUD operations must interact dynamically with the database and respect role permissions. The system must support:
 
-- [x] Create, Read, Update, Delete operations for collection items
+- Operations for collection items
+  - [ ] Create
+  - [x] Read
+  - [x] Update
+  - [x] Delete
 - [x] Metadata updates
 - [x] Submission of access requests
 - [x] Recording of review decisions
-- [x] Status transitions (~~Under Review~~ → Public/Restricted)
-
-All CRUD operations must interact dynamically with the database and respect role permissions.
+- Status transitions
+  - [x] Restricted / Culturally Sensitive -> Public
 
 ### 4. Database Integration
 
-The application must be built on your Assignment 1 data model (with refinements if necessary). The database schema must logically reflect the entities and relationships identified in Assignment 1.
+- [x] The application must be built on pre-existing [data model](database\README.md) (with refinements if necessary).
+- [x] The database schema must logically reflect the [entities and relationships](database\EER_diagram.pdf).
+- [x] The submitted [database.sql](database.sql) file must be pre-populated and runnable.
 
-Minimum dataset requirements:
+Minimum dataset requirements for :
 
 - [x] At least 15 collection items across multiple categories.
 - [x] At least 6 users distributed across roles (minimum 1 per role).
 - [x] At least 3 completed review decisions.
-- [x] At least 3 access requests recorded. All database tables must remain in Third Normal Form (3NF).
-
-The submitted database.sql file must be pre-populated and runnable.
+- [x] At least 3 access requests recorded.
+- [x] All database tables must remain in Third Normal Form (3NF).
 
 ### 5. Error Handling
 
@@ -199,12 +205,10 @@ Your application must:
 
 ### 7. Technical Structure and Permitted Tools
 
-Your project must follow the structure below.
-
-Submit one ZIP file containing: 
+Your project must follow the structure below.: 
 
 ```
-[groupID]_582_A2.zip
+project
 ├── run.py
 ├── README.txt
 └── project/
@@ -228,8 +232,6 @@ Additional requirements are:
 - [x] app.debug must be set to False .
 - [x] You must include a README.txt with instructions for running the project locally.
 - [x] Exclude any virtual environments and external dependencies from submission.
-- There is no word limit.
-- There is no minimum or maximum line-of-code requirement; however, the application must fully meet all functional requirements. 
 
 #### Tools and Requirements
 
@@ -239,18 +241,18 @@ The following tools and resources are permitted:
 
 > IMPORTANT: Use of high-level frameworks, automation tools, or alternative libraries, including **Flask-Admin, Django**, or similar, is **strictly prohibited**.
 
-- [x] You must use only the frameworks and libraries taught and discussed in collab sessions, or explicitly permitted, such as:
-  - Flask
-  - Flask-Login
-  - Jinja2
-  - Flask-WTF
-  - WTForms
-  - Flask-MySQLdb
-  - MySQLClient
-  - bootstrap-flask
-  - Python standard libraries (e.g., datetime, os, etc).
+- [x] You must use only these frameworks and libraries:
+  - [x] Flask
+  - [x] Flask-Login
+  - [x] Jinja2
+  - [x] Flask-WTF
+  - [x] WTForms
+  - [x] Flask-MySQLdb
+  - [x] MySQLClient
+  - [x] bootstrap-flask
+  - [x] Python standard libraries (e.g., datetime, os, etc).
 
-The complete list of permitted packages is provided in **‘requirements.txt’**.
+The complete list of permitted packages used in [requirements.txt](requirements.txt).
 
 ##### Front-End
 

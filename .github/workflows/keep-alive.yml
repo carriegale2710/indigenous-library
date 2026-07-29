@@ -1,5 +1,5 @@
 # Purpose:
-# This pings Avien every 12 hrs as a workaround hack to keep the mySQLdb host server alive even on free tier. Prevents automatic shutdowns.
+# This pings Aiven every 12 hrs as a workaround hack to keep the mySQLdb host server alive even on free tier. Prevents automatic shutdowns.
 
 # Notes:
 # The cron runs every 12 hours. Aiven doesn't publish an exact inactivity threshold, so if you still see it power off, tighten this to every 6 hours (0 */6 * * *).
