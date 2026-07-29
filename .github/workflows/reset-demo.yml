@@ -7,7 +7,7 @@ name: Reset Demo Data
 
 on:
   schedule:
-    - cron: "*/10 * * * *" # the shared demo admin account needs a short leash
+    - cron: "0 * * * *" # the shared demo admin account needs a short leash
   workflow_dispatch: {} # lets you trigger it manually from the Actions tab
 
 jobs:
@@ -16,5 +16,5 @@ jobs:
     steps:
       - name: Call reset endpoint
         run: |
-          curl -sf -X POST "${{ secrets.RENDER_APP_URL }}/admin/reset-demo" \
+          curl -sf -X POST "${{ secrets.DEMO_APP_URL }}/admin/reset-demo" \
             -H "X-Reset-Key: ${{ secrets.RESET_SECRET }}"
