@@ -25,7 +25,7 @@ def create_app():
     app.config["MYSQL_PORT"] = _db_port()
     app.config["MYSQL_DB"] = _db()
     app.config["MYSQL_CURSORCLASS"] = "DictCursor"   # rows come back as dicts, e.g. row["title"]
-    app.config["MYSQL_SSL_CA"] = "../../ca.pem"
+    # app.config["MYSQL_SSL_CA"] = "../../ca.pem"
     app.config["SECRET_KEY"] = "secret-key"
 
     mysql.init_app(app)
