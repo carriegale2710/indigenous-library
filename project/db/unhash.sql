@@ -8,7 +8,7 @@
 -- STEPS:
 
 -- 1. Open MySQL Workbench and connect to your local instance (same one python run.py connects to).
--- 2. In the schema navigator on the left, make sure ifq582_a2 is set as the active schema, double-click it if it's not bolded/selected, that's what points a new query at the right database.
+-- 2. In the schema navigator on the left, make sure indigenous_library_db is set as the active schema, double-click it if it's not bolded/selected, that's what points a new query at the right database.
 -- 3. Open a new SQL tab (the little page icon, or File > New Query Tab).
 -- 4. Paste query below (or run `unhash.sql`).
 -- 5. Run it, either the lightning bolt icon in the toolbar or Cmd+Return with your cursor on that line.Workbench will report something like "8 row(s) affected" in the output panel at the bottom, that's your confirmation all 8 seeded users got the new hash.

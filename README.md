@@ -173,7 +173,7 @@ Clone the repository (GitHub Desktop: File, then Clone Repository, then choose T
 
 ### 3. Create the database
 
-Open `database.sql` in MySQL Workbench and run it (Execute All). This creates the `ifq582_a2` database and all its tables.
+Open `database.sql` in MySQL Workbench and run it (Execute All). This creates the `indigenous_library_db` database and all its tables.
 
 ### 4. Set your database password
 

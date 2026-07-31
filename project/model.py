@@ -2,7 +2,7 @@
 IFQ582 Assignment 2  |  Group 1D  |  Indigenous Cultural Collection
 Data model: classes + data-access methods for the Flask app.
 
-Source of truth for tables and columns: IFQ582_A2_database.sql  (database: ifq582_a2)
+Source of truth for tables and columns: database.sql  (database: indigenous_library_db)
 
 ================================================================================
 WIRING THE DATABASE (Flask-MySQLdb)
@@ -17,7 +17,7 @@ In project/__init__.py you create the MySQL object and configure the connection:
         app.config["MYSQL_HOST"] = "localhost"
         app.config["MYSQL_USER"] = "root"
         app.config["MYSQL_PASSWORD"] = "your_password"
-        app.config["MYSQL_DB"] = "ifq582_a2"
+        app.config["MYSQL_DB"] = "indigenous_library_db"
         app.config["MYSQL_CURSORCLASS"] = "DictCursor"   # rows come back as dicts
         mysql.init_app(app)
         ...

@@ -13,7 +13,7 @@ missing, it falls back to a MYSQL_PASSWORD environment variable, then blank.
 MYSQL_HOST="localhost" 
 MYSQL_USER="root" 
 MYSQL_PASSWORD="your-password" 
-MYSQL_DB="ifq582_a2" # → whatever database you ran your schema against (defaultdb or your renamed one)
+MYSQL_DB="indigenous_library_db" # → whatever database you ran your schema against (defaultdb or your renamed one)
 MYSQL_PORT=3306
 
 RESET_SECRET="test123"

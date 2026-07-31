@@ -4,11 +4,11 @@
 -- Build script for MySQL Workbench (MySQL 8.x)
 -- =====================================================================
 
-DROP DATABASE IF EXISTS ifq582_a2;
-CREATE DATABASE ifq582_a2
+DROP DATABASE IF EXISTS indigenous_library_db;
+CREATE DATABASE indigenous_library_db
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
-USE ifq582_a2;
+USE indigenous_library_db;
 
 -- ---------------------------------------------------------------------
 -- Tables (created in foreign-key dependency order)

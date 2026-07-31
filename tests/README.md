@@ -7,7 +7,7 @@ These are small, focused checks. Each one exercises a single data access method 
 You need three things in place:
 
 1. **The virtual environment is active.** From the repo root run `source .venv/bin/activate` (Mac/Linux) or `.venv\Scripts\activate` (Windows). Your prompt shows `(.venv)` when it's on.
-2. **MySQL is running and the database is loaded.** Run `database.sql` once in MySQL Workbench to build and seed the `ifq582_a2` database.
+2. **MySQL is running and the database is loaded.** Run `database.sql` once in MySQL Workbench to build and seed the `indigenous_library_db` database.
 3. **Your `config.py` exists.** Copy `config.example.py` to `config.py` and put your own MySQL password in it. This file is gitignored, so it never gets pushed.
 
 ## How to run them

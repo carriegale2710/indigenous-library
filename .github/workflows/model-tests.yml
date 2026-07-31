@@ -15,7 +15,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root_test_password
-          MYSQL_DATABASE: ifq582_a2
+          MYSQL_DATABASE: indigenous_library_db
         ports:
           - 3306:3306
         options: >-
@@ -31,7 +31,7 @@ jobs:
       MYSQL_USER: root
       MYSQL_PASSWORD: root_test_password
       MYSQL_PORT: 3306
-      MYSQL_DB: ifq582_a2
+      MYSQL_DB: indigenous_library_db
 
     steps:
       - name: Check out repository
@@ -65,7 +65,7 @@ jobs:
 
       - name: Load schema and seed data
         run: |
-          mysql -h 127.0.0.1 -P 3306 -u root -proot_test_password ifq582_a2 < project/db/database.sql
+          mysql -h 127.0.0.1 -P 3306 -u root -proot_test_password  < project/db/database.sql
 
       - name: Run all model tests
         run: |
