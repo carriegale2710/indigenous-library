@@ -8,9 +8,9 @@ item.title }}{% endblock %} {% block content %}
     <p class="section-label text-warning mb-2">Review Decision</p>
     <h1 class="fw-bold mb-2">Review Decision</h1>
     <p class="mb-0 page-subtitle">
-      Approve review decision for this an item access request. Restricted or culturally
-      sensitive materials may require staff review, community consultation, or
-      additional access conditions before viewing is approved.
+      Approve review decision for this an item access request. Restricted or
+      culturally sensitive materials may require staff review, community
+      consultation, or additional access conditions before viewing is approved.
     </p>
   </div>
 </header>
@@ -19,14 +19,16 @@ item.title }}{% endblock %} {% block content %}
 <main class="item-details-area py-5">
   <div class="container px-4">
     <div class="row g-4">
-
       <!-- Left Column: Item Summary -->
       <div class="col-lg-4">
         <div class="card item-card mb-4">
           {% if item.thumbnailPath %}
           <img
             src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
-            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
+            onerror="
+              this.onerror = null;
+              this.src = 'static/assets/uncatalogued-item.webp';
+            "
             alt="{{ item.title }}"
             class="item-thumbnail"
           />
@@ -98,20 +100,23 @@ item.title }}{% endblock %} {% block content %}
       <div class="col-lg-8">
         <div class="alert cultural-alert mb-4" role="alert">
           <strong>Cultural access notice:</strong>
-          Please provide a clear decision notes or access conditions for approving access requests. Some items may require
-          review by authorised library staff, cultural advisors, or community
-          representatives before access is granted.
+          Please provide a clear decision notes or access conditions for
+          approving access requests. Some items may require review by authorised
+          library staff, cultural advisors, or community representatives before
+          access is granted.
         </div>
 
         <div class="card item-card">
           <div class="card-body p-4 p-md-5">
             <p class="section-label">Review Decision Details</p>
-            <h2 class="h3 fw-bold mb-3">Review Decision for Request to View Item</h2>
+            <h2 class="h3 fw-bold mb-3">
+              Review Decision for Request to View Item
+            </h2>
 
             <p class="text-muted">
-              Complete the form below by approving or rejecting the request. Your review decision will be recorded and
-              will auto-update the item's access status and cultural
-              protocol requirements.
+              Complete the form below by approving or rejecting the request.
+              Your review decision will be recorded and will auto-update the
+              item's access status and cultural protocol requirements.
             </p>
 
             <form
@@ -123,11 +128,9 @@ item.title }}{% endblock %} {% block content %}
               {{ form.hidden_tag() }}
 
               <div class="mb-4">
-                {{ form.decisionType.label(class="form-label fw-semibold")}}
-                {{ form.decisionType( class="form-control",
-                placeholder="Approve or reject the request." ) }} 
-
-                {% if form.decisionType.errors %}
+                {{ form.decisionType.label(class="form-label fw-semibold")}} {{
+                form.decisionType( class="form-control", placeholder="Approve or
+                reject the request." ) }} {% if form.decisionType.errors %}
                 <div class="text-danger small mt-2">
                   {% for error in form.decisionType.errors %}
                   <div>{{ error }}</div>
@@ -139,9 +142,8 @@ item.title }}{% endblock %} {% block content %}
               <div class="mb-4">
                 {{ form.decisionNotes.label(class="form-label fw-semibold") }}
                 {{ form.decisionNotes( class="form-control", rows="5",
-                placeholder="Write down any decision notes." ) }} 
-
-                {% if form.decisionNotes.errors %}
+                placeholder="Write down any decision notes." ) }} {% if
+                form.decisionNotes.errors %}
                 <div class="text-danger small mt-2">
                   {% for error in form.decisionNotes.errors %}
                   <div>{{ error }}</div>
@@ -156,11 +158,10 @@ item.title }}{% endblock %} {% block content %}
               </div>
 
               <div class="mb-4">
-                {{ form.accessConditions.label(class="form-label fw-semibold") }}
-                {{ form.accessConditions( class="form-control", rows="5",
-                placeholder="Write down any access conditions." ) }} 
-
-                {% if form.accessConditions.errors %}
+                {{ form.accessConditions.label(class="form-label fw-semibold")
+                }} {{ form.accessConditions( class="form-control", rows="5",
+                placeholder="Write down any access conditions." ) }} {% if
+                form.accessConditions.errors %}
                 <div class="text-danger small mt-2">
                   {% for error in form.accessConditions.errors %}
                   <div>{{ error }}</div>
@@ -168,14 +169,16 @@ item.title }}{% endblock %} {% block content %}
                 </div>
                 {% else %}
                 <div class="form-text">
-                  If approved, you must include any specific access conditions or restrictions.
+                  If approved, you must include any specific access conditions
+                  or restrictions.
                 </div>
                 {% endif %}
               </div>
 
               <div class="permission-note mt-4">
-                  <strong>Decision responsibility:</strong>
-                  Final review decisions should only be recorded by authorised administrators or community reviewers.
+                <strong>Decision responsibility:</strong>
+                Final review decisions should only be recorded by authorised
+                administrators or community reviewers.
               </div>
 
               <div class="d-flex flex-wrap gap-2 mt-4">

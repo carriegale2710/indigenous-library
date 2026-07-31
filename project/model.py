@@ -400,7 +400,7 @@ class CollectionItem:
         Commit, then return the new itemID.
         """
         if thumbnailPath is None:
-            thumbnailPath = "uncatalogued-item.svg"
+            thumbnailPath = "uncatalogued-item.webp"
         cur = _get_cursor()
         cur.execute(
             "INSERT INTO CollectionItem "

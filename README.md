@@ -1,4 +1,4 @@
-<img src="project/static/assets/logo.svg" alt="logo" width="250"/>
+<img src="project/static/assets/logo.webp" alt="logo" width="250"/>
 
 # Indigenous Cultural Collection Library
 

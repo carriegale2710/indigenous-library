@@ -1,5 +1,6 @@
 <!-- Controller branch | Rebecca | Collection Item Edit Form -->
-{% extends "base_template.html" %} {% block title %}Edit Item | {{ item.title }}{% endblock %} {% block content %}
+{% extends "base_template.html" %} {% block title %}Edit Item | {{ item.title
+}}{% endblock %} {% block content %}
 
 <!-- Page Header -->
 <header class="item-page-header py-5">
@@ -17,14 +18,16 @@
 <main class="item-details-area py-5">
   <div class="container px-4">
     <div class="row g-4">
-
       <!-- Left Column: Item Summary -->
       <div class="col-lg-4">
         <div class="card item-card mb-4">
           {% if item.thumbnailPath %}
           <img
             src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
-            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
+            onerror="
+              this.onerror = null;
+              this.src = 'static/assets/uncatalogued-item.webp';
+            "
             alt="{{ item.title }}"
             class="item-thumbnail"
           />
@@ -37,9 +40,10 @@
             <h3 class="h5 fw-bold">{{ item.title }}</h3>
 
             <p class="text-muted small mb-2">
-              {{ item.collectionName if item.collectionName else "Collection not recorded" }} |
-              {{ item.itemType if item.itemType else "Item type not recorded" }} |
-              {{ item.year if item.year else "Year unknown" }}
+              {{ item.collectionName if item.collectionName else "Collection not
+              recorded" }} | {{ item.itemType if item.itemType else "Item type
+              not recorded" }} | {{ item.year if item.year else "Year unknown"
+              }}
             </p>
 
             {% if item.summary %}
@@ -47,12 +51,9 @@
             {% endif %}
 
             <div class="mb-3">
-              <span class="badge
-                {% if item.statusName == 'Open' %}status-open
-                {% elif item.statusName == 'Restricted' %}status-restricted
-                {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive
-                {% elif item.statusName == 'Pending' %}status-pending
-                {% else %}bg-secondary{% endif %}">
+              <span
+                class="badge {% if item.statusName == 'Open' %}status-open {% elif item.statusName == 'Restricted' %}status-restricted {% elif item.statusName == 'Culturally Sensitive' %}status-sensitive {% elif item.statusName == 'Pending' %}status-pending {% else %}bg-secondary{% endif %}"
+              >
                 {{ item.statusName }}
               </span>
             </div>
@@ -74,7 +75,8 @@
                 <strong>Access Status:</strong> {{ item.statusName }}
               </p>
               <p class="mb-0">
-                <strong>Note:</strong> Access status is managed by Cultural Metadata, not this form.
+                <strong>Note:</strong> Access status is managed by Cultural
+                Metadata, not this form.
               </p>
             </div>
             <p class="small text-muted mb-0">
@@ -99,8 +101,8 @@
             <h2 class="h3 fw-bold mb-3">Edit Item</h2>
 
             <p class="text-muted">
-              Update the fields below and click Save Changes to update
-              this item in the catalogue.
+              Update the fields below and click Save Changes to update this item
+              in the catalogue.
             </p>
 
             <form
@@ -113,11 +115,12 @@
 
               <!-- Title -->
               <div class="mb-4">
-                {{ form.title.label(class="form-label fw-semibold") }}
-                {{ form.title(class="form-control") }}
-                {% if form.title.errors %}
+                {{ form.title.label(class="form-label fw-semibold") }} {{
+                form.title(class="form-control") }} {% if form.title.errors %}
                 <div class="text-danger small mt-2">
-                  {% for error in form.title.errors %}<div>{{ error }}</div>{% endfor %}
+                  {% for error in form.title.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
                 </div>
                 {% endif %}
               </div>
@@ -125,60 +128,70 @@
               <!-- Author / Creator -->
               <div class="mb-4">
                 {{ form.authorCreator.label(class="form-label fw-semibold") }}
-                {{ form.authorCreator(class="form-control") }}
-                {% if form.authorCreator.errors %}
+                {{ form.authorCreator(class="form-control") }} {% if
+                form.authorCreator.errors %}
                 <div class="text-danger small mt-2">
-                  {% for error in form.authorCreator.errors %}<div>{{ error }}</div>{% endfor %}
+                  {% for error in form.authorCreator.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
                 </div>
                 {% endif %}
               </div>
 
               <!-- Year -->
               <div class="mb-4">
-                {{ form.year.label(class="form-label fw-semibold") }}
-                {{ form.year(class="form-control", placeholder="e.g. 2018") }}
-                {% if form.year.errors %}
+                {{ form.year.label(class="form-label fw-semibold") }} {{
+                form.year(class="form-control", placeholder="e.g. 2018") }} {%
+                if form.year.errors %}
                 <div class="text-danger small mt-2">
-                  {% for error in form.year.errors %}<div>{{ error }}</div>{% endfor %}
+                  {% for error in form.year.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
                 </div>
                 {% endif %}
               </div>
 
               <!-- Collection -->
               <div class="mb-4">
-                {{ form.collection.label(class="form-label fw-semibold") }}
-                {{ form.collection(class="form-select") }}
-                {% if form.collection.errors %}
+                {{ form.collection.label(class="form-label fw-semibold") }} {{
+                form.collection(class="form-select") }} {% if
+                form.collection.errors %}
                 <div class="text-danger small mt-2">
-                  {% for error in form.collection.errors %}<div>{{ error }}</div>{% endfor %}
+                  {% for error in form.collection.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
                 </div>
                 {% endif %}
               </div>
 
               <!-- Item Type -->
               <div class="mb-4">
-                {{ form.itemType.label(class="form-label fw-semibold") }}
-                {{ form.itemType(class="form-select") }}
-                {% if form.itemType.errors %}
+                {{ form.itemType.label(class="form-label fw-semibold") }} {{
+                form.itemType(class="form-select") }} {% if form.itemType.errors
+                %}
                 <div class="text-danger small mt-2">
-                  {% for error in form.itemType.errors %}<div>{{ error }}</div>{% endfor %}
+                  {% for error in form.itemType.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
                 </div>
                 {% endif %}
               </div>
 
               <!-- Summary -->
               <div class="mb-4">
-                {{ form.summary.label(class="form-label fw-semibold") }}
-                {{ form.summary(class="form-control", rows="4") }}
-                {% if form.summary.errors %}
+                {{ form.summary.label(class="form-label fw-semibold") }} {{
+                form.summary(class="form-control", rows="4") }} {% if
+                form.summary.errors %}
                 <div class="text-danger small mt-2">
-                  {% for error in form.summary.errors %}<div>{{ error }}</div>{% endfor %}
+                  {% for error in form.summary.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
                 </div>
                 {% endif %}
               </div>
 
               <!-- Thumbnail -->
-               <!-- Commented out because this will remove the thumbnail already if user leave this blank -->
+              <!-- Commented out because this will remove the thumbnail already if user leave this blank -->
               <!-- <div class="mb-4">
                 {{ form.thumbnailPath.label(class="form-label fw-semibold") }}
                 {{ form.thumbnailPath(class="form-control") }}
@@ -194,13 +207,17 @@
               <!-- Next Review Date -->
               <div class="mb-4">
                 {{ form.nextReviewDate.label(class="form-label fw-semibold") }}
-                {{ form.nextReviewDate(class="form-control") }}
-                {% if form.nextReviewDate.errors %}
+                {{ form.nextReviewDate(class="form-control") }} {% if
+                form.nextReviewDate.errors %}
                 <div class="text-danger small mt-2">
-                  {% for error in form.nextReviewDate.errors %}<div>{{ error }}</div>{% endfor %}
+                  {% for error in form.nextReviewDate.errors %}
+                  <div>{{ error }}</div>
+                  {% endfor %}
                 </div>
                 {% else %}
-                <div class="form-text">Optional. Leave blank if no review date is scheduled.</div>
+                <div class="form-text">
+                  Optional. Leave blank if no review date is scheduled.
+                </div>
                 {% endif %}
               </div>
 
@@ -213,12 +230,10 @@
                   Cancel
                 </a>
               </div>
-
             </form>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </main>

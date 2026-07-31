@@ -103,8 +103,11 @@
       <div class="col-lg-6">
         <div class="library-image-card shadow-sm">
           <img
-            src="static/assets/library.svg"
-            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
+            src="static/assets/library.webp"
+            onerror="
+              this.onerror = null;
+              this.src = 'static/assets/uncatalogued-item.webp';
+            "
             alt="Academic Library"
             class="img-fluid library-image"
           />
@@ -166,8 +169,12 @@
         <div class="card h-100 catalogue-card">
           <img
             src="{{ url_for('static', filename='assets/' ~ item.thumbnailPath) }}"
-            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
-            class="card-img-top catalogue-image" alt="{{ item.title }}"
+            onerror="
+              this.onerror = null;
+              this.src = 'static/assets/uncatalogued-item.webp';
+            "
+            class="card-img-top catalogue-image"
+            alt="{{ item.title }}"
           />
 
           <div class="card-body">
@@ -292,8 +299,11 @@
       <div class="col-lg-6">
         <div class="library-image-card shadow-sm">
           <img
-            src="static/assets/gallery.svg"
-            onerror="this.onerror=null; this.src='static/assets/uncatalogued-item.svg';"
+            src="static/assets/gallery.webp"
+            onerror="
+              this.onerror = null;
+              this.src = 'static/assets/uncatalogued-item.webp';
+            "
             alt="Gallery event space"
             class="img-fluid library-image"
           />
