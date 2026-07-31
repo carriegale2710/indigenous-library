@@ -177,7 +177,7 @@ Open `database.sql` in MySQL Workbench and run it (Execute All). This creates th
 
 ### 4. Set your database password
 
-Copy `config.example.py` to `config.py` and put your own MySQL root password in it. `config.py` is gitignored, so your password never gets pushed.
+Copy `config.example.py` to `config.py` and put your own MySQL credentials in it. `config.py` is gitignored, so your password never gets pushed.
 
 - Windows: `copy config.example.py config.py`
 - Mac or Linux: `cp config.example.py config.py`

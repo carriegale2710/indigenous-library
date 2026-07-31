@@ -16,5 +16,5 @@ jobs:
     steps:
       - name: Call reset endpoint
         run: |
-          curl -sf -X POST "${{ secrets.RENDER_APP_URL }}/admin/reset-demo" \
+          curl -sf -X POST "${{ secrets.DEMO_APP_URL }}/admin/reset-demo" \
             -H "X-Reset-Key: ${{ secrets.RESET_SECRET }}"
