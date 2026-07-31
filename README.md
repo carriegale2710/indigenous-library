@@ -137,6 +137,7 @@ What's next, and what's still rough. Grouped by priority.
 
 - Not all model tests are passing yet - see the [tests folder](tests/README.md) and [model-tests.yml](.github/workflows/model-tests.yml).
 - Item card images take 10-30 seconds to render on the catalogue page.
+  - Svg files have been converted to webp -> improved loading performance (93% score on Lighthouse) (LCP value: 1.5-2s -> 0.83 s)
 - Item Assessment page is hard to reach from Item Details alone - needs a direct link.
 - Minor responsiveness/UX polish outstanding (item card layout, redundant text).
 
