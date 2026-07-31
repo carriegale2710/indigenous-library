@@ -25,8 +25,8 @@ def create_app():
     app.config["MYSQL_PORT"] = _db_port()
     app.config["MYSQL_DB"] = _db()
     app.config["MYSQL_CURSORCLASS"] = "DictCursor"   # rows come back as dicts, e.g. row["title"]
-    # app.config["MYSQL_SSL_CA"] = "../../ca.pem"
-    app.config["RESET_SECRET"] = _reset_secret()
+    app.config["SECRET_KEY"]="secretkey"
+    app.config["RESET_SECRET"] = _reset_secret() # for automated mysqldb refresh for demo deployment
     mysql.init_app(app)
 
     # load favicon from assets - Some browsers/crawlers request /favicon.ico directly instead of using the <link> tag.
