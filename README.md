@@ -22,9 +22,9 @@ This project is deployed on AWS using a production-style stack: an Ubuntu EC2 in
 
 ![admin-demo](docs/demo/admin-demo.png)
 
-- **Try it**: click **"Try Demo as Admin"** on the [login page](https://indigenous-library-ov0s.onrender.com/auth/login) - no password required.
+- **Try it**: click **"Try Demo as Admin"** on the [login page](https://indigenouslibrary.site/auth/login) - no password required.
 - **What you get**: full Admin access (roleID 1) - create/edit/delete collection items, manage access requests, everything a real Admin can do.
-- **Data resets automatically**: since this is a shared account, all data resets to its original seed state every 10 minutes via a scheduled GitHub Action. Don't be surprised if your changes disappear shortly after - that's expected, not a bug.
+- **Data resets automatically**: since this is a shared account, all data resets to its original seed state every hour via a scheduled GitHub Action. Don't be surprised if your changes disappear shortly after - that's expected, not a bug.
 - **Why**: this is a live public deployment, not a sandboxed per-visitor environment, so resets keep the demo clean for the next person and prevent the database from accumulating spam/junk input over time.
 
 The client app has 3-4 main pages:
@@ -235,7 +235,7 @@ python test_create_only.py
 
 ### 8. Access Test accounts with different role permissions
 
-Refer to [here](db/README.md) for details.
+Refer [here](project/db/README.md) for details.
 
 ---
 
