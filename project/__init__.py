@@ -26,8 +26,7 @@ def create_app():
     app.config["MYSQL_DB"] = _db()
     app.config["MYSQL_CURSORCLASS"] = "DictCursor"   # rows come back as dicts, e.g. row["title"]
     # app.config["MYSQL_SSL_CA"] = "../../ca.pem"
-    app.config["SECRET_KEY"] = "secret-key"
-
+    app.config["RESET_SECRET"] = _reset_secret()
     mysql.init_app(app)
 
     # load favicon from assets - Some browsers/crawlers request /favicon.ico directly instead of using the <link> tag.
@@ -95,3 +94,11 @@ def _db():
         return MYSQL_DB
     except ImportError:
         return os.environ.get("MYSQL_DB", "")
+
+
+def _reset_secret():
+    try:
+        from config import MYSQL_DB
+        return MYSQL_DB
+    except ImportError:
+        return os.environ.get("RESET_SECRET", "")
