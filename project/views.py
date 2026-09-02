@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, flash, abort, url_for, session, request
-from MySQLdb import IntegrityError
+from psycopg import IntegrityError
 from project.model import CollectionItem, Collection, AccessRequest
 from project.decorators import login_required, role_required
 from project.forms import AccessRequestForm, CollectionItemForm

@@ -28,7 +28,7 @@ _RESET_TABLES = [
     "AccessRequest",
     "CulturalMetadata",
     "CollectionItem",
-    "`User`",
+    '"User"',
 ]
 
 # Re-inserted in parent-to-child FK order (reverse of the truncate order).
@@ -36,7 +36,7 @@ _RESET_TABLES = [
 # exact same known-good state.
 _SEED_STATEMENTS = [
     (
-        "INSERT INTO `User` (userID, roleID, fullName, username, email, "
+        'INSERT INTO "User" (userID, roleID, fullName, username, email, '
         "passwordHash, accountStatus, createdDate) VALUES "
         "(1, 1, 'Sarah Mitchell', 'smitchell', 's.mitchell@library.qut.edu.au', "
         "'$2b$12$Rk9...adminhash', 'active', '2025-11-01'), "
@@ -57,7 +57,7 @@ _SEED_STATEMENTS = [
     ),
     (
         "INSERT INTO CollectionItem (itemID, collectionID, statusID, title, "
-        "authorCreator, `year`, itemType, summary, thumbnailPath, nextReviewDate) VALUES "
+        "authorCreator, year, itemType, summary, thumbnailPath, nextReviewDate) VALUES "
         "(1, 1, 1, 'Kalaw Lagaw Ya Dictionary', 'Torres Strait Language Centre', 2018, 'book', "
         "'A community dictionary of the Kalaw Lagaw Ya language.', 'kalaw-lagaw-ya-dictionary.webp', NULL), "
         "(2, 1, 2, 'Recordings of Meriam Mir Speakers', 'Dr Anne Foster', 2005, 'recording', "
@@ -198,6 +198,18 @@ _SEED_STATEMENTS = [
     ),
 ]
 
+_RESET_SEQUENCES = [
+    ('Role', 'roleid'),
+    ('Collection', 'collectionid'),
+    ('AccessStatus', 'statusid'),
+    ('"User"', 'userid'),
+    ('CollectionItem', 'itemid'),
+    ('CulturalMetadata', 'metadataid'),
+    ('AccessRequest', 'requestid'),
+    ('ReviewDecision', 'decisionid'),
+    ('CommunityComment', 'commentid'),
+]
+
 
 def reset_demo_data():
     """
@@ -208,14 +220,17 @@ def reset_demo_data():
     """
     cur = mysql.connection.cursor()
 
-    cur.execute("SET FOREIGN_KEY_CHECKS = 0")
-    for table in _RESET_TABLES:
-        cur.execute(f"TRUNCATE TABLE {table}")
+    cur.execute("TRUNCATE TABLE " + ", ".join(_RESET_TABLES) + " RESTART IDENTITY CASCADE")
 
     for statement in _SEED_STATEMENTS:
         cur.execute(statement)
 
-    cur.execute("SET FOREIGN_KEY_CHECKS = 1")
+    for table, column in _RESET_SEQUENCES:
+        cur.execute(
+            "SELECT setval(pg_get_serial_sequence(%s, %s), MAX(" + column + ")::bigint) FROM " + table,
+            (table, column),
+        )
+
     mysql.connection.commit()
     cur.close()
 

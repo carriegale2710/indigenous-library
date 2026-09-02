@@ -5,12 +5,11 @@ Data model: classes + data-access methods for the Flask app.
 Source of truth for tables and columns: database.sql  (database: indigenous_library_db)
 
 ================================================================================
-WIRING THE DATABASE (Flask-MySQLdb)
+WIRING THE DATABASE (psycopg)
 ================================================================================
 In project/__init__.py you create the MySQL object and configure the connection:
 
-    from flask_mysqldb import MySQL
-    mysql = MySQL()
+    import psycopg
 
     def create_app():
         app = Flask(__name__)
@@ -32,7 +31,7 @@ from werkzeug.security import check_password_hash
 # ----------------------------------------------------------------------------
 def _get_cursor():
     """
-    Return a cursor on the live Flask-MySQLdb connection.
+    Return a cursor on the live psycopg connection.
 
     With MYSQL_CURSORCLASS = "DictCursor" each fetched row is a dict keyed by
     column name, e.g. row["title"].
@@ -165,7 +164,7 @@ class User:
         the password with verify_password(). Returns a row or None.
         """
         cur = _get_cursor()
-        cur.execute("SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM `User` WHERE username = %s", (username,))
+        cur.execute('SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM "User" WHERE username = %s', (username,))
         rows = cur.fetchone()
         cur.close()
         return rows
@@ -177,7 +176,7 @@ class User:
         the password with verify_password(). Returns a row or None.
         """
         cur = _get_cursor()
-        cur.execute("SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM `User` WHERE email = %s", (email,))
+        cur.execute('SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM "User" WHERE email = %s', (email,))
         rows = cur.fetchone()
         cur.close()
         return rows
@@ -187,7 +186,7 @@ class User:
     def get_by_id(userID):
         """SELECT one User by userID. Flask-Login's user loader uses this."""
         cur = _get_cursor()
-        cur.execute("SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM `User` WHERE userID = %s", (userID,))
+        cur.execute('SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM "User" WHERE userID = %s', (userID,))
         rows = cur.fetchone()
         cur.close()
         return rows
@@ -199,16 +198,16 @@ class User:
         IMPORTANT: passwordHash must already be hashed before it reaches here.
         Hash it in the view/form layer (e.g. werkzeug generate_password_hash),
         never store a plain password. Remember mysql.connection.commit().
-        Returns the new userID (cur.lastrowid).
+        Returns the new userID.
         """
         cur = _get_cursor()
-        cur.execute("INSERT INTO `User` "
+        cur.execute('INSERT INTO "User" '
         "(roleID, fullName, username, email, passwordHash, accountStatus, createdDate) "
-        "VALUES (%s, %s, %s, %s, %s, %s, %s)",
+        "VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING userID",
         (roleID, fullName, username, email, passwordHash, accountStatus, date.today()))
         from project import mysql
         mysql.connection.commit()
-        new_id = cur.lastrowid
+        new_id = cur.fetchone()["userID"]
         cur.close()
         return new_id
 
@@ -226,7 +225,7 @@ class User:
     def list_all():
         """SELECT all users (Admin user-management screen). Returns a list."""
         cur = _get_cursor()
-        cur.execute("SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM `User`")
+        cur.execute('SELECT userID, roleID, fullName, username, email, passwordHash, accountStatus, createdDate FROM "User"')
         rows = cur.fetchall()
         cur.close()
         return rows
@@ -271,7 +270,7 @@ class CollectionItem:
                 ci.itemID,
                 ci.title,
                 ci.authorCreator,
-                ci.`year`,
+                ci.year,
                 ci.itemType,
                 ci.summary,
                 ci.thumbnailPath,
@@ -296,7 +295,7 @@ class CollectionItem:
             like = f"%{search}%"
             conditions.append(
                 "(ci.title LIKE %s OR ci.summary LIKE %s OR ci.authorCreator LIKE %s "
-                "OR cm.communityGroup LIKE %s OR cm.`language` LIKE %s "
+                "OR cm.communityGroup LIKE %s OR cm.language LIKE %s "
                 "OR cm.location LIKE %s OR cm.subjectArea LIKE %s)"
             )
             params.extend([like] * 7)
@@ -338,7 +337,7 @@ class CollectionItem:
             FROM CollectionItem ci
             JOIN AccessStatus ast
                 ON ci.statusID = ast.statusID
-            ORDER BY RAND()
+            ORDER BY RANDOM()
             LIMIT 3
         """)
         rows = cur.fetchall()
@@ -360,7 +359,7 @@ class CollectionItem:
                 ci.itemID,
                 ci.title,
                 ci.authorCreator,
-                ci.`year`,
+                ci.year,
                 ci.itemType,
                 ci.summary,
                 ci.thumbnailPath,
@@ -404,13 +403,13 @@ class CollectionItem:
         cur = _get_cursor()
         cur.execute(
             "INSERT INTO CollectionItem "
-            "(collectionID, statusID, title, authorCreator, `year`, itemType, summary, thumbnailPath, nextReviewDate) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            "(collectionID, statusID, title, authorCreator, year, itemType, summary, thumbnailPath, nextReviewDate) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING itemID",
             (collectionID, statusID, title, authorCreator, year, itemType, summary, thumbnailPath, nextReviewDate)
         )
         from project import mysql
         mysql.connection.commit()
-        new_id = cur.lastrowid
+        new_id = cur.fetchone()["itemID"]
         cur.close()
         return new_id
 
@@ -428,7 +427,7 @@ class CollectionItem:
         params = []
         for column, value in fields.items():
             if column in editable:
-                set_parts.append("`" + column + "` = %s")
+                set_parts.append(column + " = %s")
                 params.append(value)
 
         if not set_parts:
@@ -504,7 +503,7 @@ class CulturalMetadata:
     def get_by_item(item_id):
         """SELECT the metadata row for one item. Returns a row or None."""
         cur = _get_cursor()
-        cur.execute("SELECT metadataID, itemID, communityGroup, `language`, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations FROM CulturalMetadata WHERE itemID = %s", (item_id,))
+        cur.execute("SELECT metadataID, itemID, communityGroup, language, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations FROM CulturalMetadata WHERE itemID = %s", (item_id,))
         row = cur.fetchone()
         cur.close()
         return row
@@ -521,12 +520,12 @@ class CulturalMetadata:
         cur.execute(
             "INSERT INTO CulturalMetadata " 
             "(itemID, communityGroup, language, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)", 
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING metadataID", 
             (itemID, communityGroup, language, location, subjectArea, culturalSensitivityNotes, culturalProtocolNotes, accessRecommendations)
         )
         from project import mysql
         mysql.connection.commit()
-        new_id = cur.lastrowid
+        new_id = cur.fetchone()["metadataID"]
         cur.close()
         return new_id
 
@@ -572,12 +571,12 @@ class AccessRequest:
         cur.execute(
             "INSERT INTO AccessRequest "
             "(userID, itemID, requestReason, supportingDocuments, requestDate, requestStatus) "
-            "VALUES (%s, %s, %s, %s, %s, %s)",
+            "VALUES (%s, %s, %s, %s, %s, %s) RETURNING requestID",
             (userID, itemID, requestReason, supportingDocuments, date.today(), requestStatus)
         )
         from project import mysql
         mysql.connection.commit()
-        new_id = cur.lastrowid
+        new_id = cur.fetchone()["requestID"]
         cur.close()
         return new_id
 
@@ -603,7 +602,7 @@ class AccessRequest:
                 u.username,
                 CollectionItem.title
             FROM AccessRequest ar
-                JOIN `User` u
+                JOIN "User" u
                     ON ar.userID = u.userID
                 JOIN CollectionItem 
                     ON ar.itemID = CollectionItem.itemID
@@ -680,7 +679,7 @@ class AccessRequest:
                 u.email,
                 CollectionItem.title
             FROM AccessRequest ar
-                JOIN `User` u
+                JOIN "User" u
                     ON ar.userID = u.userID
                 JOIN CollectionItem
                     ON ar.itemID = CollectionItem.itemID
@@ -747,12 +746,12 @@ class ReviewDecision:
         cur.execute(
             "INSERT INTO ReviewDecision "
             "(requestID, reviewerID, decisionType,decisionNotes, accessConditions, decisionDate) " 
-            "VALUES (%s, %s, %s, %s, %s, %s)",
+            "VALUES (%s, %s, %s, %s, %s, %s) RETURNING decisionID",
             (requestID, reviewerID, decisionType,decisionNotes, accessConditions, date.today())
         )
         from project import mysql
         mysql.connection.commit()
-        new_decision = cur.lastrowid
+        new_decision = cur.fetchone()["decisionID"]
         cur.close()
         return new_decision
   
@@ -776,7 +775,7 @@ class ReviewDecision:
                 u.username,
                 u.email
             FROM ReviewDecision rd
-                JOIN `User` u
+                JOIN "User" u
                     ON rd.reviewerID = u.userID
             WHERE rd.requestID = %s
             ORDER BY rd.decisionDate
@@ -807,9 +806,9 @@ class ReviewDecision:
                 u.roleID,
                 r.roleName
             FROM ReviewDecision rd
-                JOIN `User` u
+                JOIN "User" u
                     ON rd.reviewerID = u.userID
-                JOIN `Role` r   
+                JOIN Role r   
                     ON u.roleID = r.roleID
             WHERE rd.requestID = %s
             ORDER BY rd.decisionDate DESC
@@ -842,12 +841,12 @@ class CommunityComment:
         cur.execute(
             "INSERT INTO CommunityComment "
             "(requestID, reviewerID, commentText, createdDate) " 
-            "VALUES (%s, %s, %s, %s)",
+            "VALUES (%s, %s, %s, %s) RETURNING commentID",
             (requestID, reviewerID, commentText, date.today())
         )
         from project import mysql
         mysql.connection.commit()
-        new_comment = cur.lastrowid
+        new_comment = cur.fetchone()["commentID"]
         cur.close()
         return new_comment
 
@@ -869,7 +868,7 @@ class CommunityComment:
                 u.roleID,
                 u.fullName
             FROM CommunityComment cc
-                JOIN `User` u
+                JOIN "User" u
                     ON cc.reviewerID = u.userID
             WHERE cc.requestID = %s
             ORDER BY cc.createdDate

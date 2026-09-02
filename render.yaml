@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: indigenous-library
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn "project:create_app()"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: indigenous-library-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: RESET_SECRET
+        sync: false
+
+databases:
+  - name: indigenous-library-db
+    databaseName: indigenous_library_db
+    user: indigenous_library
+    plan: free

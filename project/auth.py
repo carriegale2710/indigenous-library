@@ -8,7 +8,7 @@ from flask import  Blueprint, abort, g, session, redirect, render_template, url_
 from werkzeug.security import  generate_password_hash
 from project.model import User
 from project.forms import RegistrationForm, LoginForm
-from MySQLdb import IntegrityError
+from psycopg import IntegrityError
 
 # The authentication blueprint will have views to register new users and to log in and log out.
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
